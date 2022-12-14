@@ -4,12 +4,11 @@ CREATE TABLE reputation_feedback (
     network TEXT NOT NULL,
     fb_type INTEGER NOT NULL,
     dst_account TEXT NOT NULL REFERENCES account (address),
-    tx_id TEXT,
+    tx_id TEXT NOT NULL,
     ref TEXT NOT NULL
 );
 
 CREATE TABLE reputation_feedback_aggregate (
-    network TEXT NOT NULL,
     index TEXT PRIMARY KEY NOT NULL,
     cpt_positive INTEGER NOT NULL,
     cpt_negative INTEGER NOT NULL,

@@ -1,20 +1,20 @@
+CREATE TABLE kyc_human (
+   index TEXT PRIMARY KEY NOT NULL,
+   vns_domain TEXT NOT NULL,
+   accounts JSON NOT NULL,
+   network_primary_wallet JSON NOT NULL
+);
+
 CREATE TABLE kyc_account (
     index TEXT PRIMARY KEY NOT NULL REFERENCES account (address),
     human_id TEXT UNIQUE REFERENCES kyc_human (index),
-    private_acc BIT NOT NULL DEFAULT 0
-);
-
-CREATE TABLE kyc_human (
-    index TEXT PRIMARY KEY NOT NULL,
-    vns_domain TEXT NOT NULL,
-    accounts JSON NOT NULL,
-    network_primary_wallet JSON NOT NULL
+    private_acc BIT NOT NULL DEFAULT 0::BIT
 );
 
 CREATE TABLE kyc_invite (
     network TEXT NOT NULL,
     challenge TEXT PRIMARY KEY NOT NULL,
-    registered BIT NOT NULL DEFAULT 0,
+    registered BIT NOT NULL DEFAULT 0::BIT,
     confirmed_account TEXT NOT NULL REFERENCES account (address),
     invite_creator TEXT NOT NULL REFERENCES account (address),
     human_id TEXT NOT NULL REFERENCES kyc_human (index),
