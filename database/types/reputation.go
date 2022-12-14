@@ -40,10 +40,6 @@ type ReputationFeedbackItem struct {
 	Timestamp  time.Time `db:"timestamp"`
 }
 
-func NewReputationFeedbackItem(creatorAcc string, destAcc string, txId string, ref string, timestamp time.Time) *ReputationFeedbackItem {
-	return &ReputationFeedbackItem{CreatorAcc: creatorAcc, DestAcc: destAcc, TxId: txId, Ref: ref, Timestamp: timestamp}
-}
-
 type ReputationPostFeedback struct {
 	Creator    string    `db:"creator"`
 	Network    string    `db:"network"`
