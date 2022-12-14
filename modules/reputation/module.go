@@ -7,7 +7,6 @@ import (
 )
 
 var (
-	_ modules.BlockModule   = &Module{}
 	_ modules.Module        = &Module{}
 	_ modules.MessageModule = &Module{}
 )
