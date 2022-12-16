@@ -2,7 +2,10 @@ package modules
 
 import (
 	"github.com/forbole/bdjuno/v3/modules/actions"
+	"github.com/forbole/bdjuno/v3/modules/kyc"
+	"github.com/forbole/bdjuno/v3/modules/reputation"
 	"github.com/forbole/bdjuno/v3/modules/types"
+	"github.com/forbole/bdjuno/v3/modules/village"
 
 	"github.com/forbole/juno/v3/modules/pruning"
 	"github.com/forbole/juno/v3/modules/telemetry"
@@ -65,7 +68,7 @@ func NewRegistrar(parser messages.MessageAddressesParser) *Registrar {
 
 // BuildModules implements modules.Registrar
 func (r *Registrar) BuildModules(ctx registrar.Context) jmodules.Modules {
-	cdc := ctx.EncodingConfig.Marshaler
+	cdc := ctx.EncodingConfig.Codec
 	db := database.Cast(ctx.Database)
 
 	sources, err := types.BuildSources(ctx.JunoConfig.Node, ctx.EncodingConfig)
@@ -85,6 +88,9 @@ func (r *Registrar) BuildModules(ctx registrar.Context) jmodules.Modules {
 	stakingModule := staking.NewModule(sources.StakingSource, cdc, db)
 	govModule := gov.NewModule(sources.GovSource, authModule, distrModule, mintModule, slashingModule, stakingModule, cdc, db)
 	upgradeModule := upgrade.NewModule(db, stakingModule)
+	reputationModule := reputation.NewModule(cdc, db)
+	villageModule := village.NewModule(cdc, db)
+	kycModule := kyc.NewModule(cdc, db)
 
 	return []jmodules.Module{
 		messages.NewModule(r.parser, cdc, ctx.Database),
@@ -105,5 +111,9 @@ func (r *Registrar) BuildModules(ctx registrar.Context) jmodules.Modules {
 		slashingModule,
 		stakingModule,
 		upgradeModule,
+
+		villageModule,
+		reputationModule,
+		kycModule,
 	}
 }
