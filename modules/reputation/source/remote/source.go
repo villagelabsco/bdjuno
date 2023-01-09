@@ -27,6 +27,13 @@ type Source struct {
 	q reputationtypes.QueryClient
 }
 
+func NewSource(source *remote.Source, q reputationtypes.QueryClient) *Source {
+	return &Source{
+		Source: source,
+		q:      q,
+	}
+}
+
 func (s Source) GetParams(height int64) (reputationtypes.Params, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.Params(ctx, &reputationtypes.QueryParamsRequest{})
