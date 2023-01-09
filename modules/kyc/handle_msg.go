@@ -25,12 +25,50 @@ import (
 
 func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 	switch cosmosMsg := msg.(type) {
+	case *kyctypes.MsgVerifyAccount:
+		return m.HandleMsgVerifyAccount(cosmosMsg)
+	case *kyctypes.MsgRevokeAccount:
+		return m.HandleMsgRevokeAccount(cosmosMsg)
 	case *kyctypes.MsgCreateInvite:
 		return m.HandleMsgCreateInvite(cosmosMsg)
 	case *kyctypes.MsgClaimInvite:
 		return m.HandleMsgClaimInvite(cosmosMsg)
+	case *kyctypes.MsgRescindInvite:
+		return m.HandleMsgRescindInvite(cosmosMsg)
+	case *kyctypes.MsgCreateMultipleInvites:
+		return m.HandleMsgCreateMultipleInvites(cosmosMsg)
+	case *kyctypes.MsgVerifyNetwork:
+		return m.HandleMsgVerifyNetwork(cosmosMsg)
+	case *kyctypes.MsgRevokeNetwork:
+		return m.HandleMsgRevokeNetwork(cosmosMsg)
+	case *kyctypes.MsgCreateHumanId:
+		return m.HandleMsgCreateHumanId(cosmosMsg)
+	case *kyctypes.MsgRegisterIdentityProvider:
+		return m.HandleMsgRegisterIdentityProvider(cosmosMsg)
+	case *kyctypes.MsgSetIdentityProviderAdminAccounts:
+		return m.HandleMsgSetIdentityProviderAdminAccounts(cosmosMsg)
+	case *kyctypes.MsgSetIdentityProviderProviderAccounts:
+		return m.HandleMsgSetIdentityProviderProviderAccounts(cosmosMsg)
+	case *kyctypes.MsgJoinNetwork:
+		return m.HandleMsgJoinNetwork(cosmosMsg)
+	case *kyctypes.MsgCreateMultipleHumanIds:
+		return m.HandleMsgCreateMultipleHumanIds(cosmosMsg)
+	case *kyctypes.MsgSetPrimaryNetworkWallet:
+		return m.HandleMsgSetPrimaryNetworkWallet(cosmosMsg)
+	case *kyctypes.MsgAcceptLinkWalletToHumanProposal:
+		return m.HandleMsgAcceptLinkWalletToHumanProposal(cosmosMsg)
+	case *kyctypes.MsgProposeLinkAccountToHuman:
+		return m.HandleMsgProposeLinkAccountToHuman(cosmosMsg)
 	}
 
+	return nil
+}
+
+func (m *Module) HandleMsgVerifyAccount(msg *kyctypes.MsgVerifyAccount) error {
+	return nil
+}
+
+func (m *Module) HandleMsgRevokeAccount(msg *kyctypes.MsgRevokeAccount) error {
 	return nil
 }
 
@@ -70,5 +108,74 @@ func (m *Module) HandleMsgClaimInvite(msg *kyctypes.MsgClaimInvite) error {
 		}
 	}
 
+	return nil
+}
+
+func (m *Module) HandleMsgRescindInvite(msg *kyctypes.MsgRescindInvite) error {
+	return nil
+}
+
+func (m *Module) HandleMsgCreateMultipleInvites(msg *kyctypes.MsgCreateMultipleInvites) error {
+	inv := make([]*kyctypes.Invite, len(msg.Challenges))
+	for i, c := range msg.Challenges {
+		inv[i] = &kyctypes.Invite{
+			Challenge:        c,
+			Registered:       false,
+			ConfirmedAccount: "",
+			InviteCreator:    msg.Creator,
+			HumanId:          msg.HumanIds[i],
+			GivenRoles:       msg.GivenRoles,
+		}
+	}
+
+	err := m.db.InsertMultipleInvites(msg.Network, inv)
+	if err != nil {
+		return fmt.Errorf("error inserting multiple invites: %s", err)
+	}
+
+	return nil
+}
+
+func (m *Module) HandleMsgVerifyNetwork(msg *kyctypes.MsgVerifyNetwork) error {
+	return nil
+}
+
+func (m *Module) HandleMsgRevokeNetwork(msg *kyctypes.MsgRevokeNetwork) error {
+	return nil
+}
+
+func (m *Module) HandleMsgCreateHumanId(msg *kyctypes.MsgCreateHumanId) error {
+	return nil
+}
+
+func (m *Module) HandleMsgRegisterIdentityProvider(msg *kyctypes.MsgRegisterIdentityProvider) error {
+	return nil
+}
+
+func (m *Module) HandleMsgSetIdentityProviderAdminAccounts(msg *kyctypes.MsgSetIdentityProviderAdminAccounts) error {
+	return nil
+}
+
+func (m *Module) HandleMsgSetIdentityProviderProviderAccounts(msg *kyctypes.MsgSetIdentityProviderProviderAccounts) error {
+	return nil
+}
+
+func (m *Module) HandleMsgJoinNetwork(msg *kyctypes.MsgJoinNetwork) error {
+	return nil
+}
+
+func (m *Module) HandleMsgCreateMultipleHumanIds(msg *kyctypes.MsgCreateMultipleHumanIds) error {
+	return nil
+}
+
+func (m *Module) HandleMsgSetPrimaryNetworkWallet(msg *kyctypes.MsgSetPrimaryNetworkWallet) error {
+	return nil
+}
+
+func (m *Module) HandleMsgAcceptLinkWalletToHumanProposal(msg *kyctypes.MsgAcceptLinkWalletToHumanProposal) error {
+	return nil
+}
+
+func (m *Module) HandleMsgProposeLinkAccountToHuman(msg *kyctypes.MsgProposeLinkAccountToHuman) error {
 	return nil
 }

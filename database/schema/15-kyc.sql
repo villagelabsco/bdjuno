@@ -18,7 +18,7 @@ CREATE TABLE kyc_invite (
     confirmed_account TEXT NOT NULL REFERENCES account (address),
     invite_creator TEXT NOT NULL REFERENCES account (address),
     human_id TEXT NOT NULL REFERENCES kyc_human (index),
-    givenRoles JSON[] NOT NULL
+    given_roles text NOT NULL
 );
 
 CREATE TABLE kyc_status (
