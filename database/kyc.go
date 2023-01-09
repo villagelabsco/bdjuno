@@ -19,11 +19,12 @@ package database
 import (
 	"fmt"
 	kyctypes "github.com/villagelabs/villaged/x/kyc/types"
+	"strings"
 )
 
 func (db *Db) InsertInvite(network string, invite *kyctypes.Invite) error {
 	stmt := `
-	INSERT INTO kyc_invite ("network", "challenge", "registered", "confirmed_account", "invite_creator", "human_id", "givenroles") 
+	INSERT INTO kyc_invite ("network", "challenge", "registered", "confirmed_account", "invite_creator", "human_id", "given_roles") 
 	VALUES ($1, $2, $3, $4, $5, $6, $7);`
 
 	_, err := db.Sql.Exec(stmt, network, invite.Challenge, false, invite.ConfirmedAccount, invite.InviteCreator, invite.HumanId, invite.GivenRoles)
@@ -32,6 +33,25 @@ func (db *Db) InsertInvite(network string, invite *kyctypes.Invite) error {
 	}
 
 	return err
+}
+
+func (db *Db) InsertMultipleInvites(network string, invites []*kyctypes.Invite) error {
+	stmt := `
+	INSERT INTO kyc_invite ("network", "challenge", "registered", "confirmed_account", "invite_creator", "human_id", "given_roles")
+	VALUES %s;`
+
+	values := make([]string, 0, len(invites))
+	for _, invite := range invites {
+		values = append(values, fmt.Sprintf("('%s', '%s', '%t', '%s', '%s', '%s', '%s')", network, invite.Challenge, false, invite.ConfirmedAccount, invite.InviteCreator, invite.HumanId, invite.GivenRoles))
+	}
+
+	stmt = fmt.Sprintf(stmt, strings.Join(values, ","))
+	_, err := db.Sql.Exec(stmt)
+	if err != nil {
+		return fmt.Errorf("error while storing invites: %s", err)
+	}
+
+	return nil
 }
 
 func (db *Db) UpdateInvite(network string, challenge string, confirmedAccount string) error {
