@@ -23,199 +23,199 @@ import (
 
 type Source struct {
 	*remote.Source
-	querier kyctypes.QueryClient
+	q kyctypes.QueryClient
 }
 
 func NewSource(source *remote.Source, querier kyctypes.QueryClient) *Source {
 	return &Source{
-		Source:  source,
-		querier: querier,
+		Source: source,
+		q:      querier,
 	}
 }
 
 func (s Source) GetParams(height int64) (kyctypes.Params, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.Params(ctx, &kyctypes.QueryParamsRequest{})
+	res, err := s.q.Params(ctx, &kyctypes.QueryParamsRequest{})
 	if err != nil {
 		return kyctypes.Params{}, err
 	}
 	return res.Params, nil
 }
 
-func (s Source) GetKycStatus(height int64, request kyctypes.QueryGetKycStatusRequest) (kyctypes.QueryGetKycStatusResponse, error) {
+func (s Source) GetKycStatus(height int64, req kyctypes.QueryGetKycStatusRequest) (kyctypes.QueryGetKycStatusResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.KycStatus(ctx, &request)
+	res, err := s.q.KycStatus(ctx, &req)
 	if err != nil {
 		return kyctypes.QueryGetKycStatusResponse{}, err
 	}
 	return *res, nil
 }
 
-func (s Source) GetAllKycStatus(height int64, request kyctypes.QueryAllKycStatusRequest) (kyctypes.QueryAllKycStatusResponse, error) {
+func (s Source) GetAllKycStatus(height int64, req kyctypes.QueryAllKycStatusRequest) (kyctypes.QueryAllKycStatusResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.KycStatusAll(ctx, &request)
+	res, err := s.q.KycStatusAll(ctx, &req)
 	if err != nil {
 		return kyctypes.QueryAllKycStatusResponse{}, err
 	}
 	return *res, nil
 }
 
-func (s Source) GetDetailedAccount(height int64, request kyctypes.QueryGetDetailedAccountRequest) (kyctypes.QueryGetDetailedAccountResponse, error) {
+func (s Source) GetDetailedAccount(height int64, req kyctypes.QueryGetDetailedAccountRequest) (kyctypes.QueryGetDetailedAccountResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.DetailedAccount(ctx, &request)
+	res, err := s.q.DetailedAccount(ctx, &req)
 	if err != nil {
 		return kyctypes.QueryGetDetailedAccountResponse{}, err
 	}
 	return *res, nil
 }
 
-func (s Source) GetAllDetailedAccount(height int64, request kyctypes.QueryAllDetailedAccountsRequest) (kyctypes.QueryAllDetailedAccountsResponse, error) {
+func (s Source) GetAllDetailedAccount(height int64, req kyctypes.QueryAllDetailedAccountsRequest) (kyctypes.QueryAllDetailedAccountsResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.DetailedAccountsAll(ctx, &request)
+	res, err := s.q.DetailedAccountsAll(ctx, &req)
 	if err != nil {
 		return kyctypes.QueryAllDetailedAccountsResponse{}, err
 	}
 	return *res, nil
 }
 
-func (s Source) GetInvite(height int64, request kyctypes.QueryGetInviteRequest) (kyctypes.QueryGetInviteResponse, error) {
+func (s Source) GetInvite(height int64, req kyctypes.QueryGetInviteRequest) (kyctypes.QueryGetInviteResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.Invite(ctx, &request)
+	res, err := s.q.Invite(ctx, &req)
 	if err != nil {
 		return kyctypes.QueryGetInviteResponse{}, err
 	}
 	return *res, nil
 }
 
-func (s Source) GetAllInvite(height int64, request kyctypes.QueryAllInviteRequest) (kyctypes.QueryAllInviteResponse, error) {
+func (s Source) GetAllInvite(height int64, req kyctypes.QueryAllInviteRequest) (kyctypes.QueryAllInviteResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.InviteAll(ctx, &request)
+	res, err := s.q.InviteAll(ctx, &req)
 	if err != nil {
 		return kyctypes.QueryAllInviteResponse{}, err
 	}
 	return *res, nil
 }
 
-func (s Source) GetNbInvitePerDay(height int64, request kyctypes.QueryGetNbInvitePerDayRequest) (kyctypes.QueryGetNbInvitePerDayResponse, error) {
+func (s Source) GetNbInvitePerDay(height int64, req kyctypes.QueryGetNbInvitePerDayRequest) (kyctypes.QueryGetNbInvitePerDayResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.NbInvitePerDay(ctx, &request)
+	res, err := s.q.NbInvitePerDay(ctx, &req)
 	if err != nil {
 		return kyctypes.QueryGetNbInvitePerDayResponse{}, err
 	}
 	return *res, nil
 }
 
-func (s Source) GetAllNbInvitePerDay(height int64, request kyctypes.QueryAllNbInvitePerDayRequest) (kyctypes.QueryAllNbInvitePerDayResponse, error) {
+func (s Source) GetAllNbInvitePerDay(height int64, req kyctypes.QueryAllNbInvitePerDayRequest) (kyctypes.QueryAllNbInvitePerDayResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.NbInvitePerDayAll(ctx, &request)
+	res, err := s.q.NbInvitePerDayAll(ctx, &req)
 	if err != nil {
 		return kyctypes.QueryAllNbInvitePerDayResponse{}, err
 	}
 	return *res, nil
 }
 
-func (s Source) GetNetworkKyb(height int64, request kyctypes.QueryGetNetworkKybRequest) (kyctypes.QueryGetNetworkKybResponse, error) {
+func (s Source) GetNetworkKyb(height int64, req kyctypes.QueryGetNetworkKybRequest) (kyctypes.QueryGetNetworkKybResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.NetworkKyb(ctx, &request)
+	res, err := s.q.NetworkKyb(ctx, &req)
 	if err != nil {
 		return kyctypes.QueryGetNetworkKybResponse{}, err
 	}
 	return *res, nil
 }
 
-func (s Source) GetAllNetworkKyb(height int64, request kyctypes.QueryAllNetworkKybRequest) (kyctypes.QueryAllNetworkKybResponse, error) {
+func (s Source) GetAllNetworkKyb(height int64, req kyctypes.QueryAllNetworkKybRequest) (kyctypes.QueryAllNetworkKybResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.NetworkKybAll(ctx, &request)
+	res, err := s.q.NetworkKybAll(ctx, &req)
 	if err != nil {
 		return kyctypes.QueryAllNetworkKybResponse{}, err
 	}
 	return *res, nil
 }
 
-func (s Source) GetHuman(height int64, request kyctypes.QueryGetHumanRequest) (kyctypes.QueryGetHumanResponse, error) {
+func (s Source) GetHuman(height int64, req kyctypes.QueryGetHumanRequest) (kyctypes.QueryGetHumanResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.Human(ctx, &request)
+	res, err := s.q.Human(ctx, &req)
 	if err != nil {
 		return kyctypes.QueryGetHumanResponse{}, err
 	}
 	return *res, nil
 }
 
-func (s Source) GetAllHuman(height int64, request kyctypes.QueryAllHumanRequest) (kyctypes.QueryAllHumanResponse, error) {
+func (s Source) GetAllHuman(height int64, req kyctypes.QueryAllHumanRequest) (kyctypes.QueryAllHumanResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.HumanAll(ctx, &request)
+	res, err := s.q.HumanAll(ctx, &req)
 	if err != nil {
 		return kyctypes.QueryAllHumanResponse{}, err
 	}
 	return *res, nil
 }
 
-func (s Source) GetAccount(height int64, request kyctypes.QueryGetAccountRequest) (kyctypes.QueryGetAccountResponse, error) {
+func (s Source) GetAccount(height int64, req kyctypes.QueryGetAccountRequest) (kyctypes.QueryGetAccountResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.Account(ctx, &request)
+	res, err := s.q.Account(ctx, &req)
 	if err != nil {
 		return kyctypes.QueryGetAccountResponse{}, nil
 	}
 	return *res, nil
 }
 
-func (s Source) GetAllAccount(height int64, request kyctypes.QueryAllAccountRequest) (kyctypes.QueryAllAccountResponse, error) {
+func (s Source) GetAllAccount(height int64, req kyctypes.QueryAllAccountRequest) (kyctypes.QueryAllAccountResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.AccountAll(ctx, &request)
+	res, err := s.q.AccountAll(ctx, &req)
 	if err != nil {
 		return kyctypes.QueryAllAccountResponse{}, nil
 	}
 	return *res, nil
 }
 
-func (s Source) GetIdentityProvider(height int64, request kyctypes.QueryGetIdentityProviderRequest) (kyctypes.QueryGetIdentityProviderResponse, error) {
+func (s Source) GetIdentityProvider(height int64, req kyctypes.QueryGetIdentityProviderRequest) (kyctypes.QueryGetIdentityProviderResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.IdentityProvider(ctx, &request)
+	res, err := s.q.IdentityProvider(ctx, &req)
 	if err != nil {
 		return kyctypes.QueryGetIdentityProviderResponse{}, err
 	}
 	return *res, nil
 }
 
-func (s Source) GetAllIdentityProvider(height int64, request kyctypes.QueryAllIdentityProviderRequest) (kyctypes.QueryAllIdentityProviderResponse, error) {
+func (s Source) GetAllIdentityProvider(height int64, req kyctypes.QueryAllIdentityProviderRequest) (kyctypes.QueryAllIdentityProviderResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.IdentityProviderAll(ctx, &request)
+	res, err := s.q.IdentityProviderAll(ctx, &req)
 	if err != nil {
 		return kyctypes.QueryAllIdentityProviderResponse{}, err
 	}
 	return *res, nil
 }
 
-func (s Source) GetAccountLinkProposal(height int64, request kyctypes.QueryGetAccountLinkProposalRequest) (kyctypes.QueryGetAccountLinkProposalResponse, error) {
+func (s Source) GetAccountLinkProposal(height int64, req kyctypes.QueryGetAccountLinkProposalRequest) (kyctypes.QueryGetAccountLinkProposalResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.AccountLinkProposal(ctx, &request)
+	res, err := s.q.AccountLinkProposal(ctx, &req)
 	if err != nil {
 		return kyctypes.QueryGetAccountLinkProposalResponse{}, nil
 	}
 	return *res, nil
 }
 
-func (s Source) GetAllAccountLinkProposal(height int64, request kyctypes.QueryAllAccountLinkProposalRequest) (kyctypes.QueryAllAccountLinkProposalResponse, error) {
+func (s Source) GetAllAccountLinkProposal(height int64, req kyctypes.QueryAllAccountLinkProposalRequest) (kyctypes.QueryAllAccountLinkProposalResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.AccountLinkProposalAll(ctx, &request)
+	res, err := s.q.AccountLinkProposalAll(ctx, &req)
 	if err != nil {
 		return kyctypes.QueryAllAccountLinkProposalResponse{}, nil
 	}
 	return *res, nil
 }
 
-func (s Source) GetAccountLinkProposalsForHumanId(height int64, request kyctypes.QueryGetAccountLinkProposalsForHumanIdRequest) (kyctypes.QueryGetAccountLinkProposalsForHumanIdResponse, error) {
+func (s Source) GetAccountLinkProposalsForHumanId(height int64, req kyctypes.QueryGetAccountLinkProposalsForHumanIdRequest) (kyctypes.QueryGetAccountLinkProposalsForHumanIdResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.AccountLinkProposalsForHumanId(ctx, &request)
+	res, err := s.q.AccountLinkProposalsForHumanId(ctx, &req)
 	if err != nil {
 		return kyctypes.QueryGetAccountLinkProposalsForHumanIdResponse{}, nil
 	}
 	return *res, nil
 }
 
-func (s Source) GetAllAccountLinkProposalsForHumanId(height int64, request kyctypes.QueryAllAccountLinkProposalsForHumanIdRequest) (kyctypes.QueryAllAccountLinkProposalsForHumanIdResponse, error) {
+func (s Source) GetAllAccountLinkProposalsForHumanId(height int64, req kyctypes.QueryAllAccountLinkProposalsForHumanIdRequest) (kyctypes.QueryAllAccountLinkProposalsForHumanIdResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.AccountLinkProposalsForHumanIdAll(ctx, &request)
+	res, err := s.q.AccountLinkProposalsForHumanIdAll(ctx, &req)
 	if err != nil {
 		return kyctypes.QueryAllAccountLinkProposalsForHumanIdResponse{}, nil
 	}

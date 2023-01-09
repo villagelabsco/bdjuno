@@ -23,19 +23,19 @@ import (
 
 type Source struct {
 	*remote.Source
-	querier villagetypes.QueryClient
+	q villagetypes.QueryClient
 }
 
 func NewSource(source *remote.Source, querier villagetypes.QueryClient) *Source {
 	return &Source{
-		Source:  source,
-		querier: querier,
+		Source: source,
+		q:      querier,
 	}
 }
 
 func (s Source) GetParams(height int64) (villagetypes.Params, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.Params(ctx, &villagetypes.QueryParamsRequest{})
+	res, err := s.q.Params(ctx, &villagetypes.QueryParamsRequest{})
 	if err != nil {
 		return villagetypes.Params{}, err
 	}
@@ -44,7 +44,7 @@ func (s Source) GetParams(height int64) (villagetypes.Params, error) {
 
 func (s Source) GetNetwork(height int64, req villagetypes.QueryGetNetworkRequest) (villagetypes.QueryGetNetworkResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.Network(ctx, &req)
+	res, err := s.q.Network(ctx, &req)
 	if err != nil {
 		return villagetypes.QueryGetNetworkResponse{}, err
 	}
@@ -53,7 +53,7 @@ func (s Source) GetNetwork(height int64, req villagetypes.QueryGetNetworkRequest
 
 func (s Source) GetAllNetwork(height int64, req villagetypes.QueryAllNetworkRequest) (villagetypes.QueryAllNetworkResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.NetworkAll(ctx, &req)
+	res, err := s.q.NetworkAll(ctx, &req)
 	if err != nil {
 		return villagetypes.QueryAllNetworkResponse{}, err
 	}
@@ -62,7 +62,7 @@ func (s Source) GetAllNetwork(height int64, req villagetypes.QueryAllNetworkRequ
 
 func (s Source) GetUserNetworks(height int64, req villagetypes.QueryGetUserNetworksRequest) (villagetypes.QueryGetUserNetworksResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.UserNetworks(ctx, &req)
+	res, err := s.q.UserNetworks(ctx, &req)
 	if err != nil {
 		return villagetypes.QueryGetUserNetworksResponse{}, err
 	}
@@ -71,7 +71,7 @@ func (s Source) GetUserNetworks(height int64, req villagetypes.QueryGetUserNetwo
 
 func (s Source) GetAllUserNetworks(height int64, req villagetypes.QueryAllUserNetworksRequest) (villagetypes.QueryAllUserNetworksResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.UserNetworksAll(ctx, &req)
+	res, err := s.q.UserNetworksAll(ctx, &req)
 	if err != nil {
 		return villagetypes.QueryAllUserNetworksResponse{}, err
 	}
@@ -80,7 +80,7 @@ func (s Source) GetAllUserNetworks(height int64, req villagetypes.QueryAllUserNe
 
 func (s Source) GetNbNetworkCreationPerDay(height int64, req villagetypes.QueryGetNbNetworkCreationPerDayRequest) (villagetypes.QueryGetNbNetworkCreationPerDayResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.NbNetworkCreationPerDay(ctx, &req)
+	res, err := s.q.NbNetworkCreationPerDay(ctx, &req)
 	if err != nil {
 		return villagetypes.QueryGetNbNetworkCreationPerDayResponse{}, err
 	}
@@ -89,7 +89,7 @@ func (s Source) GetNbNetworkCreationPerDay(height int64, req villagetypes.QueryG
 
 func (s Source) GetAllNbNetworkCreationPerDay(height int64, req villagetypes.QueryAllNbNetworkCreationPerDayRequest) (villagetypes.QueryAllNbNetworkCreationPerDayResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.NbNetworkCreationPerDayAll(ctx, &req)
+	res, err := s.q.NbNetworkCreationPerDayAll(ctx, &req)
 	if err != nil {
 		return villagetypes.QueryAllNbNetworkCreationPerDayResponse{}, err
 	}
@@ -98,7 +98,7 @@ func (s Source) GetAllNbNetworkCreationPerDay(height int64, req villagetypes.Que
 
 func (s Source) GetAccountsInNetwork(height int64, req villagetypes.QueryGetAccountsInNetworkRequest) (villagetypes.QueryGetAccountsInNetworkResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.AccountsInNetwork(ctx, &req)
+	res, err := s.q.AccountsInNetwork(ctx, &req)
 	if err != nil {
 		return villagetypes.QueryGetAccountsInNetworkResponse{}, err
 	}
@@ -107,7 +107,7 @@ func (s Source) GetAccountsInNetwork(height int64, req villagetypes.QueryGetAcco
 
 func (s Source) GetAllAccountsInNetwork(height int64, req villagetypes.QueryAllAccountsInNetworkRequest) (villagetypes.QueryAllAccountsInNetworkResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.querier.AccountsInNetworkAll(ctx, &req)
+	res, err := s.q.AccountsInNetworkAll(ctx, &req)
 	if err != nil {
 		return villagetypes.QueryAllAccountsInNetworkResponse{}, err
 	}
