@@ -19,6 +19,7 @@ package classes
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/forbole/bdjuno/v3/database"
+	classessource "github.com/forbole/bdjuno/v3/modules/classes/source"
 	"github.com/forbole/juno/v3/modules"
 	classestypes "github.com/villagelabs/villaged/x/classes/types"
 )
@@ -31,10 +32,16 @@ var (
 type Module struct {
 	cdc codec.Codec
 	db  *database.Db
+
+	src classessource.Source
 }
 
-func NewModule(cdc codec.Codec, db *database.Db) *Module {
-	return &Module{cdc: cdc, db: db}
+func NewModule(cdc codec.Codec, db *database.Db, src classessource.Source) *Module {
+	return &Module{
+		cdc: cdc,
+		db:  db,
+		src: src,
+	}
 }
 
 func (m *Module) Name() string {
