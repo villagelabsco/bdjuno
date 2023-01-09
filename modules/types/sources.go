@@ -2,6 +2,13 @@ package types
 
 import (
 	"fmt"
+	classestypes "github.com/villagelabs/villaged/x/classes/types"
+	kyctypes "github.com/villagelabs/villaged/x/kyc/types"
+	marketplacetypes "github.com/villagelabs/villaged/x/marketplace/types"
+	productstypes "github.com/villagelabs/villaged/x/products/types"
+	rbactypes "github.com/villagelabs/villaged/x/rbac/types"
+	reputationtypes "github.com/villagelabs/villaged/x/reputation/types"
+	villagetypes "github.com/villagelabs/villaged/x/village/types"
 	"os"
 
 	"github.com/cosmos/cosmos-sdk/simapp"
@@ -39,6 +46,30 @@ import (
 	stakingsource "github.com/forbole/bdjuno/v3/modules/staking/source"
 	localstakingsource "github.com/forbole/bdjuno/v3/modules/staking/source/local"
 	remotestakingsource "github.com/forbole/bdjuno/v3/modules/staking/source/remote"
+
+	classessource "github.com/forbole/bdjuno/v3/modules/classes/source"
+	kycsource "github.com/forbole/bdjuno/v3/modules/kyc/source"
+	marketplacesource "github.com/forbole/bdjuno/v3/modules/marketplace/source"
+	productssource "github.com/forbole/bdjuno/v3/modules/products/source"
+	rbacsource "github.com/forbole/bdjuno/v3/modules/rbac/source"
+	reputationsource "github.com/forbole/bdjuno/v3/modules/reputation/source"
+	villagesource "github.com/forbole/bdjuno/v3/modules/village/source"
+
+	remoteclassessource "github.com/forbole/bdjuno/v3/modules/classes/source/remote"
+	remotekycsource "github.com/forbole/bdjuno/v3/modules/kyc/source/remote"
+	remotemarketplacesource "github.com/forbole/bdjuno/v3/modules/marketplace/source/remote"
+	remoteproductssource "github.com/forbole/bdjuno/v3/modules/products/source/remote"
+	remoterbacsource "github.com/forbole/bdjuno/v3/modules/rbac/source/remote"
+	remotereputationsource "github.com/forbole/bdjuno/v3/modules/reputation/source/remote"
+	remotevillagesource "github.com/forbole/bdjuno/v3/modules/village/source/remote"
+
+	localclassessource "github.com/forbole/bdjuno/v3/modules/classes/source/local"
+	localkycsource "github.com/forbole/bdjuno/v3/modules/kyc/source/local"
+	localmarketplacesource "github.com/forbole/bdjuno/v3/modules/marketplace/source/local"
+	localproductssource "github.com/forbole/bdjuno/v3/modules/products/source/local"
+	localrbacsource "github.com/forbole/bdjuno/v3/modules/rbac/source/local"
+	localreputationsource "github.com/forbole/bdjuno/v3/modules/reputation/source/local"
+	localvillagesource "github.com/forbole/bdjuno/v3/modules/village/source/local"
 )
 
 type Sources struct {
@@ -48,6 +79,14 @@ type Sources struct {
 	MintSource     mintsource.Source
 	SlashingSource slashingsource.Source
 	StakingSource  stakingsource.Source
+
+	ClassesSource     classessource.Source
+	KycSource         kycsource.Source
+	MarketplaceSource marketplacesource.Source
+	ProductsSource    productssource.Source
+	RbacSource        rbacsource.Source
+	ReputationSource  reputationsource.Source
+	VillageSource     villagesource.Source
 }
 
 func BuildSources(nodeCfg nodeconfig.Config, encodingConfig *params.EncodingConfig) (*Sources, error) {
@@ -74,12 +113,19 @@ func buildLocalSources(cfg *local.Details, encodingConfig *params.EncodingConfig
 	)
 
 	sources := &Sources{
-		BankSource:     localbanksource.NewSource(source, banktypes.QueryServer(app.BankKeeper)),
-		DistrSource:    localdistrsource.NewSource(source, distrtypes.QueryServer(app.DistrKeeper)),
-		GovSource:      localgovsource.NewSource(source, govtypes.QueryServer(app.GovKeeper)),
-		MintSource:     localmintsource.NewSource(source, minttypes.QueryServer(app.MintKeeper)),
-		SlashingSource: localslashingsource.NewSource(source, slashingtypes.QueryServer(app.SlashingKeeper)),
-		StakingSource:  localstakingsource.NewSource(source, stakingkeeper.Querier{Keeper: app.StakingKeeper}),
+		BankSource:        localbanksource.NewSource(source, banktypes.QueryServer(app.BankKeeper)),
+		DistrSource:       localdistrsource.NewSource(source, distrtypes.QueryServer(app.DistrKeeper)),
+		GovSource:         localgovsource.NewSource(source, govtypes.QueryServer(app.GovKeeper)),
+		MintSource:        localmintsource.NewSource(source, minttypes.QueryServer(app.MintKeeper)),
+		SlashingSource:    localslashingsource.NewSource(source, slashingtypes.QueryServer(app.SlashingKeeper)),
+		StakingSource:     localstakingsource.NewSource(source, stakingkeeper.Querier{Keeper: app.StakingKeeper}),
+		ClassesSource:     localclassessource.NewSource(source, classestypes.QueryServer(app.ClassesKeeper)),
+		KycSource:         localkycsource.NewSource(source, kyctypes.QueryServer(app.KycKeeper)),
+		MarketplaceSource: localmarketplacesource.NewSource(source, marketplacetypes.QueryServer(app.MarketplaceKeeper)),
+		ProductsSource:    localproductssource.NewSource(source, productstypes.QueryServer(app.ProductsKeeper)),
+		RbacSource:        localrbacsource.NewSource(source, rbactypes.QueryServer(app.RbacKeeper)),
+		ReputationSource:  localreputationsource.NewSource(source, reputationtypes.QueryServer(app.ReputationKeeper)),
+		VillageSource:     localvillagesource.NewSource(source, villagetypes.QueryServer(app.VillageKeeper)),
 	}
 
 	// Mount and initialize the stores
@@ -113,11 +159,18 @@ func buildRemoteSources(cfg *remote.Details) (*Sources, error) {
 	}
 
 	return &Sources{
-		BankSource:     remotebanksource.NewSource(source, banktypes.NewQueryClient(source.GrpcConn)),
-		DistrSource:    remotedistrsource.NewSource(source, distrtypes.NewQueryClient(source.GrpcConn)),
-		GovSource:      remotegovsource.NewSource(source, govtypes.NewQueryClient(source.GrpcConn)),
-		MintSource:     remotemintsource.NewSource(source, minttypes.NewQueryClient(source.GrpcConn)),
-		SlashingSource: remoteslashingsource.NewSource(source, slashingtypes.NewQueryClient(source.GrpcConn)),
-		StakingSource:  remotestakingsource.NewSource(source, stakingtypes.NewQueryClient(source.GrpcConn)),
+		BankSource:        remotebanksource.NewSource(source, banktypes.NewQueryClient(source.GrpcConn)),
+		DistrSource:       remotedistrsource.NewSource(source, distrtypes.NewQueryClient(source.GrpcConn)),
+		GovSource:         remotegovsource.NewSource(source, govtypes.NewQueryClient(source.GrpcConn)),
+		MintSource:        remotemintsource.NewSource(source, minttypes.NewQueryClient(source.GrpcConn)),
+		SlashingSource:    remoteslashingsource.NewSource(source, slashingtypes.NewQueryClient(source.GrpcConn)),
+		StakingSource:     remotestakingsource.NewSource(source, stakingtypes.NewQueryClient(source.GrpcConn)),
+		ClassesSource:     remoteclassessource.NewSource(source, classestypes.NewQueryClient(source.GrpcConn)),
+		KycSource:         remotekycsource.NewSource(source, kyctypes.NewQueryClient(source.GrpcConn)),
+		MarketplaceSource: remotemarketplacesource.NewSource(source, marketplacetypes.NewQueryClient(source.GrpcConn)),
+		ProductsSource:    remoteproductssource.NewSource(source, productstypes.NewQueryClient(source.GrpcConn)),
+		RbacSource:        remoterbacsource.NewSource(source, rbactypes.NewQueryClient(source.GrpcConn)),
+		ReputationSource:  remotereputationsource.NewSource(source, reputationtypes.NewQueryClient(source.GrpcConn)),
+		VillageSource:     remotevillagesource.NewSource(source, villagetypes.NewQueryClient(source.GrpcConn)),
 	}, nil
 }
