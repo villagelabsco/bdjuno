@@ -19,6 +19,7 @@ package marketplace
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/forbole/bdjuno/v3/database"
+	marketplacesource "github.com/forbole/bdjuno/v3/modules/marketplace/source"
 	"github.com/forbole/juno/v3/modules"
 	kyctypes "github.com/villagelabs/villaged/x/kyc/types"
 )
@@ -31,10 +32,16 @@ var (
 type Module struct {
 	cdc codec.Codec
 	db  *database.Db
+
+	src marketplacesource.Source
 }
 
-func NewModule(cdc codec.Codec, db *database.Db) *Module {
-	return &Module{cdc: cdc, db: db}
+func NewModule(cdc codec.Codec, db *database.Db, src marketplacesource.Source) *Module {
+	return &Module{
+		cdc: cdc,
+		db:  db,
+		src: src,
+	}
 }
 
 func (m *Module) Name() string {

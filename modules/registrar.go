@@ -96,7 +96,7 @@ func (r *Registrar) BuildModules(ctx registrar.Context) jmodules.Modules {
 	villageModule := village.NewModule(cdc, db)
 	kycModule := kyc.NewModule(cdc, db)
 	classesModule := classes.NewModule(cdc, db, sources.ClassesSource)
-	marketplaceModule := marketplace.NewModule(cdc, db)
+	marketplaceModule := marketplace.NewModule(cdc, db, sources.MarketplaceSource)
 	productsModule := products.NewModule(cdc, db, sources.ProductsSource)
 	rbacModule := rbac.NewModule(cdc, db)
 
