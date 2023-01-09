@@ -3,6 +3,7 @@ package reputation
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/forbole/bdjuno/v3/database"
+	reputationsource "github.com/forbole/bdjuno/v3/modules/reputation/source"
 	"github.com/forbole/juno/v3/modules"
 )
 
@@ -15,13 +16,15 @@ var (
 type Module struct {
 	cdc codec.Codec
 	db  *database.Db
+	s   reputationsource.Source
 }
 
 // NewModule returns a new Module instance
-func NewModule(cdc codec.Codec, db *database.Db) *Module {
+func NewModule(cdc codec.Codec, db *database.Db, s reputationsource.Source) *Module {
 	return &Module{
 		cdc: cdc,
 		db:  db,
+		s:   s,
 	}
 }
 

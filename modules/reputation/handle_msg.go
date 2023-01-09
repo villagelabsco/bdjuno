@@ -17,12 +17,11 @@
 package reputation
 
 import (
+	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/forbole/bdjuno/v3/database/types"
 	juno "github.com/forbole/juno/v3/types"
 	"github.com/pkg/errors"
 	reputationtypes "github.com/villagelabs/villaged/x/reputation/types"
-	"time"
 )
 
 func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
@@ -32,47 +31,39 @@ func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 
 	switch cosmosMsg := msg.(type) {
 	case *reputationtypes.MsgPostFeedback:
-		return m.HandleMsgPostFeedback(cosmosMsg)
+		return m.HandleMsgPostFeedback(tx.Height, cosmosMsg)
 	}
 
 	return nil
 }
 
-func (m *Module) HandleMsgPostFeedback(msg *reputationtypes.MsgPostFeedback) error {
+func (m *Module) HandleMsgPostFeedback(height int64, msg *reputationtypes.MsgPostFeedback) error {
 	err := m.db.SavePostFeedback(msg)
 	if err != nil {
 		return errors.Wrap(err, "error while saving reputation post feedback")
 	}
 
-	fbItem := &types.ReputationFeedbackItem{
-		CreatorAcc: msg.Creator,
-		DestAcc:    msg.DstAccount,
-		TxId:       msg.TxId,
-		Ref:        msg.Ref,
-		// TODO: Any way to get a block time?
-		Timestamp: time.Now(),
-	}
-
-	fb, err := m.db.FeedbackAggregate(msg.DstAccount)
+	fb, err := m.s.GetFeedback(height, reputationtypes.QueryGetFeedbackRequest{
+		Network: msg.Network,
+		Index:   msg.DstAccount,
+	})
 	if err != nil {
-		return errors.Wrap(err, "error while getting reputation feedback aggregate")
+		return fmt.Errorf("error while getting feedback: %s", err)
 	}
 
-	switch reputationtypes.FeedbackType(msg.FbType) {
-	case reputationtypes.PositiveFeedback:
-		fb.CptPositive += 1
-		fb.Positive = append(fb.Positive, fbItem.ToDto())
-	case reputationtypes.NeutralFeedback:
-		fb.CptNeutral += 1
-		fb.Neutral = append(fb.Neutral, fbItem.ToDto())
-	case reputationtypes.NegativeFeedback:
-		fb.CptNegative += 1
-		fb.Negative = append(fb.Negative, fbItem.ToDto())
+	existing, err := m.db.FeedbackAggregate(msg.DstAccount)
+	if err != nil {
+		return fmt.Errorf("error while getting feedback aggregate: %s", err)
 	}
-
-	if fb.Index == "" {
-		return m.db.InsertFeedbackAggregate(fb)
+	if existing == nil {
+		if err := m.db.InsertFeedbackAggregate(&fb.Feedback); err != nil {
+			return fmt.Errorf("error while inserting feedback aggregate: %s", err)
+		}
 	} else {
-		return m.db.UpdateFeedbackAggregate(fb)
+		if err := m.db.UpdateFeedbackAggregate(&fb.Feedback); err != nil {
+			return fmt.Errorf("error while updating feedback aggregate: %s", err)
+		}
 	}
+
+	return nil
 }
