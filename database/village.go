@@ -21,7 +21,7 @@ import (
 	villagetypes "github.com/villagelabs/villaged/x/village/types"
 )
 
-func (db *Db) InsertNetwork(network *villagetypes.Network) error {
+func (db *Db) SaveNetwork(network *villagetypes.Network) error {
 	stmt := `
 	INSERT INTO village_network ("index", "active", "full_name", "identity_provider", "invite_only")
 	VALUES ($1, $2, $3, $4, $5);`
@@ -65,7 +65,7 @@ func (db *Db) UserNetworks(index string) (*villagetypes.UserNetworks, error) {
 	return &userNetworks, nil
 }
 
-func (db *Db) InsertUserNetworks(userNetworks *villagetypes.UserNetworks) error {
+func (db *Db) SaveUserNetworks(userNetworks *villagetypes.UserNetworks) error {
 	stmt := `
 	INSERT INTO village_user_networks ("index", "networks")
 	VALUES ($1, $2);`

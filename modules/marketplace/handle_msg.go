@@ -52,7 +52,7 @@ func (m *Module) HandleMsgCreateListing(height int64, msg *marketplacetypes.MsgC
 	}
 	listing := lst.Listing
 
-	if err := m.db.InsertListing(&listing); err != nil {
+	if err := m.db.SaveListing(&listing); err != nil {
 		return fmt.Errorf("error while handling create listing msg: %s", err)
 	}
 

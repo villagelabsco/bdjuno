@@ -56,7 +56,7 @@ func (m *Module) HandleMsgPostFeedback(height int64, msg *reputationtypes.MsgPos
 		return fmt.Errorf("error while getting feedback aggregate: %s", err)
 	}
 	if existing == nil {
-		if err := m.db.InsertFeedbackAggregate(&fb.Feedback); err != nil {
+		if err := m.db.SaveFeedbackAggregate(&fb.Feedback); err != nil {
 			return fmt.Errorf("error while inserting feedback aggregate: %s", err)
 		}
 	} else {

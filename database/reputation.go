@@ -37,7 +37,7 @@ func (db *Db) FeedbackAggregate(index string) (*reputationtypes.Feedback, error)
 	return fb.ToDto(), nil
 }
 
-func (db *Db) InsertFeedbackAggregate(fb *reputationtypes.Feedback) error {
+func (db *Db) SaveFeedbackAggregate(fb *reputationtypes.Feedback) error {
 	q := `
 	INSERT INTO reputation_feedback_aggregate ("index", "cpt_positive", "cpt_negative", "cpt_neutral", "positive", "negative", "neutral", "feedbackers", "last_change")
 	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);`

@@ -32,7 +32,7 @@ func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 }
 
 func (m *Module) HandleMsgCreateNetwork(msg *villagetypes.MsgCreateNetwork) error {
-	return m.db.InsertNetwork(&villagetypes.Network{
+	return m.db.SaveNetwork(&villagetypes.Network{
 		Index:            msg.ShortName,
 		Active:           true,
 		FullName:         msg.FullName,

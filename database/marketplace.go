@@ -35,7 +35,7 @@ func (db *Db) Listing(network, index string) (*marketplacetypes.Listing, error) 
 	return &listing, nil
 }
 
-func (db *Db) InsertListing(lst *marketplacetypes.Listing) error {
+func (db *Db) SaveListing(lst *marketplacetypes.Listing) error {
 	stmt := `
 		INSERT INTO marketplace_listings (network, index, product, nft, attributes, creator, active) 
 		VALUES ($1, $2, $3, $4, $5, $6, $7)
