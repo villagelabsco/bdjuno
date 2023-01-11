@@ -22,7 +22,7 @@ import (
 	"strings"
 )
 
-func (db *Db) InsertInvite(network string, invite *kyctypes.Invite) error {
+func (db *Db) SaveInvite(network string, invite *kyctypes.Invite) error {
 	stmt := `
 	INSERT INTO kyc_invite ("network", "challenge", "registered", "confirmed_account", "invite_creator", "human_id", "given_roles") 
 	VALUES ($1, $2, $3, $4, $5, $6, $7);`
@@ -35,7 +35,7 @@ func (db *Db) InsertInvite(network string, invite *kyctypes.Invite) error {
 	return err
 }
 
-func (db *Db) InsertMultipleInvites(network string, invites []*kyctypes.Invite) error {
+func (db *Db) SaveMultipleInvites(network string, invites []*kyctypes.Invite) error {
 	stmt := `
 	INSERT INTO kyc_invite ("network", "challenge", "registered", "confirmed_account", "invite_creator", "human_id", "given_roles")
 	VALUES %s;`
