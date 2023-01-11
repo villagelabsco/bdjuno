@@ -31,76 +31,46 @@ func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 		return m.HandleMsgUpdateProduct(tx.Height, cosmosMsg)
 	case *productstypes.MsgDeleteProduct:
 		return m.HandleMsgDeleteProduct(tx.Height, cosmosMsg)
+	case *productstypes.MsgCreateProductClass:
+		return m.HandleMsgCreateProductClass(tx.Height, cosmosMsg)
+	case *productstypes.MsgCreateTaskClass:
+		return m.HandleMsgCreateTaskClass(tx.Height, cosmosMsg)
+	case *productstypes.MsgFreezeClass:
+		return m.HandleMsgFreezeClass(tx.Height, cosmosMsg)
+	case *productstypes.MsgUpdateClass:
+		return m.HandleMsgUpdateClass(tx.Height, cosmosMsg)
 	default:
 		return fmt.Errorf("unrecognized products message type: %T", msg)
 	}
 }
 
 func (m *Module) HandleMsgCreateProduct(height int64, msg *productstypes.MsgCreateProduct) error {
-	pr, err := m.src.GetProduct(height, productstypes.QueryGetProductRequest{
-		Network: msg.Network,
-		Index:   msg.Index,
-	})
-	if err != nil {
-		return fmt.Errorf("error while handling create product msg: %s", err)
-	}
-	product := pr.Product
-
-	if err := m.db.InsertProduct(&product); err != nil {
-		return fmt.Errorf("error while handling create product msg: %s", err)
-	}
-
-	if product.Parent != "" {
-		if err := m.db.UpdateProductHasChildren(product.Network, product.Parent, true); err != nil {
-			return fmt.Errorf("error while handling create product msg: %s", err)
-		}
-	}
-
+	// TODO: How do we handle with new nft-first product model?
 	return nil
 }
 
 func (m *Module) HandleMsgUpdateProduct(height int64, msg *productstypes.MsgUpdateProduct) error {
-	pr, err := m.src.GetProduct(height, productstypes.QueryGetProductRequest{
-		Network: msg.Network,
-		Index:   msg.Index,
-	})
-	if err != nil {
-		return fmt.Errorf("error while handling update product msg: %s", err)
-	}
-	product := pr.Product
-
-	if err := m.db.UpdateProduct(&product); err != nil {
-		return fmt.Errorf("error while handling update product msg: %s", err)
-	}
-
+	// TODO: How do we handle with new nft-first product model?
 	return nil
 }
 
 func (m *Module) HandleMsgDeleteProduct(height int64, msg *productstypes.MsgDeleteProduct) error {
-	if err := m.db.UpdateProductActive(msg.Network, msg.Index, false); err != nil {
-		return fmt.Errorf("error while handling delete product msg: %s", err)
-	}
+	// TODO: How do we handle with new nft-first product model?
+	return nil
+}
 
-	// Set parent's has_children flag if needed
-	pr, err := m.db.Product(msg.Network, msg.Index)
-	if err != nil {
-		return fmt.Errorf("error while handling delete product msg: %s", err)
-	}
+func (m *Module) HandleMsgCreateProductClass(height int64, msg *productstypes.MsgCreateProductClass) error {
+	return nil
+}
 
-	if pr.Parent != "" {
-		parent, err := m.src.GetProduct(height, productstypes.QueryGetProductRequest{
-			Network: msg.Network,
-			Index:   pr.Parent,
-		})
-		if err != nil {
-			return fmt.Errorf("error while handling delete product msg: %s", err)
-		}
-		if !parent.Product.HasChildren {
-			if err := m.db.UpdateProductHasChildren(msg.Network, pr.Parent, false); err != nil {
-				return fmt.Errorf("error while handling delete product msg: %s", err)
-			}
-		}
-	}
+func (m *Module) HandleMsgCreateTaskClass(height int64, msg *productstypes.MsgCreateTaskClass) error {
+	return nil
+}
 
+func (m *Module) HandleMsgFreezeClass(height int64, msg *productstypes.MsgFreezeClass) error {
+	return nil
+}
+
+func (m *Module) HandleMsgUpdateClass(height int64, msg *productstypes.MsgUpdateClass) error {
 	return nil
 }
