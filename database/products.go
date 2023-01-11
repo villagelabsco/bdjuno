@@ -21,63 +21,6 @@ import (
 	productstypes "github.com/villagelabs/villaged/x/products/types"
 )
 
-func (db *Db) InsertProduct(pr *productstypes.Product) error {
-	stmt := `
-		INSERT INTO products_products (network, index, parent, parent_chain, has_children, name, description, attributes, images, tags, p_type, class, creator, active)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-	`
-
-	if _, err := db.Sql.Exec(stmt,
-		pr.Network,
-		pr.Index,
-		pr.Parent,
-		pr.ParentChain,
-		pr.HasChildren,
-		pr.Name,
-		pr.Description,
-		pr.Attributes,
-		pr.Images,
-		pr.Tags,
-		pr.Ptype,
-		pr.ClassID,
-		pr.Creator,
-		pr.Active); err != nil {
-		return fmt.Errorf("error while inserting product: %s", err)
-	}
-
-	return nil
-}
-
-func (db *Db) UpdateProduct(pr *productstypes.Product) error {
-	stmt := `
-		UPDATE products_products
-		SET
-		    name = $1,
-		    description = $2,
-		    attributes = $3,
-		    images = $4,
-		    tags = $5,
-		    p_type = $6,
-		    class = $7
-		WHERE network = $8 AND index = $9
-	`
-
-	if _, err := db.Sql.Exec(stmt,
-		pr.Name,
-		pr.Description,
-		pr.Attributes,
-		pr.Images,
-		pr.Tags,
-		pr.Ptype,
-		pr.ClassID,
-		pr.Network,
-		pr.Index); err != nil {
-		return fmt.Errorf("error while updating product: %s", err)
-	}
-
-	return nil
-}
-
 func (db *Db) DeleteProduct(network, index string) error {
 	stmt := `
 		UPDATE products_products
@@ -123,31 +66,7 @@ func (db *Db) UpdateProductActive(network, index string, val bool) error {
 	return nil
 }
 
-func (db *Db) Product(network, index string) (productstypes.Product, error) {
-	q := `
-		SELECT
-			network,
-			index,
-			parent,
-			parent_chain,
-			has_children,
-			name,
-			description,
-			attributes,
-			images,
-			tags,
-			p_type,
-			class,
-			creator,
-			active
-		FROM products_products
-		WHERE network = $1 AND index = $2
-	`
+func (db *Db) SaveProductClass(pc productstypes.ProductClassInfo) error {
 
-	var pr productstypes.Product
-	if err := db.Sqlx.Select(&pr, q, network, index); err != nil {
-		return productstypes.Product{}, fmt.Errorf("error while getting product: %s", err)
-	}
-
-	return pr, nil
+	return nil
 }
