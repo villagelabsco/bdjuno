@@ -13,4 +13,16 @@ CREATE TABLE products_products (
     class text not null references classes_classes (index),
     creator text not null references account (address),
     active bit not null
-)
+);
+
+CREATE TABLE products_product_class_infos (
+    network text not null references village_network (index),
+    type text not null,
+    parent text,
+    parent_chain text,
+    has_children bool,
+    disabled bool,
+    is_soul_bond bool,
+    base_image_uri text,
+    metadata json
+);
