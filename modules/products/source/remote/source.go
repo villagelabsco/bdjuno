@@ -43,20 +43,20 @@ func (s Source) GetParams(height int64) (productstypes.Params, error) {
 	return res.Params, nil
 }
 
-func (s Source) GetProduct(height int64, req productstypes.QueryGetProductRequest) (productstypes.QueryGetProductResponse, error) {
+func (s Source) GetProductClassInfo(height int64, req productstypes.QueryGetProductClassInfoRequest) (productstypes.QueryGetProductClassInfoResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.q.Product(ctx, &req)
+	res, err := s.q.ProductClassInfo(ctx, &req)
 	if err != nil {
-		return productstypes.QueryGetProductResponse{}, fmt.Errorf("error while getting product: %s", err)
+		return productstypes.QueryGetProductClassInfoResponse{}, fmt.Errorf("error while getting product class info: %s", err)
 	}
 	return *res, nil
 }
 
-func (s Source) GetAllProduct(height int64, req productstypes.QueryAllProductRequest) (productstypes.QueryAllProductResponse, error) {
+func (s Source) GetAllProductClassInfo(height int64, req productstypes.QueryAllProductClassInfoRequest) (productstypes.QueryAllProductClassInfoResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.q.ProductAll(ctx, &req)
+	res, err := s.q.ProductClassInfoAll(ctx, &req)
 	if err != nil {
-		return productstypes.QueryAllProductResponse{}, fmt.Errorf("error while getting all products: %s", err)
+		return productstypes.QueryAllProductClassInfoResponse{}, fmt.Errorf("error while getting all product class info: %s", err)
 	}
 	return *res, nil
 }

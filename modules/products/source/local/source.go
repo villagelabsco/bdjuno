@@ -52,36 +52,37 @@ func (s Source) GetParams(height int64) (productstypes.Params, error) {
 	return res.Params, nil
 }
 
-func (s Source) GetProduct(height int64, req productstypes.QueryGetProductRequest) (productstypes.QueryGetProductResponse, error) {
+func (s Source) GetProductClassInfo(height int64, req productstypes.QueryGetProductClassInfoRequest) (productstypes.QueryGetProductClassInfoResponse, error) {
 	ctx, err := s.LoadHeight(height)
 	if err != nil {
-		return productstypes.QueryGetProductResponse{}, fmt.Errorf("error while loading height: %s", err)
+		return productstypes.QueryGetProductClassInfoResponse{}, fmt.Errorf("error while loading height: %s", err)
 	}
 
-	res, err := s.q.Product(
+	res, err := s.q.ProductClassInfo(
 		sdk.WrapSDKContext(ctx),
 		&req,
 	)
 	if err != nil {
-		return productstypes.QueryGetProductResponse{}, fmt.Errorf("error while getting product: %s", err)
+		return productstypes.QueryGetProductClassInfoResponse{}, fmt.Errorf("error while getting product class info: %s", err)
 	}
 
 	return *res, nil
 }
 
-func (s Source) GetAllProduct(height int64, req productstypes.QueryAllProductRequest) (productstypes.QueryAllProductResponse, error) {
+func (s Source) GetAllProductClassInfo(height int64, req productstypes.QueryAllProductClassInfoRequest) (productstypes.QueryAllProductClassInfoResponse, error) {
 	ctx, err := s.LoadHeight(height)
 	if err != nil {
-		return productstypes.QueryAllProductResponse{}, fmt.Errorf("error while loading height: %s", err)
+		return productstypes.QueryAllProductClassInfoResponse{}, fmt.Errorf("error while loading height: %s", err)
 	}
 
-	res, err := s.q.ProductAll(
+	res, err := s.q.ProductClassInfoAll(
 		sdk.WrapSDKContext(ctx),
 		&req,
 	)
 	if err != nil {
-		return productstypes.QueryAllProductResponse{}, fmt.Errorf("error while getting all products: %s", err)
+		return productstypes.QueryAllProductClassInfoResponse{}, fmt.Errorf("error while getting all product class info: %s", err)
 	}
 
 	return *res, nil
 }
+

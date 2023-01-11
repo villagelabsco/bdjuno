@@ -20,6 +20,6 @@ import productstypes "github.com/villagelabs/villaged/x/products/types"
 
 type Source interface {
 	GetParams(height int64) (productstypes.Params, error)
-	GetProduct(height int64, req productstypes.QueryGetProductRequest) (productstypes.QueryGetProductResponse, error)
-	GetAllProduct(height int64, req productstypes.QueryAllProductRequest) (productstypes.QueryAllProductResponse, error)
+	GetProductClassInfo(height int64, req productstypes.QueryGetProductClassInfoRequest) (productstypes.QueryGetProductClassInfoResponse, error)
+	GetAllProductClassInfo(height int64, req productstypes.QueryAllProductClassInfoRequest) (productstypes.QueryAllProductClassInfoResponse, error)
 }
