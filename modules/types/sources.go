@@ -13,11 +13,7 @@ import (
 	"os"
 
 	"github.com/cosmos/cosmos-sdk/simapp"
-	"github.com/tendermint/tendermint/libs/log"
-
 	"github.com/cosmos/cosmos-sdk/simapp/params"
-	"github.com/forbole/juno/v3/node/remote"
-
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
@@ -26,6 +22,8 @@ import (
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/forbole/juno/v3/node/local"
+	"github.com/forbole/juno/v3/node/remote"
+	"github.com/tendermint/tendermint/libs/log"
 
 	nodeconfig "github.com/forbole/juno/v3/node/config"
 
@@ -106,39 +104,39 @@ func buildLocalSources(cfg *local.Details, encodingConfig *params.EncodingConfig
 		return nil, err
 	}
 
-	app := simapp.NewSimApp(
+	sapp := simapp.NewSimApp(
 		log.NewTMLogger(log.NewSyncWriter(os.Stdout)), source.StoreDB, nil, true, map[int64]bool{},
 		cfg.Home, 0, simapp.MakeTestEncodingConfig(), simapp.EmptyAppOptions{},
 	)
 
 	sources := &Sources{
-		BankSource:        localbanksource.NewSource(source, banktypes.QueryServer(app.BankKeeper)),
-		DistrSource:       localdistrsource.NewSource(source, distrtypes.QueryServer(app.DistrKeeper)),
-		GovSource:         localgovsource.NewSource(source, govtypes.QueryServer(app.GovKeeper)),
-		MintSource:        localmintsource.NewSource(source, minttypes.QueryServer(app.MintKeeper)),
-		SlashingSource:    localslashingsource.NewSource(source, slashingtypes.QueryServer(app.SlashingKeeper)),
-		StakingSource:     localstakingsource.NewSource(source, stakingkeeper.Querier{Keeper: app.StakingKeeper}),
-		NftSource:         localnftsource.NewSource(source, nfttypes.QueryServer(app.NftKeeper)),
-		KycSource:         localkycsource.NewSource(source, kyctypes.QueryServer(app.KycKeeper)),
-		MarketplaceSource: localmarketplacesource.NewSource(source, marketplacetypes.QueryServer(app.MarketplaceKeeper)),
-		ProductsSource:    localproductssource.NewSource(source, productstypes.QueryServer(app.ProductsKeeper)),
-		RbacSource:        localrbacsource.NewSource(source, rbactypes.QueryServer(app.RbacKeeper)),
-		ReputationSource:  localreputationsource.NewSource(source, reputationtypes.QueryServer(app.ReputationKeeper)),
-		VillageSource:     localvillagesource.NewSource(source, villagetypes.QueryServer(app.VillageKeeper)),
+		BankSource:        localbanksource.NewSource(source, banktypes.QueryServer(sapp.BankKeeper)),
+		DistrSource:       localdistrsource.NewSource(source, distrtypes.QueryServer(sapp.DistrKeeper)),
+		GovSource:         localgovsource.NewSource(source, govtypes.QueryServer(sapp.GovKeeper)),
+		MintSource:        localmintsource.NewSource(source, minttypes.QueryServer(sapp.MintKeeper)),
+		SlashingSource:    localslashingsource.NewSource(source, slashingtypes.QueryServer(sapp.SlashingKeeper)),
+		StakingSource:     localstakingsource.NewSource(source, stakingkeeper.Querier{Keeper: sapp.StakingKeeper}),
+		NftSource:         localnftsource.NewSource(source, nfttypes.QueryServer(sapp.NFTKeeper)),
+		KycSource:         localkycsource.NewSource(source, kyctypes.QueryServer(sapp.KycKeeper)),
+		MarketplaceSource: localmarketplacesource.NewSource(source, marketplacetypes.QueryServer(sapp.MarketplaceKeeper)),
+		ProductsSource:    localproductssource.NewSource(source, productstypes.QueryServer(sapp.ProductsKeeper)),
+		RbacSource:        localrbacsource.NewSource(source, rbactypes.QueryServer(sapp.RbacKeeper)),
+		ReputationSource:  localreputationsource.NewSource(source, reputationtypes.QueryServer(sapp.ReputationKeeper)),
+		VillageSource:     localvillagesource.NewSource(source, villagetypes.QueryServer(sapp.VillageKeeper)),
 	}
 
 	// Mount and initialize the stores
-	err = source.MountKVStores(app, "keys")
+	err = source.MountKVStores(sapp, "keys")
 	if err != nil {
 		return nil, err
 	}
 
-	err = source.MountTransientStores(app, "tkeys")
+	err = source.MountTransientStores(sapp, "tkeys")
 	if err != nil {
 		return nil, err
 	}
 
-	err = source.MountMemoryStores(app, "memKeys")
+	err = source.MountMemoryStores(sapp, "memKeys")
 	if err != nil {
 		return nil, err
 	}
