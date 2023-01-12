@@ -1,8 +1,8 @@
 CREATE TABLE rbac_authorizations (
     index text primary key,
-    messages json[],
+    messages jsonb,
     metadata text,
     group_id text,
-    role_admins json,
-    role_delegates json
+    role_admins jsonb,
+    role_delegates jsonb
 )

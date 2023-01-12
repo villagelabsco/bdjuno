@@ -13,9 +13,9 @@ CREATE TABLE reputation_feedback_aggregate (
     cpt_positive INTEGER NOT NULL,
     cpt_negative INTEGER NOT NULL,
     cpt_neutral INTEGER NOT NULL,
-    positive JSON[] NOT NULL,
-    negative JSON[] NOT NULL,
-    neutral JSON[] NOT NULL,
-    feedbackers JSON NOT NULL,
+    positive jsonb NOT NULL,
+    negative jsonb NOT NULL,
+    neutral jsonb NOT NULL,
+    feedbackers jsonb NOT NULL,
     last_change TIMESTAMP NOT NULL
 );
