@@ -17,56 +17,93 @@
 package database
 
 import (
+	"encoding/json"
 	"fmt"
+	nfttypes "github.com/cosmos/cosmos-sdk/x/nft"
+	"github.com/forbole/bdjuno/v3/database/db_types"
 	productstypes "github.com/villagelabs/villaged/x/products/types"
 )
 
-func (db *Db) DeleteProduct(network, index string) error {
-	stmt := `
-		UPDATE products_products
-		SET
-			active = false
-		WHERE network = $1 AND index = $2
-	`
-
-	if _, err := db.Sql.Exec(stmt, network, index); err != nil {
-		return fmt.Errorf("error while setting product as inactive: %s", err)
+func (db *Db) SaveOrUpdateProductClass(
+	pc productstypes.ProductClassInfo,
+	nftClass *nfttypes.Class,
+	metadata productstypes.StdClassData,
+	specificMetadata productstypes.ProductClassData) error {
+	specificMetadataB, err := json.Marshal(specificMetadata)
+	if err != nil {
+		return fmt.Errorf("error while marshalling specific metadata: %s", err)
 	}
 
+	metadata.SpecificMetadata = nil
+	metadataB, err := json.Marshal(metadata)
+	if err != nil {
+		return fmt.Errorf("error while marshalling metadata: %s", err)
+	}
+
+	pci := db_types.ProductClassInfo{}.FromProto(pc, nftClass, metadataB, specificMetadataB)
+	return db.saveOrUpdateProductClass(pci)
+}
+
+func (db *Db) SaveOrUpdateTaskClass(
+	tc productstypes.ProductClassInfo,
+	nftClass *nfttypes.Class,
+	metadata productstypes.StdClassData,
+	specificMetadata productstypes.TaskClassData) error {
+	specificMetadataB, err := json.Marshal(specificMetadata)
+	if err != nil {
+		return fmt.Errorf("error while marshalling specific metadata: %s", err)
+	}
+
+	metadata.SpecificMetadata = nil
+	metadataB, err := json.Marshal(metadata)
+	if err != nil {
+		return fmt.Errorf("error while marshalling metadata: %s", err)
+	}
+
+	tci := db_types.ProductClassInfo{}.FromProto(tc, nftClass, metadataB, specificMetadataB)
+	return db.saveOrUpdateProductClass(tci)
+}
+
+func (db *Db) UpdateProductClassDisabled(fullClassId string, val bool) error {
+	stmt := `
+		UPDATE products_product_class_infos
+		SET metadata = jsonb_set(metadata, '{disabled}', $1::jsonb, true)
+		WHERE full_class_id = $2
+	`
+
+	_, err := db.Sql.Exec(stmt, val, fullClassId)
+	if err != nil {
+		return fmt.Errorf("error while updating product class metadata: %s", err)
+	}
 	return nil
 }
 
-func (db *Db) UpdateProductHasChildren(network, index string, val bool) error {
+func (db *Db) saveOrUpdateProductClass(pci db_types.ProductClassInfo) error {
 	stmt := `
-	UPDATE products_products
-	SET
-	    has_children = $1
-	WHERE network = $2 AND index = $3
+		INSERT INTO products_product_class_infos (network, class_id, full_class_id, class_type, name, description, metadata, specific_metadata)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
+		ON CONFLICT (full_class_id) DO 
+		UPDATE
+		    SET 
+		        name = $5,
+		        description = $6,
+		        metadata = $7,
+		        specific_metadata = $8
 	`
 
-	if _, err := db.Sql.Exec(stmt, val, network, index); err != nil {
-		return fmt.Errorf("error while updating product has_children: %s", err)
+	_, err := db.Sql.Exec(stmt,
+		pci.Network,
+		pci.ClassId,
+		pci.FullClassId,
+		pci.ClassType,
+		pci.Name,
+		pci.Description,
+		pci.Metadata,
+		pci.SpecificMetadata,
+	)
+	if err != nil {
+		return fmt.Errorf("error while saving product class info: %s", err)
 	}
-
-	return nil
-}
-
-func (db *Db) UpdateProductActive(network, index string, val bool) error {
-	stmt := `
-	UPDATE products_products
-	SET
-	    active = $1
-	WHERE network = $2 AND index = $3
-	`
-
-	if _, err := db.Sql.Exec(stmt, val, network, index); err != nil {
-		return fmt.Errorf("error while updating product active: %s", err)
-	}
-
-	return nil
-}
-
-func (db *Db) SaveProductClass(pc productstypes.ProductClassInfo) error {
 
 	return nil
 }
