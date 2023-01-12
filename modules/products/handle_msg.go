@@ -18,19 +18,16 @@ package products
 
 import (
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	nfttypes "github.com/cosmos/cosmos-sdk/x/nft"
 	juno "github.com/forbole/juno/v3/types"
+	"github.com/gogo/protobuf/proto"
 	productstypes "github.com/villagelabs/villaged/x/products/types"
 )
 
 func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 	switch cosmosMsg := (msg).(type) {
-	case *productstypes.MsgCreateProduct:
-		return m.HandleMsgCreateProduct(tx.Height, cosmosMsg)
-	case *productstypes.MsgUpdateProduct:
-		return m.HandleMsgUpdateProduct(tx.Height, cosmosMsg)
-	case *productstypes.MsgDeleteProduct:
-		return m.HandleMsgDeleteProduct(tx.Height, cosmosMsg)
 	case *productstypes.MsgCreateProductClass:
 		return m.HandleMsgCreateProductClass(tx.Height, cosmosMsg)
 	case *productstypes.MsgCreateTaskClass:
@@ -44,33 +41,133 @@ func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 	}
 }
 
-func (m *Module) HandleMsgCreateProduct(height int64, msg *productstypes.MsgCreateProduct) error {
-	// TODO: How do we handle with new nft-first product model?
-	return nil
-}
-
-func (m *Module) HandleMsgUpdateProduct(height int64, msg *productstypes.MsgUpdateProduct) error {
-	// TODO: How do we handle with new nft-first product model?
-	return nil
-}
-
-func (m *Module) HandleMsgDeleteProduct(height int64, msg *productstypes.MsgDeleteProduct) error {
-	// TODO: How do we handle with new nft-first product model?
-	return nil
-}
-
 func (m *Module) HandleMsgCreateProductClass(height int64, msg *productstypes.MsgCreateProductClass) error {
+	cl, err := m.src.GetProductClassInfo(height, productstypes.QueryGetProductClassInfoRequest{
+		Network: msg.Network,
+		Idx:     msg.Id,
+	})
+	if err != nil {
+		return fmt.Errorf("error while handling create product class info msg: %s", err)
+	}
+	class := cl.ProductClassInfo
+
+	nftCl, err := m.nftSrc.Class(height, nfttypes.QueryClassRequest{ClassId: class.FullClassId})
+	if err != nil {
+		return fmt.Errorf("error while handling create product class info msg: %s", err)
+	}
+	nftClass := nftCl.Class
+
+	metadata, specificMetadata, err := unmarshalProductClassMetadata[*productstypes.ProductClassData](nftClass.Data)
+	if err != nil {
+		return fmt.Errorf("error while handling create product class info msg: %s", err)
+	}
+
+	if err := m.db.SaveOrUpdateProductClass(class, nftClass, *metadata, *specificMetadata); err != nil {
+		return fmt.Errorf("error while handling create product class info msg: %s", err)
+	}
+
 	return nil
 }
 
 func (m *Module) HandleMsgCreateTaskClass(height int64, msg *productstypes.MsgCreateTaskClass) error {
+	cl, err := m.src.GetProductClassInfo(height, productstypes.QueryGetProductClassInfoRequest{
+		Network: msg.Network,
+		Idx:     msg.Id,
+	})
+	if err != nil {
+		return fmt.Errorf("error while handling create task class info msg: %s", err)
+	}
+	class := cl.ProductClassInfo
+
+	nftCl, err := m.nftSrc.Class(height, nfttypes.QueryClassRequest{ClassId: class.FullClassId})
+	if err != nil {
+		return fmt.Errorf("error while handling create task class info msg: %s", err)
+	}
+	nftClass := nftCl.Class
+
+	metadata, specificMetadata, err := unmarshalProductClassMetadata[*productstypes.TaskClassData](nftClass.Data)
+	if err != nil {
+		return fmt.Errorf("error while handling create task class info msg: %s", err)
+	}
+
+	if err := m.db.SaveOrUpdateTaskClass(class, nftClass, *metadata, *specificMetadata); err != nil {
+		return fmt.Errorf("error while handling create task class info msg: %s", err)
+	}
+
 	return nil
 }
 
 func (m *Module) HandleMsgFreezeClass(height int64, msg *productstypes.MsgFreezeClass) error {
+	cl, err := m.src.GetProductClassInfo(height, productstypes.QueryGetProductClassInfoRequest{
+		Network: msg.Network,
+		Idx:     msg.Id,
+	})
+	if err != nil {
+		return fmt.Errorf("error while handling freeze class info msg: %s", err)
+	}
+	class := cl.ProductClassInfo
+
+	if err := m.db.UpdateProductClassDisabled(class.FullClassId, true); err != nil {
+		return fmt.Errorf("error while handling freeze class info msg: %s", err)
+	}
+
 	return nil
 }
 
 func (m *Module) HandleMsgUpdateClass(height int64, msg *productstypes.MsgUpdateClass) error {
+	cl, err := m.src.GetProductClassInfo(height, productstypes.QueryGetProductClassInfoRequest{
+		Network: msg.Network,
+		Idx:     msg.Id,
+	})
+	if err != nil {
+		return fmt.Errorf("error while handling update class info msg: %s", err)
+	}
+	class := cl.ProductClassInfo
+
+	nftCl, err := m.nftSrc.Class(height, nfttypes.QueryClassRequest{ClassId: class.FullClassId})
+	if err != nil {
+		return fmt.Errorf("error while handling update class info msg: %s", err)
+	}
+	nftClass := nftCl.Class
+
+	switch class.ClassType {
+	case productstypes.ClassType_CLASS_TYPE_PRODUCT:
+		metadata, specificMetadata, err := unmarshalProductClassMetadata[*productstypes.ProductClassData](nftClass.Data)
+		if err != nil {
+			return fmt.Errorf("error while handling update class info msg: %s", err)
+		}
+		if err := m.db.SaveOrUpdateProductClass(class, nftClass, *metadata, *specificMetadata); err != nil {
+			return fmt.Errorf("error while handling update class info msg: %s", err)
+		}
+	case productstypes.ClassType_CLASS_TYPE_TASK:
+		metadata, specificMetadata, err := unmarshalProductClassMetadata[*productstypes.TaskClassData](nftClass.Data)
+		if err != nil {
+			return fmt.Errorf("error while handling update class info msg: %s", err)
+		}
+		if err := m.db.SaveOrUpdateTaskClass(class, nftClass, *metadata, *specificMetadata); err != nil {
+			return fmt.Errorf("error while handling update class info msg: %s", err)
+		}
+	case productstypes.ClassType_CLASS_TYPE_SHIFT:
+		return fmt.Errorf("shift class type not supported")
+	case productstypes.ClassType_CLASS_TYPE_SERVICE:
+		return fmt.Errorf("service class type not supported")
+	default:
+		return fmt.Errorf("unrecognized class type: %s", class.ClassType)
+	}
+
 	return nil
+}
+
+func unmarshalProductClassMetadata[T proto.Unmarshaler](data *types.Any) (*productstypes.StdClassData, T, error) {
+	var stdData *productstypes.StdClassData
+	if err := stdData.Unmarshal(data.Value); err != nil {
+		return nil, nil, fmt.Errorf("error while unmarshaling std product class data: %s", err)
+	}
+
+	var spData T
+	if err := spData.Unmarshal(stdData.SpecificMetadata.Value); err != nil {
+		return nil, nil, fmt.Errorf("error while unmarshaling specific product class data: %s", err)
+	}
+
+	return stdData, spData, nil
 }

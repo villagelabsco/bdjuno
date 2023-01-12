@@ -19,6 +19,7 @@ package products
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/forbole/bdjuno/v3/database"
+	nftsource "github.com/forbole/bdjuno/v3/modules/nft/source"
 	productssource "github.com/forbole/bdjuno/v3/modules/products/source"
 	"github.com/forbole/juno/v3/modules"
 	productstypes "github.com/villagelabs/villaged/x/products/types"
@@ -33,14 +34,20 @@ type Module struct {
 	cdc codec.Codec
 	db  *database.Db
 
-	src productssource.Source
+	src    productssource.Source
+	nftSrc nftsource.Source
 }
 
-func NewModule(cdc codec.Codec, db *database.Db, src productssource.Source) *Module {
+func NewModule(
+	cdc codec.Codec,
+	db *database.Db,
+	src productssource.Source,
+	nftSrc nftsource.Source) *Module {
 	return &Module{
-		cdc: cdc,
-		db:  db,
-		src: src,
+		cdc:    cdc,
+		db:     db,
+		src:    src,
+		nftSrc: nftSrc,
 	}
 }
 
