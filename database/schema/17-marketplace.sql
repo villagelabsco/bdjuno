@@ -1,15 +1,17 @@
 CREATE TABLE marketplace_listings (
-    network text references village_network (index),
+    network text references village_networks (index),
     index text primary key,
-    nft text,
+    reference text,
+    product_class_id text references products_product_class_infos (full_class_id),
+    product_nft_id text,
     attributes jsonb,
     creator text references account (address),
-    active bit
+    active bool
 );
 
 CREATE TABLE marketplace_orders (
     index text primary key,
-    network text references village_network (index),
+    network text references village_networks (index),
     status numeric not null,
     timestamp numeric not null,
     creator text references account (address),
