@@ -18,6 +18,7 @@ package database
 
 import (
 	"fmt"
+	"github.com/forbole/bdjuno/v3/database/db_types"
 	kyctypes "github.com/villagelabs/villaged/x/kyc/types"
 	"strings"
 )
@@ -27,7 +28,23 @@ func (db *Db) SaveInvite(network string, invite *kyctypes.Invite) error {
 	INSERT INTO kyc_invite ("network", "challenge", "registered", "confirmed_account", "invite_creator", "human_id", "given_roles") 
 	VALUES ($1, $2, $3, $4, $5, $6, $7);`
 
-	_, err := db.Sql.Exec(stmt, network, invite.Challenge, false, invite.ConfirmedAccount, invite.InviteCreator, invite.HumanId, invite.GivenRoles)
+	inv := db_types.DbKycInvite{
+		Network:          network,
+		Challenge:        invite.Challenge,
+		Registered:       invite.Registered,
+		ConfirmedAccount: invite.ConfirmedAccount,
+		InviteCreator:    invite.InviteCreator,
+		HumanId:          invite.HumanId,
+		GivenRoles:       strings.Join(invite.GivenRoles, ","),
+	}
+	_, err := db.Sql.Exec(stmt, network,
+		inv.Challenge,
+		inv.Registered,
+		inv.ConfirmedAccount,
+		inv.InviteCreator,
+		inv.HumanId,
+		inv.GivenRoles,
+	)
 	if err != nil {
 		return fmt.Errorf("error while storing invite: %s", err)
 	}
@@ -65,6 +82,31 @@ func (db *Db) UpdateInvite(network string, challenge string, confirmedAccount st
 	_, err := db.Sql.Exec(stmt, true, confirmedAccount, network, challenge)
 	if err != nil {
 		return fmt.Errorf("error while updating invite: %s", err)
+	}
+
+	return nil
+}
+
+func (db *Db) SaveIdentityProvider(ip kyctypes.IdentityProvider) error {
+	stmt := `
+		INSERT INTO kyc_identity_provider (index, admin_accounts, provider_accounts, asset_minter_accounts, asset_burner_accounts) 
+		VALUES ($1, $2, $3, $4, $5);
+	`
+
+	dbip, err := db_types.DbKycIdentityProvider{}.FromProto(ip)
+	if err != nil {
+		return fmt.Errorf("error while converting identity provider: %s", err)
+	}
+
+	_, err = db.Sql.Exec(stmt,
+		dbip.Index,
+		dbip.AdminAccounts,
+		dbip.ProviderAccounts,
+		dbip.AssetMinterAccounts,
+		dbip.AssetBurnerAccounts,
+	)
+	if err != nil {
+		return fmt.Errorf("error while storing identity provider: %s", err)
 	}
 
 	return nil

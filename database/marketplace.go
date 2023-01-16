@@ -44,8 +44,6 @@ func (db *Db) SaveListing(lst *marketplacetypes.Listing) error {
 	if _, err := db.Sql.Exec(stmt,
 		lst.Network,
 		lst.Index,
-		lst.Product,
-		lst.Nft,
 		lst.Attributes,
 		lst.Creator,
 		lst.Active); err != nil {
@@ -65,7 +63,6 @@ func (db *Db) UpdateListing(lst *marketplacetypes.Listing) error {
 	`
 
 	if _, err := db.Sql.Exec(stmt,
-		lst.Product,
 		lst.Attributes,
 		lst.Network,
 		lst.Index); err != nil {
