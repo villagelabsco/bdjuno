@@ -22,7 +22,7 @@ import (
 	productstypes "github.com/villagelabs/villaged/x/products/types"
 )
 
-type ProductClassInfo struct {
+type DbProductClassInfo struct {
 	Network          string                  `db:"network"`
 	ClassId          string                  `db:"class_id"`
 	FullClassId      string                  `db:"full_class_id"`
@@ -33,8 +33,8 @@ type ProductClassInfo struct {
 	SpecificMetadata sqlxtypes.JSONText      `db:"specific_metadata"`
 }
 
-func (p ProductClassInfo) FromProto(info productstypes.ProductClassInfo, nftClass *nfttypes.Class, metadata []byte, specificMetadata []byte) ProductClassInfo {
-	return ProductClassInfo{
+func (p DbProductClassInfo) FromProto(info productstypes.ProductClassInfo, nftClass *nfttypes.Class, metadata []byte, specificMetadata []byte) DbProductClassInfo {
+	return DbProductClassInfo{
 		Network:          info.Network,
 		ClassId:          info.ClassId,
 		FullClassId:      info.FullClassId,
@@ -46,7 +46,7 @@ func (p ProductClassInfo) FromProto(info productstypes.ProductClassInfo, nftClas
 	}
 }
 
-func (p ProductClassInfo) ToProto() productstypes.ProductClassInfo {
+func (p DbProductClassInfo) ToProto() productstypes.ProductClassInfo {
 	return productstypes.ProductClassInfo{
 		Network:     p.Network,
 		ClassId:     p.ClassId,
