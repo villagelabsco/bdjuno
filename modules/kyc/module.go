@@ -19,6 +19,7 @@ package kyc
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/forbole/bdjuno/v3/database"
+	kycsource "github.com/forbole/bdjuno/v3/modules/kyc/source"
 	"github.com/forbole/juno/v3/modules"
 	kyctypes "github.com/villagelabs/villaged/x/kyc/types"
 )
@@ -31,10 +32,16 @@ var (
 type Module struct {
 	cdc codec.Codec
 	db  *database.Db
+
+	src kycsource.Source
 }
 
-func NewModule(cdc codec.Codec, db *database.Db) *Module {
-	return &Module{cdc: cdc, db: db}
+func NewModule(cdc codec.Codec, db *database.Db, src kycsource.Source) *Module {
+	return &Module{
+		cdc: cdc,
+		db:  db,
+		src: src,
+	}
 }
 
 func (m *Module) Name() string {
