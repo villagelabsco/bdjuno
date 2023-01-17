@@ -16,10 +16,22 @@
 
 package db_types
 
+import villagetypes "github.com/villagelabs/villaged/x/village/types"
+
 type DbVillageNetwork struct {
 	Index            string `db:"index"`
 	Active           bool   `db:"active"`
 	FullName         string `db:"full_name"`
 	IdentityProvider string `db:"identity_provider"`
 	InviteOnly       bool   `db:"invite_only"`
+}
+
+func (vn DbVillageNetwork) FromProto(n *villagetypes.Network) DbVillageNetwork {
+	return DbVillageNetwork{
+		Index:            n.Index,
+		Active:           n.Active,
+		FullName:         n.FullName,
+		IdentityProvider: n.IdentityProvider,
+		InviteOnly:       n.InviteOnly,
+	}
 }

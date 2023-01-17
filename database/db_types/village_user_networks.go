@@ -16,9 +16,26 @@
 
 package db_types
 
-import sqlxtypes "github.com/jmoiron/sqlx/types"
+import (
+	"encoding/json"
+	"fmt"
+	sqlxtypes "github.com/jmoiron/sqlx/types"
+	villagetypes "github.com/villagelabs/villaged/x/village/types"
+)
 
 type DbVillageUserNetworks struct {
 	Index    string             `db:"index"`
 	Networks sqlxtypes.JSONText `db:"networks"`
+}
+
+func (vn DbVillageUserNetworks) FromProto(n *villagetypes.UserNetworks) (DbVillageUserNetworks, error) {
+	networks, err := json.Marshal(n.Networks)
+	if err != nil {
+		return DbVillageUserNetworks{}, fmt.Errorf("error marshalling networks: %v", err)
+	}
+
+	return DbVillageUserNetworks{
+		Index:    n.Index,
+		Networks: networks,
+	}, nil
 }
