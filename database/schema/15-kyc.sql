@@ -35,7 +35,7 @@ CREATE TABLE kyc_nb_invite_per_day (
 
 CREATE TABLE kyc_network_kyb (
     index TEXT PRIMARY KEY NOT NULL,
-    status TEXT NOT NULL,
+    status numeric NOT NULL,
     data_hash TEXT NOT NULL,
     timestamp TIMESTAMP NOT NULL,
     metadata TEXT NOT NULL

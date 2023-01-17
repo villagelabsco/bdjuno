@@ -16,10 +16,22 @@
 
 package db_types
 
+import kyctypes "github.com/villagelabs/villaged/x/kyc/types"
+
 type DbKycNetworkKyb struct {
 	Index     string `db:"index"`
-	Status    string `db:"status"`
+	Status    uint64 `db:"status"`
 	DataHash  string `db:"data_hash"`
 	Timestamp uint64 `db:"timestamp"`
 	Metadata  string `db:"metadata"`
+}
+
+func (DbKycNetworkKyb) FromProto(kyb *kyctypes.NetworkKyb) DbKycNetworkKyb {
+	return DbKycNetworkKyb{
+		Index:     kyb.Index,
+		Status:    kyb.Status,
+		DataHash:  kyb.DataHash,
+		Timestamp: kyb.Timestamp,
+		Metadata:  kyb.Metadata,
+	}
 }

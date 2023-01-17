@@ -87,6 +87,20 @@ func (db *Db) UpdateInvite(network string, challenge string, confirmedAccount st
 	return nil
 }
 
+func (db *Db) DeleteInvite(network string, challenge string) error {
+	stmt := `
+		DELETE FROM kyc_invites
+		WHERE "network" = $1 AND "challenge" = $2;
+	`
+
+	_, err := db.Sql.Exec(stmt, network, challenge)
+	if err != nil {
+		return fmt.Errorf("error while deleting invite: %s", err)
+	}
+
+	return nil
+}
+
 func (db *Db) SaveOrUpdateIdentityProvider(ip kyctypes.IdentityProvider) error {
 	stmt := `
 		INSERT INTO kyc_identity_provider (index, admin_accounts, provider_accounts, asset_minter_accounts, asset_burner_accounts) 
@@ -114,6 +128,34 @@ func (db *Db) SaveOrUpdateIdentityProvider(ip kyctypes.IdentityProvider) error {
 	)
 	if err != nil {
 		return fmt.Errorf("error while storing identity provider: %s", err)
+	}
+
+	return nil
+}
+
+func (db *Db) SaveOrUpdateNetworkKyb(kyb *kyctypes.NetworkKyb) error {
+	stmt := `
+		INSERT INTO kyc_network_kyb (index, status, data_hash, timestamp, metadata) 
+		VALUES ($1, $2, $3, $4, $5)
+		ON CONFLICT (index) DO
+		UPDATE 
+		    SET
+		        status = $2,
+		        data_hash = $3,
+		        timestamp = $4,
+		        metadata = $5;
+	`
+
+	dbkyb := db_types.DbKycNetworkKyb{}.FromProto(kyb)
+	_, err := db.Sql.Exec(stmt,
+		dbkyb.Index,
+		dbkyb.Status,
+		dbkyb.DataHash,
+		dbkyb.Timestamp,
+		dbkyb.Metadata,
+	)
+	if err != nil {
+		return fmt.Errorf("error while storing network kyb: %s", err)
 	}
 
 	return nil

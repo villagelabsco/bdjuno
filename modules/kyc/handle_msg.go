@@ -112,6 +112,9 @@ func (m *Module) HandleMsgClaimInvite(height int64, msg *kyctypes.MsgClaimInvite
 }
 
 func (m *Module) HandleMsgRescindInvite(height int64, msg *kyctypes.MsgRescindInvite) error {
+	if err := m.db.DeleteInvite(msg.Network, msg.Challenge); err != nil {
+		return fmt.Errorf("error updating invite: %s", err)
+	}
 	return nil
 }
 
@@ -143,12 +146,28 @@ func (m *Module) HandleMsgVerifyNetwork(height int64, msg *kyctypes.MsgVerifyNet
 	if err != nil {
 		return fmt.Errorf("error getting network kyb: %s", err)
 	}
+	kyb := acc.NetworkKyb
 
-	return m.db.SaveNetwork(msg.Network, acc)
+	if err := m.db.SaveOrUpdateNetworkKyb(&kyb); err != nil {
+		return fmt.Errorf("error saving network kyb: %s", err)
+	}
+
 	return nil
 }
 
 func (m *Module) HandleMsgRevokeNetwork(height int64, msg *kyctypes.MsgRevokeNetwork) error {
+	acc, err := m.src.GetNetworkKyb(height, kyctypes.QueryGetNetworkKybRequest{
+		Index: msg.Network,
+	})
+	if err != nil {
+		return fmt.Errorf("error getting network kyb: %s", err)
+	}
+	kyb := acc.NetworkKyb
+
+	if err := m.db.SaveOrUpdateNetworkKyb(&kyb); err != nil {
+		return fmt.Errorf("error saving network kyb: %s", err)
+	}
+
 	return nil
 }
 
