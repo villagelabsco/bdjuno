@@ -25,7 +25,7 @@ import (
 
 func (db *Db) SaveInvite(network string, invite *kyctypes.Invite) error {
 	stmt := `
-	INSERT INTO kyc_invite ("network", "challenge", "registered", "confirmed_account", "invite_creator", "human_id", "given_roles") 
+	INSERT INTO kyc_invites ("network", "challenge", "registered", "confirmed_account", "invite_creator", "human_id", "given_roles") 
 	VALUES ($1, $2, $3, $4, $5, $6, $7);`
 
 	inv := db_types.DbKycInvite{
@@ -54,7 +54,7 @@ func (db *Db) SaveInvite(network string, invite *kyctypes.Invite) error {
 
 func (db *Db) SaveMultipleInvites(network string, invites []*kyctypes.Invite) error {
 	stmt := `
-	INSERT INTO kyc_invite ("network", "challenge", "registered", "confirmed_account", "invite_creator", "human_id", "given_roles")
+	INSERT INTO kyc_invites ("network", "challenge", "registered", "confirmed_account", "invite_creator", "human_id", "given_roles")
 	VALUES %s;`
 
 	values := make([]string, 0, len(invites))
@@ -73,7 +73,7 @@ func (db *Db) SaveMultipleInvites(network string, invites []*kyctypes.Invite) er
 
 func (db *Db) UpdateInvite(network string, challenge string, confirmedAccount string) error {
 	stmt := `
-	UPDATE kyc_invite 
+	UPDATE kyc_invites
 	SET 
 	    "registered" = $1, 
 	    "confirmed_account" = $2 
@@ -87,10 +87,17 @@ func (db *Db) UpdateInvite(network string, challenge string, confirmedAccount st
 	return nil
 }
 
-func (db *Db) SaveIdentityProvider(ip kyctypes.IdentityProvider) error {
+func (db *Db) SaveOrUpdateIdentityProvider(ip kyctypes.IdentityProvider) error {
 	stmt := `
 		INSERT INTO kyc_identity_provider (index, admin_accounts, provider_accounts, asset_minter_accounts, asset_burner_accounts) 
-		VALUES ($1, $2, $3, $4, $5);
+		VALUES ($1, $2, $3, $4, $5)
+		ON CONFLICT (index) DO
+		UPDATE 
+		    SET
+		        admin_accounts = $2,
+		        provider_accounts = $3,
+		        asset_minter_accounts = $4,
+		        asset_burner_accounts = $5;
 	`
 
 	dbip, err := db_types.DbKycIdentityProvider{}.FromProto(ip)
