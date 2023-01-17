@@ -29,3 +29,14 @@ type DbReputationFeedback struct {
 	TxId       string                       `db:"tx_id"`
 	Ref        string                       `db:"ref"`
 }
+
+func (rf DbReputationFeedback) FromProto(f *reputationtypes.MsgPostFeedback) DbReputationFeedback {
+	return DbReputationFeedback{
+		Creator:    f.Creator,
+		Network:    f.Network,
+		FbType:     reputationtypes.FeedbackType(f.FbType),
+		DstAccount: f.DstAccount,
+		TxId:       f.TxId,
+		Ref:        f.Ref,
+	}
+}

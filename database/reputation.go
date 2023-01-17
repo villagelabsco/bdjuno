@@ -18,7 +18,7 @@ package database
 
 import (
 	"fmt"
-	"github.com/forbole/bdjuno/v3/database/types"
+	"github.com/forbole/bdjuno/v3/database/db_types"
 	reputationtypes "github.com/villagelabs/villaged/x/reputation/types"
 )
 
@@ -28,13 +28,18 @@ func (db *Db) FeedbackAggregate(index string) (*reputationtypes.Feedback, error)
 	FROM reputation_feedback_aggregate AS rfa
 	WHERE rfa.index = $1;`
 
-	var fb types.ReputationFeedbackAggregate
+	var fb db_types.DbReputationFeedbackAggregate
 	err := db.Sqlx.Select(&fb, q, index)
 	if err != nil {
 		return nil, fmt.Errorf("error while querying reputation feedback aggregate: %s", err)
 	}
 
-	return fb.ToDto(), nil
+	res, err := fb.ToProto()
+	if err != nil {
+		return nil, fmt.Errorf("error while converting reputation feedback aggregate to dto: %s", err)
+	}
+
+	return res, nil
 }
 
 func (db *Db) SaveFeedbackAggregate(fb *reputationtypes.Feedback) error {
@@ -42,7 +47,11 @@ func (db *Db) SaveFeedbackAggregate(fb *reputationtypes.Feedback) error {
 	INSERT INTO reputation_feedback_aggregate ("index", "cpt_positive", "cpt_negative", "cpt_neutral", "positive", "negative", "neutral", "feedbackers", "last_change")
 	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);`
 
-	_, err := db.Sql.Exec(q, fb.Index, fb.CptPositive, fb.CptNegative, fb.CptNeutral, fb.Positive, fb.Negative, fb.Neutral, fb.Feedbackers, fb.LastChange)
+	fa, err := db_types.DbReputationFeedbackAggregate{}.FromProto(fb)
+	if err != nil {
+		return fmt.Errorf("error while converting reputation feedback aggregate to db type: %s", err)
+	}
+	_, err = db.Sql.Exec(q, fa.Index, fa.CptPositive, fa.CptNegative, fa.CptNeutral, fa.Positive, fa.Negative, fa.Neutral, fa.Feedbackers, fa.LastChange)
 	if err != nil {
 		return fmt.Errorf("error while inserting reputation feedback aggregate: %s", err)
 	}
@@ -63,16 +72,20 @@ func (db *Db) UpdateFeedbackAggregate(fb *reputationtypes.Feedback) error {
 		feedbackers = $9
     WHERE rfa.index = $1`
 
-	_, err := db.Sql.Exec(stmt,
-		fb.Index,
-		fb.LastChange,
-		fb.CptPositive,
-		fb.CptNeutral,
-		fb.CptNegative,
-		fb.Positive,
-		fb.Neutral,
-		fb.Negative,
-		fb.Feedbackers,
+	fa, err := db_types.DbReputationFeedbackAggregate{}.FromProto(fb)
+	if err != nil {
+		return fmt.Errorf("error while converting reputation feedback aggregate to db type: %s", err)
+	}
+	_, err = db.Sql.Exec(stmt,
+		fa.Index,
+		fa.LastChange,
+		fa.CptPositive,
+		fa.CptNeutral,
+		fa.CptNegative,
+		fa.Positive,
+		fa.Neutral,
+		fa.Negative,
+		fa.Feedbackers,
 	)
 	if err != nil {
 		return fmt.Errorf("error while updating reputation feedback aggregate: %s", err)
@@ -86,7 +99,8 @@ func (db *Db) SavePostFeedback(msg *reputationtypes.MsgPostFeedback) error {
 	INSERT INTO reputation_feedback ("creator", "network", "fb_type", "dst_account", "tx_id", "ref")
 	VALUES ($1, $2, $3, $4, $5, $6)`
 
-	_, err := db.Sql.Exec(stmt, msg.Creator, msg.Network, msg.FbType, msg.DstAccount, msg.TxId, msg.Ref)
+	pfb := db_types.DbReputationFeedback{}.FromProto(msg)
+	_, err := db.Sql.Exec(stmt, pfb.Creator, pfb.Network, pfb.FbType, pfb.DstAccount, pfb.TxId, pfb.Ref)
 	if err != nil {
 		return fmt.Errorf("error while saving reputation feedback: %s", err)
 	}
