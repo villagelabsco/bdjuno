@@ -19,6 +19,7 @@ package marketplace
 import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/forbole/bdjuno/v3/utils"
 	juno "github.com/forbole/juno/v3/types"
 	marketplacetypes "github.com/villagelabs/villaged/x/marketplace/types"
 )
@@ -43,9 +44,17 @@ func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 }
 
 func (m *Module) HandleMsgCreateListing(index int, tx *juno.Tx, msg *marketplacetypes.MsgCreateListing) error {
+	evt, err := tx.FindEventByType(index, utils.ProtoMsgName(&marketplacetypes.EvtCreatedListing{}))
+	if err != nil {
+		return fmt.Errorf("error while finding event %T: %s", &marketplacetypes.EvtCreatedListing{}, err)
+	}
+	idx, err := tx.FindAttributeByKey(evt, "Index")
+	if err != nil {
+		return fmt.Errorf("error while finding index attribute in created listing evt: %s", err)
+	}
 	lst, err := m.src.GetListing(tx.Height, marketplacetypes.QueryGetListingRequest{
 		Network: msg.Network,
-		Index:   msg.Index,
+		Index:   idx,
 	})
 	if err != nil {
 		return fmt.Errorf("error while handling create listing msg: %s", err)
@@ -62,7 +71,7 @@ func (m *Module) HandleMsgCreateListing(index int, tx *juno.Tx, msg *marketplace
 func (m *Module) HandleMsgUpdateListing(index int, tx *juno.Tx, msg *marketplacetypes.MsgUpdateListing) error {
 	lst, err := m.src.GetListing(tx.Height, marketplacetypes.QueryGetListingRequest{
 		Network: msg.Network,
-		Index:   msg.Index,
+		Index:   msg.ListingIdx,
 	})
 	if err != nil {
 		return fmt.Errorf("error while handling update listing msg: %s", err)
@@ -77,7 +86,7 @@ func (m *Module) HandleMsgUpdateListing(index int, tx *juno.Tx, msg *marketplace
 }
 
 func (m *Module) HandleMsgDeleteListing(index int, tx *juno.Tx, msg *marketplacetypes.MsgDeleteListing) error {
-	if err := m.db.UpdateListingActive(msg.Network, msg.Index, false); err != nil {
+	if err := m.db.UpdateListingActive(msg.Network, msg.ListingIdx, false); err != nil {
 		return fmt.Errorf("error while handling delete listing msg: %s", err)
 	}
 
