@@ -1,0 +1,39 @@
+/*
+ * Copyright 2022 LimeChain Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package economics
+
+import (
+	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/forbole/bdjuno/v3/database"
+	econsource "github.com/forbole/bdjuno/v3/modules/economics/source"
+	"github.com/forbole/juno/v3/modules"
+	econtypes "github.com/villagelabs/villaged/x/economics/types"
+)
+
+var _ modules.Module = &Module{}
+var _ modules.MessageModule = &Module{}
+
+type Module struct {
+	cdc codec.Codec
+	db  *database.Db
+
+	src econsource.Source
+}
+
+func (m Module) Name() string {
+	return econtypes.ModuleName
+}
