@@ -2,6 +2,7 @@ package utils
 
 import (
 	"context"
+	"github.com/gogo/protobuf/proto"
 	"strconv"
 
 	grpctypes "github.com/cosmos/cosmos-sdk/types/grpc"
@@ -29,4 +30,8 @@ func GetHeightRequestContext(context context.Context, height int64) context.Cont
 		grpctypes.GRPCBlockHeightHeader,
 		strconv.FormatInt(height, 10),
 	)
+}
+
+func ProtoMsgName(msg proto.Message) string {
+	return "/" + proto.MessageName(msg)
 }
