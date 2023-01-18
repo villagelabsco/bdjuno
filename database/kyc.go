@@ -161,3 +161,32 @@ func (db *Db) SaveOrUpdateNetworkKyb(kyb *kyctypes.NetworkKyb) error {
 
 	return nil
 }
+
+func (db *Db) SaveOrUpdateHuman(human *kyctypes.Human) error {
+	stmt := `
+		INSERT INTO kyc_humans (index, vns_domain, accounts, network_primary_wallet) 
+		VALUES ($1, $2, $3, $4)
+		ON CONFLICT (index) DO
+		UPDATE
+		    SET
+		        vns_domain = $2,
+		        accounts = $3,
+		        network_primary_wallet = $4;
+	`
+
+	dbHuman, err := db_types.DbKycHuman{}.FromProto(human)
+	if err != nil {
+		return fmt.Errorf("error while converting human: %s", err)
+	}
+	_, err = db.Sql.Exec(stmt,
+		dbHuman.Index,
+		dbHuman.VnsDomain,
+		dbHuman.Accounts,
+		dbHuman.NetworkPrimaryWallet,
+	)
+	if err != nil {
+		return fmt.Errorf("error while storing human: %s", err)
+	}
+
+	return nil
+}

@@ -16,11 +16,34 @@
 
 package db_types
 
-import sqlxtypes "github.com/jmoiron/sqlx/types"
+import (
+	"encoding/json"
+	"fmt"
+	sqlxtypes "github.com/jmoiron/sqlx/types"
+	kyctypes "github.com/villagelabs/villaged/x/kyc/types"
+)
 
 type DbKycHuman struct {
 	Index                string             `db:"index"`
 	VnsDomain            string             `db:"vns_domain"`
 	Accounts             sqlxtypes.JSONText `db:"accounts"`
 	NetworkPrimaryWallet sqlxtypes.JSONText `db:"network_primary_wallet"`
+}
+
+func (DbKycHuman) FromProto(h *kyctypes.Human) (DbKycHuman, error) {
+	accs, err := json.Marshal(h.Accounts)
+	if err != nil {
+		return DbKycHuman{}, fmt.Errorf("error while marshalling accounts: %s", err)
+	}
+	npw, err := json.Marshal(h.NetworkPrimaryWallet)
+	if err != nil {
+		return DbKycHuman{}, fmt.Errorf("error while marshalling network primary wallet: %s", err)
+	}
+
+	return DbKycHuman{
+		Index:                h.Index,
+		VnsDomain:            h.VnsDomain,
+		Accounts:             accs,
+		NetworkPrimaryWallet: npw,
+	}, nil
 }
