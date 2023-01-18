@@ -26,24 +26,24 @@ import (
 func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 	switch cosmosMsg := msg.(type) {
 	case *marketplacetypes.MsgCreateListing:
-		return m.HandleMsgCreateListing(tx.Height, cosmosMsg)
+		return m.HandleMsgCreateListing(index, tx, cosmosMsg)
 	case *marketplacetypes.MsgUpdateListing:
-		return m.HandleMsgUpdateListing(tx.Height, cosmosMsg)
+		return m.HandleMsgUpdateListing(index, tx, cosmosMsg)
 	case *marketplacetypes.MsgDeleteListing:
-		return m.HandleMsgDeleteListing(tx.Height, cosmosMsg)
+		return m.HandleMsgDeleteListing(index, tx, cosmosMsg)
 	case *marketplacetypes.MsgCreateOrder:
-		return m.HandleMsgCreateOrder(tx.Height, cosmosMsg)
+		return m.HandleMsgCreateOrder(index, tx, cosmosMsg)
 	case *marketplacetypes.MsgUpdateOrder:
-		return m.HandleMsgUpdateOrder(tx.Height, cosmosMsg)
+		return m.HandleMsgUpdateOrder(index, tx, cosmosMsg)
 	case *marketplacetypes.MsgDeleteOrder:
-		return m.HandleMsgDeleteOrder(tx.Height, cosmosMsg)
+		return m.HandleMsgDeleteOrder(index, tx, cosmosMsg)
 	default:
 		return fmt.Errorf("unrecognized marketplace message type: %T", msg)
 	}
 }
 
-func (m *Module) HandleMsgCreateListing(height int64, msg *marketplacetypes.MsgCreateListing) error {
-	lst, err := m.src.GetListing(height, marketplacetypes.QueryGetListingRequest{
+func (m *Module) HandleMsgCreateListing(index int, tx *juno.Tx, msg *marketplacetypes.MsgCreateListing) error {
+	lst, err := m.src.GetListing(tx.Height, marketplacetypes.QueryGetListingRequest{
 		Network: msg.Network,
 		Index:   msg.Index,
 	})
@@ -59,8 +59,8 @@ func (m *Module) HandleMsgCreateListing(height int64, msg *marketplacetypes.MsgC
 	return nil
 }
 
-func (m *Module) HandleMsgUpdateListing(height int64, msg *marketplacetypes.MsgUpdateListing) error {
-	lst, err := m.src.GetListing(height, marketplacetypes.QueryGetListingRequest{
+func (m *Module) HandleMsgUpdateListing(index int, tx *juno.Tx, msg *marketplacetypes.MsgUpdateListing) error {
+	lst, err := m.src.GetListing(tx.Height, marketplacetypes.QueryGetListingRequest{
 		Network: msg.Network,
 		Index:   msg.Index,
 	})
@@ -76,7 +76,7 @@ func (m *Module) HandleMsgUpdateListing(height int64, msg *marketplacetypes.MsgU
 	return nil
 }
 
-func (m *Module) HandleMsgDeleteListing(height int64, msg *marketplacetypes.MsgDeleteListing) error {
+func (m *Module) HandleMsgDeleteListing(index int, tx *juno.Tx, msg *marketplacetypes.MsgDeleteListing) error {
 	if err := m.db.UpdateListingActive(msg.Network, msg.Index, false); err != nil {
 		return fmt.Errorf("error while handling delete listing msg: %s", err)
 	}
@@ -84,8 +84,8 @@ func (m *Module) HandleMsgDeleteListing(height int64, msg *marketplacetypes.MsgD
 	return nil
 }
 
-func (m *Module) HandleMsgCreateOrder(height int64, msg *marketplacetypes.MsgCreateOrder) error {
-	ord, err := m.src.GetOrder(height, marketplacetypes.QueryGetOrderRequest{
+func (m *Module) HandleMsgCreateOrder(index int, tx *juno.Tx, msg *marketplacetypes.MsgCreateOrder) error {
+	ord, err := m.src.GetOrder(tx.Height, marketplacetypes.QueryGetOrderRequest{
 		Network: msg.Network,
 		Index:   msg.Index,
 	})
@@ -101,8 +101,8 @@ func (m *Module) HandleMsgCreateOrder(height int64, msg *marketplacetypes.MsgCre
 	return nil
 }
 
-func (m *Module) HandleMsgUpdateOrder(height int64, msg *marketplacetypes.MsgUpdateOrder) error {
-	ord, err := m.src.GetOrder(height, marketplacetypes.QueryGetOrderRequest{
+func (m *Module) HandleMsgUpdateOrder(index int, tx *juno.Tx, msg *marketplacetypes.MsgUpdateOrder) error {
+	ord, err := m.src.GetOrder(tx.Height, marketplacetypes.QueryGetOrderRequest{
 		Network: msg.Network,
 		Index:   msg.Index,
 	})
@@ -118,7 +118,7 @@ func (m *Module) HandleMsgUpdateOrder(height int64, msg *marketplacetypes.MsgUpd
 	return nil
 }
 
-func (m *Module) HandleMsgDeleteOrder(height int64, msg *marketplacetypes.MsgDeleteOrder) error {
+func (m *Module) HandleMsgDeleteOrder(index int, tx *juno.Tx, msg *marketplacetypes.MsgDeleteOrder) error {
 	if err := m.db.DeleteOrder(msg.Network, msg.Index); err != nil {
 		return fmt.Errorf("error while handling delete order msg: %s", err)
 	}

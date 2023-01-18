@@ -19,6 +19,7 @@ package kyc
 import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/forbole/bdjuno/v3/utils"
 	juno "github.com/forbole/juno/v3/types"
 	kyctypes "github.com/villagelabs/villaged/x/kyc/types"
 )
@@ -26,53 +27,53 @@ import (
 func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 	switch cosmosMsg := msg.(type) {
 	case *kyctypes.MsgVerifyAccount:
-		return m.HandleMsgVerifyAccount(tx.Height, cosmosMsg)
+		return m.HandleMsgVerifyAccount(index, tx, cosmosMsg)
 	case *kyctypes.MsgRevokeAccount:
-		return m.HandleMsgRevokeAccount(tx.Height, cosmosMsg)
+		return m.HandleMsgRevokeAccount(index, tx, cosmosMsg)
 	case *kyctypes.MsgCreateInvite:
-		return m.HandleMsgCreateInvite(tx.Height, cosmosMsg)
+		return m.HandleMsgCreateInvite(index, tx, cosmosMsg)
 	case *kyctypes.MsgClaimInvite:
-		return m.HandleMsgClaimInvite(tx.Height, cosmosMsg)
+		return m.HandleMsgClaimInvite(index, tx, cosmosMsg)
 	case *kyctypes.MsgRescindInvite:
-		return m.HandleMsgRescindInvite(tx.Height, cosmosMsg)
+		return m.HandleMsgRescindInvite(index, tx, cosmosMsg)
 	case *kyctypes.MsgCreateMultipleInvites:
-		return m.HandleMsgCreateMultipleInvites(tx.Height, cosmosMsg)
+		return m.HandleMsgCreateMultipleInvites(index, tx, cosmosMsg)
 	case *kyctypes.MsgVerifyNetwork:
-		return m.HandleMsgVerifyNetwork(tx.Height, cosmosMsg)
+		return m.HandleMsgVerifyNetwork(index, tx, cosmosMsg)
 	case *kyctypes.MsgRevokeNetwork:
-		return m.HandleMsgRevokeNetwork(tx.Height, cosmosMsg)
+		return m.HandleMsgRevokeNetwork(index, tx, cosmosMsg)
 	case *kyctypes.MsgCreateHumanId:
-		return m.HandleMsgCreateHumanId(tx.Height, cosmosMsg)
+		return m.HandleMsgCreateHumanId(index, tx, cosmosMsg)
 	case *kyctypes.MsgRegisterIdentityProvider:
-		return m.HandleMsgRegisterIdentityProvider(tx.Height, cosmosMsg)
+		return m.HandleMsgRegisterIdentityProvider(index, tx, cosmosMsg)
 	case *kyctypes.MsgSetIdentityProviderAdminAccounts:
-		return m.HandleMsgSetIdentityProviderAdminAccounts(tx.Height, cosmosMsg)
+		return m.HandleMsgSetIdentityProviderAdminAccounts(index, tx, cosmosMsg)
 	case *kyctypes.MsgSetIdentityProviderProviderAccounts:
-		return m.HandleMsgSetIdentityProviderProviderAccounts(tx.Height, cosmosMsg)
+		return m.HandleMsgSetIdentityProviderProviderAccounts(index, tx, cosmosMsg)
 	case *kyctypes.MsgJoinNetwork:
-		return m.HandleMsgJoinNetwork(tx.Height, cosmosMsg)
+		return m.HandleMsgJoinNetwork(index, tx, cosmosMsg)
 	case *kyctypes.MsgCreateMultipleHumanIds:
-		return m.HandleMsgCreateMultipleHumanIds(tx.Height, cosmosMsg)
+		return m.HandleMsgCreateMultipleHumanIds(index, tx, cosmosMsg)
 	case *kyctypes.MsgSetPrimaryNetworkWallet:
-		return m.HandleMsgSetPrimaryNetworkWallet(tx.Height, cosmosMsg)
+		return m.HandleMsgSetPrimaryNetworkWallet(index, tx, cosmosMsg)
 	case *kyctypes.MsgAcceptLinkWalletToHumanProposal:
-		return m.HandleMsgAcceptLinkWalletToHumanProposal(tx.Height, cosmosMsg)
+		return m.HandleMsgAcceptLinkWalletToHumanProposal(index, tx, cosmosMsg)
 	case *kyctypes.MsgProposeLinkAccountToHuman:
-		return m.HandleMsgProposeLinkAccountToHuman(tx.Height, cosmosMsg)
+		return m.HandleMsgProposeLinkAccountToHuman(index, tx, cosmosMsg)
 	default:
 		return fmt.Errorf("unrecognized kyc message type: %T", msg)
 	}
 }
 
-func (m *Module) HandleMsgVerifyAccount(height int64, msg *kyctypes.MsgVerifyAccount) error {
+func (m *Module) HandleMsgVerifyAccount(index int, tx *juno.Tx, msg *kyctypes.MsgVerifyAccount) error {
 	return nil
 }
 
-func (m *Module) HandleMsgRevokeAccount(height int64, msg *kyctypes.MsgRevokeAccount) error {
+func (m *Module) HandleMsgRevokeAccount(index int, tx *juno.Tx, msg *kyctypes.MsgRevokeAccount) error {
 	return nil
 }
 
-func (m *Module) HandleMsgCreateInvite(height int64, msg *kyctypes.MsgCreateInvite) error {
+func (m *Module) HandleMsgCreateInvite(index int, tx *juno.Tx, msg *kyctypes.MsgCreateInvite) error {
 	return m.db.SaveInvite(msg.Network, &kyctypes.Invite{
 		Challenge:        msg.Challenge,
 		Registered:       false,
@@ -83,7 +84,7 @@ func (m *Module) HandleMsgCreateInvite(height int64, msg *kyctypes.MsgCreateInvi
 	})
 }
 
-func (m *Module) HandleMsgClaimInvite(height int64, msg *kyctypes.MsgClaimInvite) error {
+func (m *Module) HandleMsgClaimInvite(index int, tx *juno.Tx, msg *kyctypes.MsgClaimInvite) error {
 	if err := m.db.UpdateInvite(msg.Network, msg.Challenge, msg.Creator); err != nil {
 		return fmt.Errorf("error updating invite: %s", err)
 	}
@@ -111,14 +112,14 @@ func (m *Module) HandleMsgClaimInvite(height int64, msg *kyctypes.MsgClaimInvite
 	return nil
 }
 
-func (m *Module) HandleMsgRescindInvite(height int64, msg *kyctypes.MsgRescindInvite) error {
+func (m *Module) HandleMsgRescindInvite(index int, tx *juno.Tx, msg *kyctypes.MsgRescindInvite) error {
 	if err := m.db.DeleteInvite(msg.Network, msg.Challenge); err != nil {
 		return fmt.Errorf("error updating invite: %s", err)
 	}
 	return nil
 }
 
-func (m *Module) HandleMsgCreateMultipleInvites(height int64, msg *kyctypes.MsgCreateMultipleInvites) error {
+func (m *Module) HandleMsgCreateMultipleInvites(index int, tx *juno.Tx, msg *kyctypes.MsgCreateMultipleInvites) error {
 	inv := make([]*kyctypes.Invite, len(msg.Challenges))
 	for i, c := range msg.Challenges {
 		inv[i] = &kyctypes.Invite{
@@ -139,8 +140,8 @@ func (m *Module) HandleMsgCreateMultipleInvites(height int64, msg *kyctypes.MsgC
 	return nil
 }
 
-func (m *Module) HandleMsgVerifyNetwork(height int64, msg *kyctypes.MsgVerifyNetwork) error {
-	acc, err := m.src.GetNetworkKyb(height, kyctypes.QueryGetNetworkKybRequest{
+func (m *Module) HandleMsgVerifyNetwork(index int, tx *juno.Tx, msg *kyctypes.MsgVerifyNetwork) error {
+	acc, err := m.src.GetNetworkKyb(tx.Height, kyctypes.QueryGetNetworkKybRequest{
 		Index: msg.Network,
 	})
 	if err != nil {
@@ -155,8 +156,8 @@ func (m *Module) HandleMsgVerifyNetwork(height int64, msg *kyctypes.MsgVerifyNet
 	return nil
 }
 
-func (m *Module) HandleMsgRevokeNetwork(height int64, msg *kyctypes.MsgRevokeNetwork) error {
-	acc, err := m.src.GetNetworkKyb(height, kyctypes.QueryGetNetworkKybRequest{
+func (m *Module) HandleMsgRevokeNetwork(index int, tx *juno.Tx, msg *kyctypes.MsgRevokeNetwork) error {
+	acc, err := m.src.GetNetworkKyb(tx.Height, kyctypes.QueryGetNetworkKybRequest{
 		Index: msg.Network,
 	})
 	if err != nil {
@@ -171,12 +172,12 @@ func (m *Module) HandleMsgRevokeNetwork(height int64, msg *kyctypes.MsgRevokeNet
 	return nil
 }
 
-func (m *Module) HandleMsgCreateHumanId(height int64, msg *kyctypes.MsgCreateHumanId) error {
-	return nil
+func (m *Module) HandleMsgCreateHumanId(index int, tx *juno.Tx, msg *kyctypes.MsgCreateHumanId) error {
+	tx.FindEventByType(tx.Height, utils.ProtoMsgName(msg))
 }
 
-func (m *Module) HandleMsgRegisterIdentityProvider(height int64, msg *kyctypes.MsgRegisterIdentityProvider) error {
-	ip, err := m.src.GetIdentityProvider(height, kyctypes.QueryGetIdentityProviderRequest{
+func (m *Module) HandleMsgRegisterIdentityProvider(index int, tx *juno.Tx, msg *kyctypes.MsgRegisterIdentityProvider) error {
+	ip, err := m.src.GetIdentityProvider(tx.Height, kyctypes.QueryGetIdentityProviderRequest{
 		Index: msg.Name,
 	})
 	if err != nil {
@@ -191,8 +192,8 @@ func (m *Module) HandleMsgRegisterIdentityProvider(height int64, msg *kyctypes.M
 	return nil
 }
 
-func (m *Module) HandleMsgSetIdentityProviderAdminAccounts(height int64, msg *kyctypes.MsgSetIdentityProviderAdminAccounts) error {
-	ip, err := m.src.GetIdentityProvider(height, kyctypes.QueryGetIdentityProviderRequest{
+func (m *Module) HandleMsgSetIdentityProviderAdminAccounts(index int, tx *juno.Tx, msg *kyctypes.MsgSetIdentityProviderAdminAccounts) error {
+	ip, err := m.src.GetIdentityProvider(tx.Height, kyctypes.QueryGetIdentityProviderRequest{
 		Index: msg.Name,
 	})
 	if err != nil {
@@ -207,8 +208,8 @@ func (m *Module) HandleMsgSetIdentityProviderAdminAccounts(height int64, msg *ky
 	return nil
 }
 
-func (m *Module) HandleMsgSetIdentityProviderProviderAccounts(height int64, msg *kyctypes.MsgSetIdentityProviderProviderAccounts) error {
-	ip, err := m.src.GetIdentityProvider(height, kyctypes.QueryGetIdentityProviderRequest{
+func (m *Module) HandleMsgSetIdentityProviderProviderAccounts(index int, tx *juno.Tx, msg *kyctypes.MsgSetIdentityProviderProviderAccounts) error {
+	ip, err := m.src.GetIdentityProvider(tx.Height, kyctypes.QueryGetIdentityProviderRequest{
 		Index: msg.Name,
 	})
 	if err != nil {
@@ -223,22 +224,22 @@ func (m *Module) HandleMsgSetIdentityProviderProviderAccounts(height int64, msg 
 	return nil
 }
 
-func (m *Module) HandleMsgJoinNetwork(height int64, msg *kyctypes.MsgJoinNetwork) error {
+func (m *Module) HandleMsgJoinNetwork(index int, tx *juno.Tx, msg *kyctypes.MsgJoinNetwork) error {
 	return nil
 }
 
-func (m *Module) HandleMsgCreateMultipleHumanIds(height int64, msg *kyctypes.MsgCreateMultipleHumanIds) error {
+func (m *Module) HandleMsgCreateMultipleHumanIds(index int, tx *juno.Tx, msg *kyctypes.MsgCreateMultipleHumanIds) error {
 	return nil
 }
 
-func (m *Module) HandleMsgSetPrimaryNetworkWallet(height int64, msg *kyctypes.MsgSetPrimaryNetworkWallet) error {
+func (m *Module) HandleMsgSetPrimaryNetworkWallet(index int, tx *juno.Tx, msg *kyctypes.MsgSetPrimaryNetworkWallet) error {
 	return nil
 }
 
-func (m *Module) HandleMsgAcceptLinkWalletToHumanProposal(height int64, msg *kyctypes.MsgAcceptLinkWalletToHumanProposal) error {
+func (m *Module) HandleMsgAcceptLinkWalletToHumanProposal(index int, tx *juno.Tx, msg *kyctypes.MsgAcceptLinkWalletToHumanProposal) error {
 	return nil
 }
 
-func (m *Module) HandleMsgProposeLinkAccountToHuman(height int64, msg *kyctypes.MsgProposeLinkAccountToHuman) error {
+func (m *Module) HandleMsgProposeLinkAccountToHuman(index int, tx *juno.Tx, msg *kyctypes.MsgProposeLinkAccountToHuman) error {
 	return nil
 }

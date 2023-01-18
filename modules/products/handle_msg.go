@@ -29,20 +29,20 @@ import (
 func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 	switch cosmosMsg := (msg).(type) {
 	case *productstypes.MsgCreateProductClass:
-		return m.HandleMsgCreateProductClass(tx.Height, cosmosMsg)
+		return m.HandleMsgCreateProductClass(index, tx, cosmosMsg)
 	case *productstypes.MsgCreateTaskClass:
-		return m.HandleMsgCreateTaskClass(tx.Height, cosmosMsg)
+		return m.HandleMsgCreateTaskClass(index, tx, cosmosMsg)
 	case *productstypes.MsgFreezeClass:
-		return m.HandleMsgFreezeClass(tx.Height, cosmosMsg)
+		return m.HandleMsgFreezeClass(index, tx, cosmosMsg)
 	case *productstypes.MsgUpdateClass:
-		return m.HandleMsgUpdateClass(tx.Height, cosmosMsg)
+		return m.HandleMsgUpdateClass(index, tx, cosmosMsg)
 	default:
 		return fmt.Errorf("unrecognized products message type: %T", msg)
 	}
 }
 
-func (m *Module) HandleMsgCreateProductClass(height int64, msg *productstypes.MsgCreateProductClass) error {
-	cl, err := m.src.GetProductClassInfo(height, productstypes.QueryGetProductClassInfoRequest{
+func (m *Module) HandleMsgCreateProductClass(index int, tx *juno.Tx, msg *productstypes.MsgCreateProductClass) error {
+	cl, err := m.src.GetProductClassInfo(tx.Height, productstypes.QueryGetProductClassInfoRequest{
 		Network: msg.Network,
 		Idx:     msg.Id,
 	})
@@ -51,7 +51,7 @@ func (m *Module) HandleMsgCreateProductClass(height int64, msg *productstypes.Ms
 	}
 	class := cl.ProductClassInfo
 
-	nftCl, err := m.nftSrc.Class(height, nfttypes.QueryClassRequest{ClassId: class.FullClassId})
+	nftCl, err := m.nftSrc.Class(tx.Height, nfttypes.QueryClassRequest{ClassId: class.FullClassId})
 	if err != nil {
 		return fmt.Errorf("error while handling create product class info msg: %s", err)
 	}
@@ -69,8 +69,8 @@ func (m *Module) HandleMsgCreateProductClass(height int64, msg *productstypes.Ms
 	return nil
 }
 
-func (m *Module) HandleMsgCreateTaskClass(height int64, msg *productstypes.MsgCreateTaskClass) error {
-	cl, err := m.src.GetProductClassInfo(height, productstypes.QueryGetProductClassInfoRequest{
+func (m *Module) HandleMsgCreateTaskClass(index int, tx *juno.Tx, msg *productstypes.MsgCreateTaskClass) error {
+	cl, err := m.src.GetProductClassInfo(tx.Height, productstypes.QueryGetProductClassInfoRequest{
 		Network: msg.Network,
 		Idx:     msg.Id,
 	})
@@ -79,7 +79,7 @@ func (m *Module) HandleMsgCreateTaskClass(height int64, msg *productstypes.MsgCr
 	}
 	class := cl.ProductClassInfo
 
-	nftCl, err := m.nftSrc.Class(height, nfttypes.QueryClassRequest{ClassId: class.FullClassId})
+	nftCl, err := m.nftSrc.Class(tx.Height, nfttypes.QueryClassRequest{ClassId: class.FullClassId})
 	if err != nil {
 		return fmt.Errorf("error while handling create task class info msg: %s", err)
 	}
@@ -97,8 +97,8 @@ func (m *Module) HandleMsgCreateTaskClass(height int64, msg *productstypes.MsgCr
 	return nil
 }
 
-func (m *Module) HandleMsgFreezeClass(height int64, msg *productstypes.MsgFreezeClass) error {
-	cl, err := m.src.GetProductClassInfo(height, productstypes.QueryGetProductClassInfoRequest{
+func (m *Module) HandleMsgFreezeClass(index int, tx *juno.Tx, msg *productstypes.MsgFreezeClass) error {
+	cl, err := m.src.GetProductClassInfo(tx.Height, productstypes.QueryGetProductClassInfoRequest{
 		Network: msg.Network,
 		Idx:     msg.Id,
 	})
@@ -114,8 +114,8 @@ func (m *Module) HandleMsgFreezeClass(height int64, msg *productstypes.MsgFreeze
 	return nil
 }
 
-func (m *Module) HandleMsgUpdateClass(height int64, msg *productstypes.MsgUpdateClass) error {
-	cl, err := m.src.GetProductClassInfo(height, productstypes.QueryGetProductClassInfoRequest{
+func (m *Module) HandleMsgUpdateClass(index int, tx *juno.Tx, msg *productstypes.MsgUpdateClass) error {
+	cl, err := m.src.GetProductClassInfo(tx.Height, productstypes.QueryGetProductClassInfoRequest{
 		Network: msg.Network,
 		Idx:     msg.Id,
 	})
@@ -124,7 +124,7 @@ func (m *Module) HandleMsgUpdateClass(height int64, msg *productstypes.MsgUpdate
 	}
 	class := cl.ProductClassInfo
 
-	nftCl, err := m.nftSrc.Class(height, nfttypes.QueryClassRequest{ClassId: class.FullClassId})
+	nftCl, err := m.nftSrc.Class(tx.Height, nfttypes.QueryClassRequest{ClassId: class.FullClassId})
 	if err != nil {
 		return fmt.Errorf("error while handling update class info msg: %s", err)
 	}

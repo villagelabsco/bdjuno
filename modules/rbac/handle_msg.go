@@ -26,36 +26,36 @@ import (
 func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 	switch cosmosMsg := msg.(type) {
 	case *rbactypes.MsgDeclareRole:
-		return m.HandleMsgDeclareRole(tx.Height, cosmosMsg)
+		return m.HandleMsgDeclareRole(index, tx, cosmosMsg)
 	case *rbactypes.MsgUpdateGroupMembers:
-		return m.HandleMsgUpdateGroupMembers(tx.Height, cosmosMsg)
+		return m.HandleMsgUpdateGroupMembers(index, tx, cosmosMsg)
 	case *rbactypes.MsgTransferRoleOwnership:
-		return m.HandleMsgTransferRoleOwnership(tx.Height, cosmosMsg)
+		return m.HandleMsgTransferRoleOwnership(index, tx, cosmosMsg)
 	case *rbactypes.MsgUpdateRole:
-		return m.HandleMsgUpdateRole(tx.Height, cosmosMsg)
+		return m.HandleMsgUpdateRole(index, tx, cosmosMsg)
 	case *rbactypes.MsgSetRoleDelegates:
-		return m.HandleMsgSetRoleDelegates(tx.Height, cosmosMsg)
+		return m.HandleMsgSetRoleDelegates(index, tx, cosmosMsg)
 	default:
 		return fmt.Errorf("unrecognized rbac message type: %T", msg)
 	}
 }
 
-func (m *Module) HandleMsgDeclareRole(height int64, msg *rbactypes.MsgDeclareRole) error {
+func (m *Module) HandleMsgDeclareRole(index int, height *juno.Tx, msg *rbactypes.MsgDeclareRole) error {
 	return nil
 }
 
-func (m *Module) HandleMsgUpdateGroupMembers(height int64, msg *rbactypes.MsgUpdateGroupMembers) error {
+func (m *Module) HandleMsgUpdateGroupMembers(index int, height *juno.Tx, msg *rbactypes.MsgUpdateGroupMembers) error {
 	return nil
 }
 
-func (m *Module) HandleMsgTransferRoleOwnership(height int64, msg *rbactypes.MsgTransferRoleOwnership) error {
+func (m *Module) HandleMsgTransferRoleOwnership(index int, height *juno.Tx, msg *rbactypes.MsgTransferRoleOwnership) error {
 	return nil
 }
 
-func (m *Module) HandleMsgUpdateRole(height int64, msg *rbactypes.MsgUpdateRole) error {
+func (m *Module) HandleMsgUpdateRole(index int, height *juno.Tx, msg *rbactypes.MsgUpdateRole) error {
 	return nil
 }
 
-func (m *Module) HandleMsgSetRoleDelegates(height int64, msg *rbactypes.MsgSetRoleDelegates) error {
+func (m *Module) HandleMsgSetRoleDelegates(index int, height *juno.Tx, msg *rbactypes.MsgSetRoleDelegates) error {
 	return nil
 }

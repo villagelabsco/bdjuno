@@ -31,19 +31,19 @@ func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 
 	switch cosmosMsg := msg.(type) {
 	case *reputationtypes.MsgPostFeedback:
-		return m.HandleMsgPostFeedback(tx.Height, cosmosMsg)
+		return m.HandleMsgPostFeedback(index, tx, cosmosMsg)
 	}
 
 	return nil
 }
 
-func (m *Module) HandleMsgPostFeedback(height int64, msg *reputationtypes.MsgPostFeedback) error {
+func (m *Module) HandleMsgPostFeedback(index int, tx *juno.Tx, msg *reputationtypes.MsgPostFeedback) error {
 	err := m.db.SavePostFeedback(msg)
 	if err != nil {
 		return errors.Wrap(err, "error while saving reputation post feedback")
 	}
 
-	fb, err := m.s.GetFeedback(height, reputationtypes.QueryGetFeedbackRequest{
+	fb, err := m.s.GetFeedback(tx.Height, reputationtypes.QueryGetFeedbackRequest{
 		Network: msg.Network,
 		Index:   msg.DstAccount,
 	})

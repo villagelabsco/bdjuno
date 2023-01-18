@@ -25,13 +25,13 @@ import (
 func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 	switch cosmosMsg := msg.(type) {
 	case *villagetypes.MsgCreateNetwork:
-		return m.HandleMsgCreateNetwork(cosmosMsg)
+		return m.HandleMsgCreateNetwork(index, tx, cosmosMsg)
 	}
 
 	return nil
 }
 
-func (m *Module) HandleMsgCreateNetwork(msg *villagetypes.MsgCreateNetwork) error {
+func (m *Module) HandleMsgCreateNetwork(index int, tx *juno.Tx, msg *villagetypes.MsgCreateNetwork) error {
 	return m.db.SaveNetwork(&villagetypes.Network{
 		Index:            msg.ShortName,
 		Active:           true,
