@@ -42,7 +42,6 @@ import (
 	localmintsource "github.com/forbole/bdjuno/v3/modules/mint/source/local"
 	remotemintsource "github.com/forbole/bdjuno/v3/modules/mint/source/remote"
 	nftsource "github.com/forbole/bdjuno/v3/modules/nft/source"
-	localnftsource "github.com/forbole/bdjuno/v3/modules/nft/source/local"
 	productssource "github.com/forbole/bdjuno/v3/modules/products/source"
 	rbacsource "github.com/forbole/bdjuno/v3/modules/rbac/source"
 	reputationsource "github.com/forbole/bdjuno/v3/modules/reputation/source"
@@ -60,13 +59,6 @@ import (
 	remoterbacsource "github.com/forbole/bdjuno/v3/modules/rbac/source/remote"
 	remotereputationsource "github.com/forbole/bdjuno/v3/modules/reputation/source/remote"
 	remotevillagesource "github.com/forbole/bdjuno/v3/modules/village/source/remote"
-
-	localkycsource "github.com/forbole/bdjuno/v3/modules/kyc/source/local"
-	localmarketplacesource "github.com/forbole/bdjuno/v3/modules/marketplace/source/local"
-	localproductssource "github.com/forbole/bdjuno/v3/modules/products/source/local"
-	localrbacsource "github.com/forbole/bdjuno/v3/modules/rbac/source/local"
-	localreputationsource "github.com/forbole/bdjuno/v3/modules/reputation/source/local"
-	localvillagesource "github.com/forbole/bdjuno/v3/modules/village/source/local"
 )
 
 type Sources struct {
@@ -110,19 +102,19 @@ func buildLocalSources(cfg *local.Details, encodingConfig *params.EncodingConfig
 	)
 
 	sources := &Sources{
-		BankSource:        localbanksource.NewSource(source, banktypes.QueryServer(sapp.BankKeeper)),
-		DistrSource:       localdistrsource.NewSource(source, distrtypes.QueryServer(sapp.DistrKeeper)),
-		GovSource:         localgovsource.NewSource(source, govtypes.QueryServer(sapp.GovKeeper)),
-		MintSource:        localmintsource.NewSource(source, minttypes.QueryServer(sapp.MintKeeper)),
-		SlashingSource:    localslashingsource.NewSource(source, slashingtypes.QueryServer(sapp.SlashingKeeper)),
-		StakingSource:     localstakingsource.NewSource(source, stakingkeeper.Querier{Keeper: sapp.StakingKeeper}),
-		NftSource:         localnftsource.NewSource(source, nfttypes.QueryServer(sapp.NFTKeeper)),
-		KycSource:         localkycsource.NewSource(source, kyctypes.QueryServer(sapp.KycKeeper)),
-		MarketplaceSource: localmarketplacesource.NewSource(source, marketplacetypes.QueryServer(sapp.MarketplaceKeeper)),
-		ProductsSource:    localproductssource.NewSource(source, productstypes.QueryServer(sapp.ProductsKeeper)),
-		RbacSource:        localrbacsource.NewSource(source, rbactypes.QueryServer(sapp.RbacKeeper)),
-		ReputationSource:  localreputationsource.NewSource(source, reputationtypes.QueryServer(sapp.ReputationKeeper)),
-		VillageSource:     localvillagesource.NewSource(source, villagetypes.QueryServer(sapp.VillageKeeper)),
+		BankSource:     localbanksource.NewSource(source, banktypes.QueryServer(sapp.BankKeeper)),
+		DistrSource:    localdistrsource.NewSource(source, distrtypes.QueryServer(sapp.DistrKeeper)),
+		GovSource:      localgovsource.NewSource(source, govtypes.QueryServer(sapp.GovKeeper)),
+		MintSource:     localmintsource.NewSource(source, minttypes.QueryServer(sapp.MintKeeper)),
+		SlashingSource: localslashingsource.NewSource(source, slashingtypes.QueryServer(sapp.SlashingKeeper)),
+		StakingSource:  localstakingsource.NewSource(source, stakingkeeper.Querier{Keeper: sapp.StakingKeeper}),
+		//NftSource:         localnftsource.NewSource(source, nfttypes.QueryServer(sapp.NFTKeeper)),
+		//KycSource:         localkycsource.NewSource(source, kyctypes.QueryServer(sapp.KycKeeper)),
+		//MarketplaceSource: localmarketplacesource.NewSource(source, marketplacetypes.QueryServer(sapp.MarketplaceKeeper)),
+		//ProductsSource:    localproductssource.NewSource(source, productstypes.QueryServer(sapp.ProductsKeeper)),
+		//RbacSource:        localrbacsource.NewSource(source, rbactypes.QueryServer(sapp.RbacKeeper)),
+		//ReputationSource:  localreputationsource.NewSource(source, reputationtypes.QueryServer(sapp.ReputationKeeper)),
+		//VillageSource:     localvillagesource.NewSource(source, villagetypes.QueryServer(sapp.VillageKeeper)),
 	}
 
 	// Mount and initialize the stores
