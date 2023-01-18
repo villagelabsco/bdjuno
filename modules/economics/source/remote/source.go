@@ -17,6 +17,7 @@
 package remote
 
 import (
+	"fmt"
 	"github.com/forbole/juno/v3/node/remote"
 	econtypes "github.com/villagelabs/villaged/x/economics/types"
 )
@@ -37,7 +38,7 @@ func (s Source) GetParams(height int64, req econtypes.QueryParamsRequest) (econt
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.Params(ctx, &req)
 	if err != nil {
-		return econtypes.QueryParamsResponse{}, err
+		return econtypes.QueryParamsResponse{}, fmt.Errorf("error while getting economics params: %s", err)
 	}
 	return *res, nil
 }
@@ -46,7 +47,7 @@ func (s Source) GetTransactionHook(height int64, req econtypes.QueryGetTransacti
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.TransactionHook(ctx, &req)
 	if err != nil {
-		return econtypes.QueryGetTransactionHookResponse{}, err
+		return econtypes.QueryGetTransactionHookResponse{}, fmt.Errorf("error while getting transaction hook: %s", err)
 	}
 	return *res, nil
 }
@@ -55,7 +56,7 @@ func (s Source) GetAllTransactionHook(height int64, req econtypes.QueryAllTransa
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.TransactionHookAll(ctx, &req)
 	if err != nil {
-		return econtypes.QueryAllTransactionHookResponse{}, err
+		return econtypes.QueryAllTransactionHookResponse{}, fmt.Errorf("error while getting all transaction hooks: %s", err)
 	}
 	return *res, nil
 }
@@ -64,7 +65,7 @@ func (s Source) GetScheduledHook(height int64, req econtypes.QueryGetScheduledHo
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.ScheduledHook(ctx, &req)
 	if err != nil {
-		return econtypes.QueryGetScheduledHookResponse{}, err
+		return econtypes.QueryGetScheduledHookResponse{}, fmt.Errorf("error while getting scheduled hook: %s", err)
 	}
 	return *res, nil
 }
@@ -73,7 +74,7 @@ func (s Source) GetAllScheduledHook(height int64, req econtypes.QueryAllSchedule
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.ScheduledHookAll(ctx, &req)
 	if err != nil {
-		return econtypes.QueryAllScheduledHookResponse{}, err
+		return econtypes.QueryAllScheduledHookResponse{}, fmt.Errorf("error while getting all scheduled hooks: %s", err)
 	}
 	return *res, nil
 }
@@ -82,7 +83,7 @@ func (s Source) GetNetworkEnabled(height int64, req econtypes.QueryGetNetworkEna
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.NetworkEnabled(ctx, &req)
 	if err != nil {
-		return econtypes.QueryGetNetworkEnabledResponse{}, err
+		return econtypes.QueryGetNetworkEnabledResponse{}, fmt.Errorf("error while getting network enabled: %s", err)
 	}
 	return *res, nil
 }
@@ -91,7 +92,7 @@ func (s Source) GetAllNetworkEnabled(height int64, req econtypes.QueryAllNetwork
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.NetworkEnabledAll(ctx, &req)
 	if err != nil {
-		return econtypes.QueryAllNetworkEnabledResponse{}, err
+		return econtypes.QueryAllNetworkEnabledResponse{}, fmt.Errorf("error while getting all network enabled: %s", err)
 	}
 	return *res, nil
 }
@@ -100,7 +101,7 @@ func (s Source) GetNbTxPerDay(height int64, req econtypes.QueryGetNbTxPerDayRequ
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.NbTxPerDay(ctx, &req)
 	if err != nil {
-		return econtypes.QueryGetNbTxPerDayResponse{}, err
+		return econtypes.QueryGetNbTxPerDayResponse{}, fmt.Errorf("error while getting nb tx per day: %s", err)
 	}
 	return *res, nil
 }
@@ -109,7 +110,7 @@ func (s Source) GetAllNbTxPerDay(height int64, req econtypes.QueryAllNbTxPerDayR
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.NbTxPerDayAll(ctx, &req)
 	if err != nil {
-		return econtypes.QueryAllNbTxPerDayResponse{}, err
+		return econtypes.QueryAllNbTxPerDayResponse{}, fmt.Errorf("error while getting all nb tx per day: %s", err)
 	}
 	return *res, nil
 }
@@ -118,7 +119,7 @@ func (s Source) GetPendingTask(height int64, req econtypes.QueryGetPendingTaskRe
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.PendingTask(ctx, &req)
 	if err != nil {
-		return econtypes.QueryGetPendingTaskResponse{}, err
+		return econtypes.QueryGetPendingTaskResponse{}, fmt.Errorf("error while getting pending task: %s", err)
 	}
 	return *res, nil
 }
@@ -127,7 +128,7 @@ func (s Source) GetAllPendingTask(height int64, req econtypes.QueryAllPendingTas
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.PendingTaskAll(ctx, &req)
 	if err != nil {
-		return econtypes.QueryAllPendingTaskResponse{}, err
+		return econtypes.QueryAllPendingTaskResponse{}, fmt.Errorf("error while getting all pending tasks: %s", err)
 	}
 	return *res, nil
 }
@@ -136,7 +137,7 @@ func (s Source) GetScheduledHookExecutionState(height int64, req econtypes.Query
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.ScheduledHookExecutionState(ctx, &req)
 	if err != nil {
-		return econtypes.QueryGetScheduledHookExecutionStateResponse{}, err
+		return econtypes.QueryGetScheduledHookExecutionStateResponse{}, fmt.Errorf("error while getting scheduled hook execution state: %s", err)
 	}
 	return *res, nil
 }
@@ -145,7 +146,7 @@ func (s Source) GetAllScheduledHookExecutionState(height int64, req econtypes.Qu
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.ScheduledHookExecutionStateAll(ctx, &req)
 	if err != nil {
-		return econtypes.QueryAllScheduledHookExecutionStateResponse{}, err
+		return econtypes.QueryAllScheduledHookExecutionStateResponse{}, fmt.Errorf("error while getting all scheduled hook execution states: %s", err)
 	}
 	return *res, nil
 }

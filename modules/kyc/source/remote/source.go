@@ -17,6 +17,7 @@
 package remote
 
 import (
+	"fmt"
 	"github.com/forbole/juno/v3/node/remote"
 	kyctypes "github.com/villagelabs/villaged/x/kyc/types"
 )
@@ -37,7 +38,7 @@ func (s Source) GetParams(height int64) (kyctypes.Params, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.Params(ctx, &kyctypes.QueryParamsRequest{})
 	if err != nil {
-		return kyctypes.Params{}, err
+		return kyctypes.Params{}, fmt.Errorf("error while getting kyc params: %s", err)
 	}
 	return res.Params, nil
 }
@@ -46,7 +47,7 @@ func (s Source) GetKycStatus(height int64, req kyctypes.QueryGetKycStatusRequest
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.KycStatus(ctx, &req)
 	if err != nil {
-		return kyctypes.QueryGetKycStatusResponse{}, err
+		return kyctypes.QueryGetKycStatusResponse{}, fmt.Errorf("error while getting kyc status: %s", err)
 	}
 	return *res, nil
 }
@@ -55,7 +56,7 @@ func (s Source) GetAllKycStatus(height int64, req kyctypes.QueryAllKycStatusRequ
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.KycStatusAll(ctx, &req)
 	if err != nil {
-		return kyctypes.QueryAllKycStatusResponse{}, err
+		return kyctypes.QueryAllKycStatusResponse{}, fmt.Errorf("error while getting all kyc status: %s", err)
 	}
 	return *res, nil
 }
@@ -64,7 +65,7 @@ func (s Source) GetDetailedAccount(height int64, req kyctypes.QueryGetDetailedAc
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.DetailedAccount(ctx, &req)
 	if err != nil {
-		return kyctypes.QueryGetDetailedAccountResponse{}, err
+		return kyctypes.QueryGetDetailedAccountResponse{}, fmt.Errorf("error while getting detailed account: %s", err)
 	}
 	return *res, nil
 }
@@ -73,7 +74,7 @@ func (s Source) GetAllDetailedAccount(height int64, req kyctypes.QueryAllDetaile
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.DetailedAccountsAll(ctx, &req)
 	if err != nil {
-		return kyctypes.QueryAllDetailedAccountsResponse{}, err
+		return kyctypes.QueryAllDetailedAccountsResponse{}, fmt.Errorf("error while getting all detailed accounts: %s", err)
 	}
 	return *res, nil
 }
@@ -82,7 +83,7 @@ func (s Source) GetInvite(height int64, req kyctypes.QueryGetInviteRequest) (kyc
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.Invite(ctx, &req)
 	if err != nil {
-		return kyctypes.QueryGetInviteResponse{}, err
+		return kyctypes.QueryGetInviteResponse{}, fmt.Errorf("error while getting invite: %s", err)
 	}
 	return *res, nil
 }
@@ -91,7 +92,7 @@ func (s Source) GetAllInvite(height int64, req kyctypes.QueryAllInviteRequest) (
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.InviteAll(ctx, &req)
 	if err != nil {
-		return kyctypes.QueryAllInviteResponse{}, err
+		return kyctypes.QueryAllInviteResponse{}, fmt.Errorf("error while getting all invites: %s", err)
 	}
 	return *res, nil
 }
@@ -100,7 +101,7 @@ func (s Source) GetNbInvitePerDay(height int64, req kyctypes.QueryGetNbInvitePer
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.NbInvitePerDay(ctx, &req)
 	if err != nil {
-		return kyctypes.QueryGetNbInvitePerDayResponse{}, err
+		return kyctypes.QueryGetNbInvitePerDayResponse{}, fmt.Errorf("error while getting nb invite per day: %s", err)
 	}
 	return *res, nil
 }
@@ -109,7 +110,7 @@ func (s Source) GetAllNbInvitePerDay(height int64, req kyctypes.QueryAllNbInvite
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.NbInvitePerDayAll(ctx, &req)
 	if err != nil {
-		return kyctypes.QueryAllNbInvitePerDayResponse{}, err
+		return kyctypes.QueryAllNbInvitePerDayResponse{}, fmt.Errorf("error while getting all nb invite per day: %s", err)
 	}
 	return *res, nil
 }
@@ -118,7 +119,7 @@ func (s Source) GetNetworkKyb(height int64, req kyctypes.QueryGetNetworkKybReque
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.NetworkKyb(ctx, &req)
 	if err != nil {
-		return kyctypes.QueryGetNetworkKybResponse{}, err
+		return kyctypes.QueryGetNetworkKybResponse{}, fmt.Errorf("error while getting network kyb: %s", err)
 	}
 	return *res, nil
 }
@@ -127,7 +128,7 @@ func (s Source) GetAllNetworkKyb(height int64, req kyctypes.QueryAllNetworkKybRe
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.NetworkKybAll(ctx, &req)
 	if err != nil {
-		return kyctypes.QueryAllNetworkKybResponse{}, err
+		return kyctypes.QueryAllNetworkKybResponse{}, fmt.Errorf("error while getting all network kyb: %s", err)
 	}
 	return *res, nil
 }
@@ -136,7 +137,7 @@ func (s Source) GetHuman(height int64, req kyctypes.QueryGetHumanRequest) (kycty
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.Human(ctx, &req)
 	if err != nil {
-		return kyctypes.QueryGetHumanResponse{}, err
+		return kyctypes.QueryGetHumanResponse{}, fmt.Errorf("error while getting human: %s", err)
 	}
 	return *res, nil
 }
@@ -145,7 +146,7 @@ func (s Source) GetAllHuman(height int64, req kyctypes.QueryAllHumanRequest) (ky
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.HumanAll(ctx, &req)
 	if err != nil {
-		return kyctypes.QueryAllHumanResponse{}, err
+		return kyctypes.QueryAllHumanResponse{}, fmt.Errorf("error while getting all humans: %s", err)
 	}
 	return *res, nil
 }
@@ -154,7 +155,7 @@ func (s Source) GetAccount(height int64, req kyctypes.QueryGetAccountRequest) (k
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.Account(ctx, &req)
 	if err != nil {
-		return kyctypes.QueryGetAccountResponse{}, nil
+		return kyctypes.QueryGetAccountResponse{}, fmt.Errorf("error while getting account: %s", err)
 	}
 	return *res, nil
 }
@@ -163,7 +164,7 @@ func (s Source) GetAllAccount(height int64, req kyctypes.QueryAllAccountRequest)
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.AccountAll(ctx, &req)
 	if err != nil {
-		return kyctypes.QueryAllAccountResponse{}, nil
+		return kyctypes.QueryAllAccountResponse{}, fmt.Errorf("error while getting all accounts: %s", err)
 	}
 	return *res, nil
 }
@@ -172,7 +173,7 @@ func (s Source) GetIdentityProvider(height int64, req kyctypes.QueryGetIdentityP
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.IdentityProvider(ctx, &req)
 	if err != nil {
-		return kyctypes.QueryGetIdentityProviderResponse{}, err
+		return kyctypes.QueryGetIdentityProviderResponse{}, fmt.Errorf("error while getting identity provider: %s", err)
 	}
 	return *res, nil
 }
@@ -181,7 +182,7 @@ func (s Source) GetAllIdentityProvider(height int64, req kyctypes.QueryAllIdenti
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.IdentityProviderAll(ctx, &req)
 	if err != nil {
-		return kyctypes.QueryAllIdentityProviderResponse{}, err
+		return kyctypes.QueryAllIdentityProviderResponse{}, fmt.Errorf("error while getting all identity providers: %s", err)
 	}
 	return *res, nil
 }
@@ -190,7 +191,7 @@ func (s Source) GetAccountLinkProposal(height int64, req kyctypes.QueryGetAccoun
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.AccountLinkProposal(ctx, &req)
 	if err != nil {
-		return kyctypes.QueryGetAccountLinkProposalResponse{}, nil
+		return kyctypes.QueryGetAccountLinkProposalResponse{}, fmt.Errorf("error while getting account link proposal: %s", err)
 	}
 	return *res, nil
 }
@@ -199,7 +200,7 @@ func (s Source) GetAllAccountLinkProposal(height int64, req kyctypes.QueryAllAcc
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.AccountLinkProposalAll(ctx, &req)
 	if err != nil {
-		return kyctypes.QueryAllAccountLinkProposalResponse{}, nil
+		return kyctypes.QueryAllAccountLinkProposalResponse{}, fmt.Errorf("error while getting all account link proposals: %s", err)
 	}
 	return *res, nil
 }
@@ -208,7 +209,7 @@ func (s Source) GetAccountLinkProposalsForHumanId(height int64, req kyctypes.Que
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.AccountLinkProposalsForHumanId(ctx, &req)
 	if err != nil {
-		return kyctypes.QueryGetAccountLinkProposalsForHumanIdResponse{}, nil
+		return kyctypes.QueryGetAccountLinkProposalsForHumanIdResponse{}, fmt.Errorf("error while getting account link proposals for human id: %s", err)
 	}
 	return *res, nil
 }
@@ -217,7 +218,7 @@ func (s Source) GetAllAccountLinkProposalsForHumanId(height int64, req kyctypes.
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.AccountLinkProposalsForHumanIdAll(ctx, &req)
 	if err != nil {
-		return kyctypes.QueryAllAccountLinkProposalsForHumanIdResponse{}, nil
+		return kyctypes.QueryAllAccountLinkProposalsForHumanIdResponse{}, fmt.Errorf("error while getting all account link proposals for human id: %s", err)
 	}
 	return *res, nil
 }

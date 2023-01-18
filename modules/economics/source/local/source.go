@@ -46,7 +46,7 @@ func (s Source) GetParams(height int64, req econtypes.QueryParamsRequest) (econt
 		&req,
 	)
 	if err != nil {
-		return econtypes.QueryParamsResponse{}, fmt.Errorf("error while getting params: %s", err)
+		return econtypes.QueryParamsResponse{}, fmt.Errorf("error while getting economics params: %s", err)
 	}
 
 	return *params, nil
