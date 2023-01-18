@@ -28,15 +28,7 @@ func (db *Db) SaveInvite(network string, invite *kyctypes.Invite) error {
 	INSERT INTO kyc_invites ("network", "challenge", "registered", "confirmed_account", "invite_creator", "human_id", "given_roles") 
 	VALUES ($1, $2, $3, $4, $5, $6, $7);`
 
-	inv := db_types.DbKycInvite{
-		Network:          network,
-		Challenge:        invite.Challenge,
-		Registered:       invite.Registered,
-		ConfirmedAccount: invite.ConfirmedAccount,
-		InviteCreator:    invite.InviteCreator,
-		HumanId:          invite.HumanId,
-		GivenRoles:       strings.Join(invite.GivenRoles, ","),
-	}
+	inv := db_types.DbKycInvite{}.FromProto(network, invite)
 	_, err := db.Sql.Exec(stmt, network,
 		inv.Challenge,
 		inv.Registered,
@@ -59,7 +51,16 @@ func (db *Db) SaveMultipleInvites(network string, invites []*kyctypes.Invite) er
 
 	values := make([]string, 0, len(invites))
 	for _, invite := range invites {
-		values = append(values, fmt.Sprintf("('%s', '%s', '%t', '%s', '%s', '%s', '%s')", network, invite.Challenge, false, invite.ConfirmedAccount, invite.InviteCreator, invite.HumanId, invite.GivenRoles))
+		values = append(values,
+			fmt.Sprintf("('%s', '%s', '%t', '%s', '%s', '%s', '%s')",
+				network,
+				invite.Challenge,
+				false,
+				invite.ConfirmedAccount,
+				invite.InviteCreator,
+				invite.HumanId,
+				strings.Join(invite.GivenRoles, ","),
+			))
 	}
 
 	stmt = fmt.Sprintf(stmt, strings.Join(values, ","))

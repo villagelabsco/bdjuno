@@ -23,13 +23,13 @@ CREATE TABLE kyc_invites (
 
 CREATE TABLE kyc_status (
     provider_id TEXT NOT NULL REFERENCES kyc_identity_provider (index),
-    human_id TEXT NOT NULL REFERENCES kyc_humans (index),
+    human_id TEXT NOT NULL PRIMARY KEY REFERENCES kyc_humans (index),
     data_hash TEXT NOT NULL,
     timestamp TIMESTAMP NOT NULL
 );
 
 CREATE TABLE kyc_nb_invite_per_day (
-    network TEXT NOT NULL REFERENCES village_networks (index),
+    network TEXT NOT NULL PRIMARY KEY REFERENCES village_networks (index),
     number TEXT NOT NULL
 );
 
@@ -50,7 +50,7 @@ CREATE TABLE kyc_primary_wallet_transfer_proposals (
 );
 
 CREATE TABLE kyc_human_proposals (
-    human_id TEXT NOT NULL REFERENCES kyc_humans (index),
+    human_id TEXT NOT NULL PRIMARY KEY REFERENCES kyc_humans (index),
     proposals jsonb NOT NULL
 );
 
