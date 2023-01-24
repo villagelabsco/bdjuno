@@ -113,3 +113,24 @@ func (db *Db) RemoveEconomicsScheduledHook(network string, idx uint64) error {
 
 	return nil
 }
+
+func (db *Db) SaveEconomicsScheduledHookManualTrigger(msg *econtypes.MsgTriggerScheduledHooks) error {
+	stmt := `
+		INSERT INTO economics_scheduled_hooks_manual_triggers (creator, network, hook_idxs)
+		VALUES ($1, $2, $3);
+	`
+
+	h, err := types.DbEconomicsScheduledHookManualTrigger{}.FromProto(msg)
+	if err != nil {
+		return fmt.Errorf("error while converting economics scheduled hook execution: %s", err)
+	}
+
+	if _, err := db.Sql.Exec(stmt,
+		h.Creator,
+		h.Network,
+		h.HookIdxs); err != nil {
+		return fmt.Errorf("error while storing economics scheduled hook execution: %s", err)
+	}
+
+	return nil
+}

@@ -31,20 +31,20 @@ func (m Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 		return m.handleMsgRemoveHook(index, tx, cosmosMsg)
 	case *econtypes.MsgPostTransaction:
 		return m.handleMsgPostTransaction(index, tx, cosmosMsg)
-	case *econtypes.MsgPostTask:
-		return m.handleMsgPostTask(index, tx, cosmosMsg)
-	case *econtypes.MsgTriggerScheduledHooks:
-		return m.handleMsgTriggerScheduledHooks(index, tx, cosmosMsg)
 	case *econtypes.MsgEnableDisableNetworkEconomics:
 		return m.handleMsgEnableDisableNetworkEconomics(index, tx, cosmosMsg)
-	case *econtypes.MsgExecutePendingTask:
-		return m.handleMsgExecutePendingTask(index, tx, cosmosMsg)
-	case *econtypes.MsgExecuteOneShotMint:
-		return m.handleMsgExecuteOneShotMint(index, tx, cosmosMsg)
-	case *econtypes.MsgExecuteOneShotTransfer:
-		return m.handleMsgExecuteOneShotTransfer(index, tx, cosmosMsg)
-	case *econtypes.MsgExecuteOneShotBurn:
-		return m.handleMsgExecuteOneShotBurn(index, tx, cosmosMsg)
+	case *econtypes.MsgTriggerScheduledHooks:
+		return m.handleMsgTriggerScheduledHooks(index, tx, cosmosMsg)
+	//case *econtypes.MsgPostTask:
+	//	return m.handleMsgPostTask(index, tx, cosmosMsg)
+	//case *econtypes.MsgExecutePendingTask:
+	//	return m.handleMsgExecutePendingTask(index, tx, cosmosMsg)
+	//case *econtypes.MsgExecuteOneShotMint:
+	//	return m.handleMsgExecuteOneShotMint(index, tx, cosmosMsg)
+	//case *econtypes.MsgExecuteOneShotTransfer:
+	//	return m.handleMsgExecuteOneShotTransfer(index, tx, cosmosMsg)
+	//case *econtypes.MsgExecuteOneShotBurn:
+	//	return m.handleMsgExecuteOneShotBurn(index, tx, cosmosMsg)
 	case *econtypes.MsgSetTransactionalHookPreMintTask:
 		return m.handleMsgSetTransactionalHookPreMintTask(index, tx, cosmosMsg)
 	case *econtypes.MsgSetTransactionalHookPreMintAccountingTokenForTasks:
@@ -85,16 +85,13 @@ func (m Module) handleMsgRemoveHook(index int, tx *juno.Tx, msg *econtypes.MsgRe
 	}
 }
 
+// TODO: Need an event for this
 func (m Module) handleMsgPostTransaction(index int, tx *juno.Tx, msg *econtypes.MsgPostTransaction) error {
 	return nil
 }
 
-func (m Module) handleMsgPostTask(index int, tx *juno.Tx, msg *econtypes.MsgPostTask) error {
-	return nil
-}
-
 func (m Module) handleMsgTriggerScheduledHooks(index int, tx *juno.Tx, msg *econtypes.MsgTriggerScheduledHooks) error {
-	return nil
+	return m.db.SaveEconomicsScheduledHookManualTrigger(msg)
 }
 
 func (m Module) handleMsgEnableDisableNetworkEconomics(index int, tx *juno.Tx, msg *econtypes.MsgEnableDisableNetworkEconomics) error {
@@ -108,22 +105,6 @@ func (m Module) handleMsgEnableDisableNetworkEconomics(index int, tx *juno.Tx, m
 	}
 
 	return m.db.SaveOrUpdateEconomicsNetworkEnabled(msg.Network, a)
-}
-
-func (m Module) handleMsgExecutePendingTask(index int, tx *juno.Tx, msg *econtypes.MsgExecutePendingTask) error {
-	return nil
-}
-
-func (m Module) handleMsgExecuteOneShotMint(index int, tx *juno.Tx, msg *econtypes.MsgExecuteOneShotMint) error {
-	return nil
-}
-
-func (m Module) handleMsgExecuteOneShotTransfer(index int, tx *juno.Tx, msg *econtypes.MsgExecuteOneShotTransfer) error {
-	return nil
-}
-
-func (m Module) handleMsgExecuteOneShotBurn(index int, tx *juno.Tx, msg *econtypes.MsgExecuteOneShotBurn) error {
-	return nil
 }
 
 func (m Module) handleMsgSetTransactionalHookPreMintTask(index int, tx *juno.Tx, msg *econtypes.MsgSetTransactionalHookPreMintTask) error {

@@ -35,3 +35,11 @@ CREATE TABLE economics_network_enabled (
     active boolean not null,
     primary key (network)
 );
+
+CREATE TABLE economics_scheduled_hooks_manual_triggers (
+    id serial not null,
+    creator text not null references account (address),
+    network text not null references identity_networks (index),
+    hook_idxs jsonb not null,
+    primary key (id)
+);

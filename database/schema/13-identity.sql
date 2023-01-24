@@ -7,6 +7,21 @@ CREATE TABLE identity_providers (
     primary key (index)
 );
 
+CREATE TABLE identity_humans (
+    index TEXT NOT NULL,
+    vns_domain TEXT NOT NULL,
+    accounts jsonb NOT NULL,
+    network_primary_wallet jsonb NOT NULL,
+    primary key (index)
+);
+
+CREATE TABLE identity_accounts (
+   index TEXT NOT NULL REFERENCES account (address),
+   human_id TEXT UNIQUE REFERENCES identity_humans (index),
+   private_acc bool NOT NULL,
+   primary key (index)
+);
+
 CREATE TABLE identity_networks (
     index TEXT NOT NULL,
     active bool NOT NULL,
@@ -19,21 +34,6 @@ CREATE TABLE identity_networks (
 CREATE TABLE identity_account_networks (
     index TEXT NOT NULL REFERENCES identity_accounts (index),
     networks jsonb NOT NULL,
-    primary key (index)
-);
-
-CREATE TABLE identity_humans (
-    index TEXT NOT NULL,
-    vns_domain TEXT NOT NULL,
-    accounts jsonb NOT NULL,
-    network_primary_wallet jsonb NOT NULL,
-    primary key (index)
-);
-
-CREATE TABLE identity_accounts (
-    index TEXT NOT NULL REFERENCES account (address),
-    human_id TEXT UNIQUE REFERENCES identity_humans (index),
-    private_acc bool NOT NULL,
     primary key (index)
 );
 
