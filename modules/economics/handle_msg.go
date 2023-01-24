@@ -19,8 +19,10 @@ package economics
 import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/forbole/bdjuno/v3/utils"
 	juno "github.com/forbole/juno/v3/types"
 	econtypes "github.com/villagelabs/villaged/x/economics/types"
+	"strconv"
 )
 
 func (m Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
@@ -73,7 +75,14 @@ func (m Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 }
 
 func (m Module) handleMsgRemoveHook(index int, tx *juno.Tx, msg *econtypes.MsgRemoveHook) error {
-	return nil
+	switch msg.HookType {
+	case econtypes.HookType_HOOKTYPE_TRANSACTIONAL:
+		return m.db.RemoveEconomicsTransactionHook(msg.Network, msg.HookIdx)
+	case econtypes.HookType_HOOKTYPE_SCHEDULED:
+		return m.db.RemoveEconomicsScheduledHook(msg.Network, msg.HookIdx)
+	default:
+		return fmt.Errorf("unrecognized hook type: %s", msg.HookType)
+	}
 }
 
 func (m Module) handleMsgPostTransaction(index int, tx *juno.Tx, msg *econtypes.MsgPostTransaction) error {
@@ -89,7 +98,16 @@ func (m Module) handleMsgTriggerScheduledHooks(index int, tx *juno.Tx, msg *econ
 }
 
 func (m Module) handleMsgEnableDisableNetworkEconomics(index int, tx *juno.Tx, msg *econtypes.MsgEnableDisableNetworkEconomics) error {
-	return nil
+	active, err := utils.FindEventAndAttr(index, tx, &econtypes.NetworkEnabled{}, "Active")
+	if err != nil {
+		return fmt.Errorf("error while getting economics active from event: %s", err)
+	}
+	a, err := strconv.ParseBool(active)
+	if err != nil {
+		return fmt.Errorf("error while parsing economics active from event: %s", err)
+	}
+
+	return m.db.SaveOrUpdateEconomicsNetworkEnabled(msg.Network, a)
 }
 
 func (m Module) handleMsgExecutePendingTask(index int, tx *juno.Tx, msg *econtypes.MsgExecutePendingTask) error {
@@ -109,49 +127,75 @@ func (m Module) handleMsgExecuteOneShotBurn(index int, tx *juno.Tx, msg *econtyp
 }
 
 func (m Module) handleMsgSetTransactionalHookPreMintTask(index int, tx *juno.Tx, msg *econtypes.MsgSetTransactionalHookPreMintTask) error {
-	return nil
+	return m.handleSetTransactionHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
 func (m Module) handleMsgSetTransactionalHookPreMintAccountingTokenForTasks(index int, tx *juno.Tx, msg *econtypes.MsgSetTransactionalHookPreMintAccountingTokenForTasks) error {
-	return nil
+	return m.handleSetTransactionHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
 func (m Module) handleMsgSetTransactionalHookMintShareToken(index int, tx *juno.Tx, msg *econtypes.MsgSetTransactionalHookMintShareToken) error {
-	return nil
+	return m.handleSetTransactionHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
 func (m Module) handleMsgSetTransactionalHookAutoSwapProductForDenom(index int, tx *juno.Tx, msg *econtypes.MsgSetTransactionalHookAutoSwapProductForDenom) error {
-	return nil
+	return m.handleSetTransactionHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
 func (m Module) handleMsgSetTransactionalHookApplyMarketplaceFees(index int, tx *juno.Tx, msg *econtypes.MsgSetTransactionalHookApplyMarketplaceFees) error {
-	return nil
+	return m.handleSetTransactionHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
 func (m Module) handleMsgSetScheduledHookTransferDenomToShareholders(index int, tx *juno.Tx, msg *econtypes.MsgSetScheduledHookTransferDenomToShareholders) error {
-	return nil
+	return m.handleSetScheduledHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
 func (m Module) handleMsgSetScheduledHookAutoSwapDenom(index int, tx *juno.Tx, msg *econtypes.MsgSetScheduledHookAutoSwapDenom) error {
-	return nil
+	return m.handleSetScheduledHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
 func (m Module) handleMsgSetScheduledHookDecayDenomForInactiveAccounts(index int, tx *juno.Tx, msg *econtypes.MsgSetScheduledHookDecayDenomForInactiveAccounts) error {
-	return nil
+	return m.handleSetScheduledHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
 func (m Module) handleMsgSetTransactionalHookPreMintProduct(index int, tx *juno.Tx, msg *econtypes.MsgSetTransactionalHookPreMintProduct) error {
-	return nil
+	return m.handleSetTransactionHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
 func (m Module) handleMsgSetTransactionalHookMintAccountingTokenForRevShareMarketplaces(index int, tx *juno.Tx, msg *econtypes.MsgSetTransactionalHookMintAccountingTokenForRevShareMarketplaces) error {
-	return nil
+	return m.handleSetTransactionHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
 func (m Module) handleMsgSetTransactionalHookPreMintGsvTrackingToken(index int, tx *juno.Tx, msg *econtypes.MsgSetTransactionalHookPreMintGsvTrackingToken) error {
-	return nil
+	return m.handleSetTransactionHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
 func (m Module) handleMsgSetScheduledHookRecurringMintToken(index int, tx *juno.Tx, msg *econtypes.MsgSetScheduledHookRecurringMintToken) error {
-	return nil
+	return m.handleSetScheduledHook(tx.Height, msg.Network, msg.HookIdx)
+}
+
+func (m Module) handleSetTransactionHook(height int64, network string, index uint64) error {
+	hk, err := m.src.GetTransactionHook(height, econtypes.QueryGetTransactionHookRequest{
+		Network: network,
+		Idx:     index,
+	})
+	if err != nil {
+		return fmt.Errorf("error while getting transaction hook from source: %s", err)
+	}
+	hook := hk.TransactionHook
+
+	return m.db.SaveEconomicsTransactionHook(&hook)
+}
+
+func (m Module) handleSetScheduledHook(height int64, network string, index uint64) error {
+	hk, err := m.src.GetScheduledHook(height, econtypes.QueryGetScheduledHookRequest{
+		Network: network,
+		HookIdx: index,
+	})
+	if err != nil {
+		return fmt.Errorf("error while getting scheduled hook from source: %s", err)
+	}
+	hook := hk.ScheduledHook
+
+	return m.db.SaveEconomicsScheduledHook(&hook)
 }
