@@ -16,12 +16,8 @@
 
 package types
 
-import sqlxtypes "github.com/jmoiron/sqlx/types"
-
-type DbKycPrimaryWalletTransferProposal struct {
-	Index                        string             `db:"index"`
-	ProposerAccount              string             `db:"proposer_account"`
-	HumanId                      string             `db:"human_id"`
-	SetAsPrimaryWalletForNetwork string             `db:"set_as_primary_wallet_for_network"`
-	Deposit                      sqlxtypes.JSONText `db:"deposit"`
+type DbIdentityAccount struct {
+	Index      string `db:"index"`
+	HumanId    string `db:"human_id"`
+	PrivateAcc bool   `db:"private_acc"`
 }

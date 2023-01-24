@@ -1,5 +1,5 @@
 CREATE TABLE marketplace_listings (
-    network text not null references village_networks (index),
+    network text not null references identity_networks (index),
     index text not null,
     reference text,
     product_class_id text references products_product_class_infos (full_class_id),
@@ -11,7 +11,7 @@ CREATE TABLE marketplace_listings (
 );
 
 CREATE TABLE marketplace_orders (
-    network text references village_networks (index),
+    network text references identity_networks (index),
     index text not null,
     status numeric not null,
     timestamp timestamp not null,

@@ -16,22 +16,24 @@
 
 package types
 
-import kyctypes "github.com/villagelabs/villaged/x/kyc/types"
+import (
+	identitytypes "github.com/villagelabs/villaged/x/identity/types"
+)
 
-type DbKycNetworkKyb struct {
-	Index     string `db:"index"`
-	Status    uint64 `db:"status"`
-	DataHash  string `db:"data_hash"`
-	Timestamp uint64 `db:"timestamp"`
-	Metadata  string `db:"metadata"`
+type DbIdentityNetwork struct {
+	Index            string `db:"index"`
+	Active           bool   `db:"active"`
+	FullName         string `db:"full_name"`
+	IdentityProvider string `db:"identity_provider"`
+	InviteOnly       bool   `db:"invite_only"`
 }
 
-func (DbKycNetworkKyb) FromProto(kyb *kyctypes.NetworkKyb) DbKycNetworkKyb {
-	return DbKycNetworkKyb{
-		Index:     kyb.Index,
-		Status:    kyb.Status,
-		DataHash:  kyb.DataHash,
-		Timestamp: kyb.Timestamp,
-		Metadata:  kyb.Metadata,
+func (vn DbIdentityNetwork) FromProto(n *identitytypes.Network) DbIdentityNetwork {
+	return DbIdentityNetwork{
+		Index:            n.Index,
+		Active:           n.Active,
+		FullName:         n.FullName,
+		IdentityProvider: n.IdentityProvider,
+		InviteOnly:       n.InviteOnly,
 	}
 }

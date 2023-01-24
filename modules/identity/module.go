@@ -14,11 +14,29 @@
  * limitations under the License.
  */
 
-package types
+package identity
 
-import sqlxtypes "github.com/jmoiron/sqlx/types"
+import (
+	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/forbole/bdjuno/v3/database"
+	"github.com/forbole/juno/v3/modules"
+	identitytypes "github.com/villagelabs/villaged/x/identity/types"
 
-type DbKycHumanProposal struct {
-	HumanId   string             `db:"human_id"`
-	Proposals sqlxtypes.JSONText `db:"proposals"`
+	identitysource "github.com/forbole/bdjuno/v3/modules/identity/source"
+)
+
+var (
+	_ modules.Module        = &Module{}
+	_ modules.MessageModule = &Module{}
+)
+
+type Module struct {
+	cdc codec.Codec
+	db  *database.Db
+
+	src identitysource.Source
+}
+
+func (m *Module) Name() string {
+	return identitytypes.ModuleName
 }

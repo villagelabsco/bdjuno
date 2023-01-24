@@ -20,10 +20,10 @@ import (
 	"encoding/json"
 	"fmt"
 	sqlxtypes "github.com/jmoiron/sqlx/types"
-	kyctypes "github.com/villagelabs/villaged/x/kyc/types"
+	identitytypes "github.com/villagelabs/villaged/x/identity/types"
 )
 
-type DbKycIdentityProvider struct {
+type DbIdentityProvider struct {
 	Index               string             `db:"index"`
 	AdminAccounts       sqlxtypes.JSONText `db:"admin_accounts"`
 	ProviderAccounts    sqlxtypes.JSONText `db:"provider_accounts"`
@@ -31,25 +31,25 @@ type DbKycIdentityProvider struct {
 	AssetBurnerAccounts sqlxtypes.JSONText `db:"asset_burner_accounts"`
 }
 
-func (d DbKycIdentityProvider) FromProto(provider kyctypes.IdentityProvider) (DbKycIdentityProvider, error) {
+func (d DbIdentityProvider) FromProto(provider identitytypes.IdentityProvider) (DbIdentityProvider, error) {
 	aa, err := json.Marshal(provider.AdminAccounts)
 	if err != nil {
-		return DbKycIdentityProvider{}, fmt.Errorf("error marshalling AdminAccounts: %s", err)
+		return DbIdentityProvider{}, fmt.Errorf("error marshalling AdminAccounts: %s", err)
 	}
 	pa, err := json.Marshal(provider.ProviderAccounts)
 	if err != nil {
-		return DbKycIdentityProvider{}, fmt.Errorf("error marshalling ProviderAccounts: %s", err)
+		return DbIdentityProvider{}, fmt.Errorf("error marshalling ProviderAccounts: %s", err)
 	}
 	ama, err := json.Marshal(provider.AssetMinterAccounts)
 	if err != nil {
-		return DbKycIdentityProvider{}, fmt.Errorf("error marshalling AssetMinterAccounts: %s", err)
+		return DbIdentityProvider{}, fmt.Errorf("error marshalling AssetMinterAccounts: %s", err)
 	}
 	aba, err := json.Marshal(provider.AssetBurnerAccounts)
 	if err != nil {
-		return DbKycIdentityProvider{}, fmt.Errorf("error marshalling AssetBurnerAccounts: %s", err)
+		return DbIdentityProvider{}, fmt.Errorf("error marshalling AssetBurnerAccounts: %s", err)
 	}
 
-	return DbKycIdentityProvider{
+	return DbIdentityProvider{
 		Index:               provider.Index,
 		AdminAccounts:       aa,
 		ProviderAccounts:    pa,

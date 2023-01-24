@@ -1,5 +1,5 @@
 CREATE TABLE reputation_feedback (
-    id SERIAL NOT NULL PRIMARY KEY,
+    id SERIAL NOT NULL,
     creator TEXT NOT NULL REFERENCES account (address),
     network TEXT NOT NULL,
     fb_type INTEGER NOT NULL,

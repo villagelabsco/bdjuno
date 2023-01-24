@@ -55,18 +55,18 @@ func (m Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 		return m.handleMsgSetTransactionalHookAutoSwapProductForDenom(index, tx, cosmosMsg)
 	case *econtypes.MsgSetTransactionalHookApplyMarketplaceFees:
 		return m.handleMsgSetTransactionalHookApplyMarketplaceFees(index, tx, cosmosMsg)
+	case *econtypes.MsgSetTransactionalHookPreMintProduct:
+		return m.handleMsgSetTransactionalHookPreMintProduct(index, tx, cosmosMsg)
+	case *econtypes.MsgSetTransactionalHookMintAccountingTokenOnTransactions:
+		return m.handleMsgSetTransactionalHookMintAccountingTokenOnTransactions(index, tx, cosmosMsg)
+	case *econtypes.MsgSetTransactionalHookPreMintGsvTrackingToken:
+		return m.handleMsgSetTransactionalHookPreMintGsvTrackingToken(index, tx, cosmosMsg)
 	case *econtypes.MsgSetScheduledHookTransferDenomToShareholders:
 		return m.handleMsgSetScheduledHookTransferDenomToShareholders(index, tx, cosmosMsg)
 	case *econtypes.MsgSetScheduledHookAutoSwapDenom:
 		return m.handleMsgSetScheduledHookAutoSwapDenom(index, tx, cosmosMsg)
 	case *econtypes.MsgSetScheduledHookDecayDenomForInactiveAccounts:
 		return m.handleMsgSetScheduledHookDecayDenomForInactiveAccounts(index, tx, cosmosMsg)
-	case *econtypes.MsgSetTransactionalHookPreMintProduct:
-		return m.handleMsgSetTransactionalHookPreMintProduct(index, tx, cosmosMsg)
-	case *econtypes.MsgSetTransactionalHookMintAccountingTokenForRevShareMarketplaces:
-		return m.handleMsgSetTransactionalHookMintAccountingTokenForRevShareMarketplaces(index, tx, cosmosMsg)
-	case *econtypes.MsgSetTransactionalHookPreMintGsvTrackingToken:
-		return m.handleMsgSetTransactionalHookPreMintGsvTrackingToken(index, tx, cosmosMsg)
 	case *econtypes.MsgSetScheduledHookRecurringMintToken:
 		return m.handleMsgSetScheduledHookRecurringMintToken(index, tx, cosmosMsg)
 	default:
@@ -162,7 +162,7 @@ func (m Module) handleMsgSetTransactionalHookPreMintProduct(index int, tx *juno.
 	return m.handleSetTransactionHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
-func (m Module) handleMsgSetTransactionalHookMintAccountingTokenForRevShareMarketplaces(index int, tx *juno.Tx, msg *econtypes.MsgSetTransactionalHookMintAccountingTokenForRevShareMarketplaces) error {
+func (m Module) handleMsgSetTransactionalHookMintAccountingTokenOnTransactions(index int, tx *juno.Tx, msg *econtypes.MsgSetTransactionalHookMintAccountingTokenOnTransactions) error {
 	return m.handleSetTransactionHook(tx.Height, msg.Network, msg.HookIdx)
 }
 

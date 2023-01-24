@@ -17,11 +17,11 @@
 package types
 
 import (
-	kyctypes "github.com/villagelabs/villaged/x/kyc/types"
+	identitytypes "github.com/villagelabs/villaged/x/identity/types"
 	"strings"
 )
 
-type DbKycInvite struct {
+type DbIdentityInvite struct {
 	Network          string `db:"network"`
 	Challenge        string `db:"challenge"`
 	Registered       bool   `db:"registered"`
@@ -31,8 +31,8 @@ type DbKycInvite struct {
 	GivenRoles       string `db:"given_roles"`
 }
 
-func (fa DbKycInvite) FromProto(network string, i *kyctypes.Invite) DbKycInvite {
-	return DbKycInvite{
+func (fa DbIdentityInvite) FromProto(network string, i *identitytypes.Invite) DbIdentityInvite {
+	return DbIdentityInvite{
 		Network:          network,
 		Challenge:        i.Challenge,
 		Registered:       i.Registered,

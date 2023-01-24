@@ -16,8 +16,9 @@
 
 package types
 
-type DbKycAccount struct {
-	Index      string `db:"index"`
-	HumanId    string `db:"human_id"`
-	PrivateAcc bool   `db:"private_acc"`
+import sqlxtypes "github.com/jmoiron/sqlx/types"
+
+type DbIdentityHumanProposal struct {
+	HumanId   string             `db:"human_id"`
+	Proposals sqlxtypes.JSONText `db:"proposals"`
 }

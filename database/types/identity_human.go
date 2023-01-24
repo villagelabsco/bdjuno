@@ -20,27 +20,27 @@ import (
 	"encoding/json"
 	"fmt"
 	sqlxtypes "github.com/jmoiron/sqlx/types"
-	kyctypes "github.com/villagelabs/villaged/x/kyc/types"
+	identitytypes "github.com/villagelabs/villaged/x/identity/types"
 )
 
-type DbKycHuman struct {
+type DbIdentityHuman struct {
 	Index                string             `db:"index"`
 	VnsDomain            string             `db:"vns_domain"`
 	Accounts             sqlxtypes.JSONText `db:"accounts"`
 	NetworkPrimaryWallet sqlxtypes.JSONText `db:"network_primary_wallet"`
 }
 
-func (DbKycHuman) FromProto(h *kyctypes.Human) (DbKycHuman, error) {
+func (DbIdentityHuman) FromProto(h *identitytypes.Human) (DbIdentityHuman, error) {
 	accs, err := json.Marshal(h.Accounts)
 	if err != nil {
-		return DbKycHuman{}, fmt.Errorf("error while marshalling accounts: %s", err)
+		return DbIdentityHuman{}, fmt.Errorf("error while marshalling accounts: %s", err)
 	}
 	npw, err := json.Marshal(h.NetworkPrimaryWallet)
 	if err != nil {
-		return DbKycHuman{}, fmt.Errorf("error while marshalling network primary wallet: %s", err)
+		return DbIdentityHuman{}, fmt.Errorf("error while marshalling network primary wallet: %s", err)
 	}
 
-	return DbKycHuman{
+	return DbIdentityHuman{
 		Index:                h.Index,
 		VnsDomain:            h.VnsDomain,
 		Accounts:             accs,

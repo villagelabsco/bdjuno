@@ -20,21 +20,21 @@ import (
 	"encoding/json"
 	"fmt"
 	sqlxtypes "github.com/jmoiron/sqlx/types"
-	villagetypes "github.com/villagelabs/villaged/x/village/types"
+	identitytypes "github.com/villagelabs/villaged/x/identity/types"
 )
 
-type DbVillageUserNetworks struct {
+type DbIdentityAccountNetworks struct {
 	Index    string             `db:"index"`
 	Networks sqlxtypes.JSONText `db:"networks"`
 }
 
-func (vn DbVillageUserNetworks) FromProto(n *villagetypes.UserNetworks) (DbVillageUserNetworks, error) {
+func (vn DbIdentityAccountNetworks) FromProto(n *identitytypes.AccountNetworks) (DbIdentityAccountNetworks, error) {
 	networks, err := json.Marshal(n.Networks)
 	if err != nil {
-		return DbVillageUserNetworks{}, fmt.Errorf("error marshalling networks: %v", err)
+		return DbIdentityAccountNetworks{}, fmt.Errorf("error marshalling networks: %v", err)
 	}
 
-	return DbVillageUserNetworks{
+	return DbIdentityAccountNetworks{
 		Index:    n.Index,
 		Networks: networks,
 	}, nil

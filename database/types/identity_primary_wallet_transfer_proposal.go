@@ -16,7 +16,12 @@
 
 package types
 
-type DbKycNbInvitesPerDay struct {
-	Network string `db:"network"`
-	Number  uint64 `db:"number"`
+import sqlxtypes "github.com/jmoiron/sqlx/types"
+
+type DbIdentityPrimaryWalletTransferProposal struct {
+	Index                        string             `db:"index"`
+	ProposerAccount              string             `db:"proposer_account"`
+	HumanId                      string             `db:"human_id"`
+	SetAsPrimaryWalletForNetwork string             `db:"set_as_primary_wallet_for_network"`
+	Deposit                      sqlxtypes.JSONText `db:"deposit"`
 }

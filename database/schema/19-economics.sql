@@ -1,5 +1,5 @@
 CREATE TABLE economics_transaction_hooks (
-    network text not null references village_networks (index),
+    network text not null references identity_networks (index),
     index numeric not null,
     trigger numeric not null,
     type numeric not null,
@@ -10,7 +10,7 @@ CREATE TABLE economics_transaction_hooks (
 );
 
 CREATE TABLE economics_scheduled_hooks (
-    network text not null references village_networks (index),
+    network text not null references identity_networks (index),
     index numeric not null,
     type numeric not null,
     name_id text not null,
@@ -25,17 +25,13 @@ CREATE TABLE economics_scheduled_hooks (
 );
 
 CREATE TABLE economics_nb_tx_per_day (
-    network text not null references village_networks (index),
+    network text not null references identity_networks (index),
     number numeric not null,
     primary key (network)
 );
 
 CREATE TABLE economics_network_enabled (
-    network text not null references village_networks (index),
+    network text not null references identity_networks (index),
     active boolean not null,
     primary key (network)
 );
-
-CREATE TABLE economics_pending_tasks (
-
-)

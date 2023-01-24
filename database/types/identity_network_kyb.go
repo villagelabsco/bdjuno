@@ -16,9 +16,24 @@
 
 package types
 
-type DbKycStatus struct {
-	ProviderId string `db:"provider_id"`
-	HumanId    string `db:"human_id"`
-	DataHash   string `db:"data_hash"`
-	Timestamp  uint64 `db:"timestamp"`
+import (
+	identitytypes "github.com/villagelabs/villaged/x/identity/types"
+)
+
+type DbIdentityNetworkKyb struct {
+	Index     string `db:"index"`
+	Status    uint64 `db:"status"`
+	DataHash  string `db:"data_hash"`
+	Timestamp uint64 `db:"timestamp"`
+	Metadata  string `db:"metadata"`
+}
+
+func (DbIdentityNetworkKyb) FromProto(kyb *identitytypes.NetworkKyb) DbIdentityNetworkKyb {
+	return DbIdentityNetworkKyb{
+		Index:     kyb.Index,
+		Status:    kyb.Status,
+		DataHash:  kyb.DataHash,
+		Timestamp: kyb.Timestamp,
+		Metadata:  kyb.Metadata,
+	}
 }
