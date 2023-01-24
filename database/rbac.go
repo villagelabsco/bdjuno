@@ -18,7 +18,7 @@ package database
 
 import (
 	"fmt"
-	"github.com/forbole/bdjuno/v3/database/db_types"
+	"github.com/forbole/bdjuno/v3/database/types"
 	rbactypes "github.com/villagelabs/villaged/x/rbac/types"
 )
 
@@ -28,7 +28,7 @@ func (db *Db) SaveOrUpdateAuthorization(au *rbactypes.Authorizations) error {
 		VALUES ($1, $2, $3, $4, $5, $6)
 	`
 
-	dbau, err := db_types.DbRbacAuthorization{}.FromProto(au)
+	dbau, err := types.DbRbacAuthorization{}.FromProto(au)
 	if err != nil {
 		return fmt.Errorf("error converting rbac authorizations from proto: %v", err)
 	}

@@ -20,7 +20,7 @@ import (
 	"encoding/json"
 	"fmt"
 	nfttypes "github.com/cosmos/cosmos-sdk/x/nft"
-	"github.com/forbole/bdjuno/v3/database/db_types"
+	"github.com/forbole/bdjuno/v3/database/types"
 	productstypes "github.com/villagelabs/villaged/x/products/types"
 )
 
@@ -40,7 +40,7 @@ func (db *Db) SaveOrUpdateProductClass(
 		return fmt.Errorf("error while marshalling metadata: %s", err)
 	}
 
-	pci := db_types.DbProductClassInfo{}.FromProto(pc, nftClass, metadataB, specificMetadataB)
+	pci := types.DbProductClassInfo{}.FromProto(pc, nftClass, metadataB, specificMetadataB)
 	return db.saveOrUpdateProductClass(pci)
 }
 
@@ -60,7 +60,7 @@ func (db *Db) SaveOrUpdateTaskClass(
 		return fmt.Errorf("error while marshalling metadata: %s", err)
 	}
 
-	tci := db_types.DbProductClassInfo{}.FromProto(tc, nftClass, metadataB, specificMetadataB)
+	tci := types.DbProductClassInfo{}.FromProto(tc, nftClass, metadataB, specificMetadataB)
 	return db.saveOrUpdateProductClass(tci)
 }
 
@@ -78,7 +78,7 @@ func (db *Db) UpdateProductClassDisabled(fullClassId string, val bool) error {
 	return nil
 }
 
-func (db *Db) saveOrUpdateProductClass(pci db_types.DbProductClassInfo) error {
+func (db *Db) saveOrUpdateProductClass(pci types.DbProductClassInfo) error {
 	stmt := `
 		INSERT INTO products_product_class_infos (network, class_id, full_class_id, class_type, name, description, metadata, specific_metadata)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 

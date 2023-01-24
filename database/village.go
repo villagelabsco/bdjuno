@@ -18,7 +18,7 @@ package database
 
 import (
 	"fmt"
-	"github.com/forbole/bdjuno/v3/database/db_types"
+	"github.com/forbole/bdjuno/v3/database/types"
 	villagetypes "github.com/villagelabs/villaged/x/village/types"
 )
 
@@ -27,7 +27,7 @@ func (db *Db) SaveNetwork(network *villagetypes.Network) error {
 	INSERT INTO village_networks ("index", "active", "full_name", "identity_provider", "invite_only")
 	VALUES ($1, $2, $3, $4, $5);`
 
-	n := db_types.DbVillageNetwork{}.FromProto(network)
+	n := types.DbVillageNetwork{}.FromProto(network)
 	_, err := db.Sql.Exec(stmt, n.Index, n.Active, n.FullName, n.IdentityProvider, n.InviteOnly)
 	if err != nil {
 		return fmt.Errorf("error while inserting network: %s", err)
@@ -45,7 +45,7 @@ func (db *Db) UpdateNetwork(network *villagetypes.Network) error {
 		invite_only = $5
 	WHERE vn.index = $1;`
 
-	n := db_types.DbVillageNetwork{}.FromProto(network)
+	n := types.DbVillageNetwork{}.FromProto(network)
 	_, err := db.Sql.Exec(stmt, n.Index, n.Active, n.FullName, n.IdentityProvider, n.InviteOnly)
 	if err != nil {
 		return fmt.Errorf("error while updating network: %s", err)
@@ -73,7 +73,7 @@ func (db *Db) SaveUserNetworks(userNetworks *villagetypes.UserNetworks) error {
 	INSERT INTO village_user_networks ("index", "networks")
 	VALUES ($1, $2);`
 
-	un, err := db_types.DbVillageUserNetworks{}.FromProto(userNetworks)
+	un, err := types.DbVillageUserNetworks{}.FromProto(userNetworks)
 	if err != nil {
 		return fmt.Errorf("error while converting user networks: %s", err)
 	}
@@ -91,7 +91,7 @@ func (db *Db) UpdateUserNetworks(userNetworks *villagetypes.UserNetworks) error 
 	SET networks = $2
 	WHERE vun.index = $1;`
 
-	un, err := db_types.DbVillageUserNetworks{}.FromProto(userNetworks)
+	un, err := types.DbVillageUserNetworks{}.FromProto(userNetworks)
 	if err != nil {
 		return fmt.Errorf("error while converting user networks: %s", err)
 	}

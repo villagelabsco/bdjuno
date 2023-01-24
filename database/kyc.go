@@ -18,7 +18,7 @@ package database
 
 import (
 	"fmt"
-	"github.com/forbole/bdjuno/v3/database/db_types"
+	"github.com/forbole/bdjuno/v3/database/types"
 	kyctypes "github.com/villagelabs/villaged/x/kyc/types"
 	"strings"
 )
@@ -28,7 +28,7 @@ func (db *Db) SaveInvite(network string, invite *kyctypes.Invite) error {
 	INSERT INTO kyc_invites ("network", "challenge", "registered", "confirmed_account", "invite_creator", "human_id", "given_roles") 
 	VALUES ($1, $2, $3, $4, $5, $6, $7);`
 
-	inv := db_types.DbKycInvite{}.FromProto(network, invite)
+	inv := types.DbKycInvite{}.FromProto(network, invite)
 	_, err := db.Sql.Exec(stmt, network,
 		inv.Challenge,
 		inv.Registered,
@@ -115,7 +115,7 @@ func (db *Db) SaveOrUpdateIdentityProvider(ip kyctypes.IdentityProvider) error {
 		        asset_burner_accounts = $5;
 	`
 
-	dbip, err := db_types.DbKycIdentityProvider{}.FromProto(ip)
+	dbip, err := types.DbKycIdentityProvider{}.FromProto(ip)
 	if err != nil {
 		return fmt.Errorf("error while converting identity provider: %s", err)
 	}
@@ -147,7 +147,7 @@ func (db *Db) SaveOrUpdateNetworkKyb(kyb *kyctypes.NetworkKyb) error {
 		        metadata = $5;
 	`
 
-	dbkyb := db_types.DbKycNetworkKyb{}.FromProto(kyb)
+	dbkyb := types.DbKycNetworkKyb{}.FromProto(kyb)
 	_, err := db.Sql.Exec(stmt,
 		dbkyb.Index,
 		dbkyb.Status,
@@ -174,7 +174,7 @@ func (db *Db) SaveOrUpdateHuman(human *kyctypes.Human) error {
 		        network_primary_wallet = $4;
 	`
 
-	dbHuman, err := db_types.DbKycHuman{}.FromProto(human)
+	dbHuman, err := types.DbKycHuman{}.FromProto(human)
 	if err != nil {
 		return fmt.Errorf("error while converting human: %s", err)
 	}
