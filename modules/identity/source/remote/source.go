@@ -27,11 +27,18 @@ type Source struct {
 	q identitytypes.QueryClient
 }
 
+func NewSource(source *remote.Source, q identitytypes.QueryClient) *Source {
+	return &Source{
+		Source: source,
+		q:      q,
+	}
+}
+
 func (s Source) GetParams(height int64) (identitytypes.Params, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
 	res, err := s.q.Params(ctx, &identitytypes.QueryParamsRequest{})
 	if err != nil {
-		return identitytypes.Params{}, fmt.Errorf("error while getting kyc params: %s", err)
+		return identitytypes.Params{}, fmt.Errorf("error while getting identity params: %s", err)
 	}
 	return res.Params, nil
 }

@@ -2,14 +2,13 @@ package modules
 
 import (
 	"github.com/forbole/bdjuno/v3/modules/actions"
-	"github.com/forbole/bdjuno/v3/modules/kyc"
+	"github.com/forbole/bdjuno/v3/modules/economics"
+	"github.com/forbole/bdjuno/v3/modules/identity"
 	"github.com/forbole/bdjuno/v3/modules/marketplace"
 	"github.com/forbole/bdjuno/v3/modules/products"
 	"github.com/forbole/bdjuno/v3/modules/rbac"
 	"github.com/forbole/bdjuno/v3/modules/reputation"
 	"github.com/forbole/bdjuno/v3/modules/types"
-	"github.com/forbole/bdjuno/v3/modules/village"
-
 	"github.com/forbole/juno/v3/modules/pruning"
 	"github.com/forbole/juno/v3/modules/telemetry"
 
@@ -92,11 +91,11 @@ func (r *Registrar) BuildModules(ctx registrar.Context) jmodules.Modules {
 	govModule := gov.NewModule(sources.GovSource, authModule, distrModule, mintModule, slashingModule, stakingModule, cdc, db)
 	upgradeModule := upgrade.NewModule(db, stakingModule)
 	reputationModule := reputation.NewModule(cdc, db, sources.ReputationSource)
-	villageModule := village.NewModule(cdc, db)
-	kycModule := kyc.NewModule(cdc, db, src)
+	identityModule := identity.NewModule(cdc, db, sources.IdentitySource)
 	marketplaceModule := marketplace.NewModule(cdc, db, sources.MarketplaceSource)
-	productsModule := products.NewModule(cdc, db, sources.ProductsSource)
+	productsModule := products.NewModule(cdc, db, sources.ProductsSource, sources.NftSource)
 	rbacModule := rbac.NewModule(cdc, db)
+	economicsModule := economics.NewModule(cdc, db, sources.EconomicsSource)
 
 	return []jmodules.Module{
 		messages.NewModule(r.parser, cdc, ctx.Database),
@@ -118,12 +117,11 @@ func (r *Registrar) BuildModules(ctx registrar.Context) jmodules.Modules {
 		stakingModule,
 		upgradeModule,
 
-		villageModule,
-		reputationModule,
-		kycModule,
-		classesModule,
-		marketplaceModule,
-		productsModule,
+		identityModule,
 		rbacModule,
+		reputationModule,
+		productsModule,
+		marketplaceModule,
+		economicsModule,
 	}
 }

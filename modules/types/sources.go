@@ -3,13 +3,15 @@ package types
 import (
 	"fmt"
 	nfttypes "github.com/cosmos/cosmos-sdk/x/nft"
+	econsource "github.com/forbole/bdjuno/v3/modules/economics/source"
+	identitysource "github.com/forbole/bdjuno/v3/modules/identity/source"
 	remotenftsource "github.com/forbole/bdjuno/v3/modules/nft/source/remote"
-	kyctypes "github.com/villagelabs/villaged/x/kyc/types"
+	econtypes "github.com/villagelabs/villaged/x/economics/types"
+	identitytypes "github.com/villagelabs/villaged/x/identity/types"
 	marketplacetypes "github.com/villagelabs/villaged/x/marketplace/types"
 	productstypes "github.com/villagelabs/villaged/x/products/types"
 	rbactypes "github.com/villagelabs/villaged/x/rbac/types"
 	reputationtypes "github.com/villagelabs/villaged/x/reputation/types"
-	villagetypes "github.com/villagelabs/villaged/x/village/types"
 	"os"
 
 	"github.com/cosmos/cosmos-sdk/simapp"
@@ -33,32 +35,29 @@ import (
 	distrsource "github.com/forbole/bdjuno/v3/modules/distribution/source"
 	localdistrsource "github.com/forbole/bdjuno/v3/modules/distribution/source/local"
 	remotedistrsource "github.com/forbole/bdjuno/v3/modules/distribution/source/remote"
+	remoteeconsource "github.com/forbole/bdjuno/v3/modules/economics/source/remote"
 	govsource "github.com/forbole/bdjuno/v3/modules/gov/source"
 	localgovsource "github.com/forbole/bdjuno/v3/modules/gov/source/local"
 	remotegovsource "github.com/forbole/bdjuno/v3/modules/gov/source/remote"
-	kycsource "github.com/forbole/bdjuno/v3/modules/kyc/source"
+	remoteidentitysource "github.com/forbole/bdjuno/v3/modules/identity/source/remote"
 	marketplacesource "github.com/forbole/bdjuno/v3/modules/marketplace/source"
+	remotemarketplacesource "github.com/forbole/bdjuno/v3/modules/marketplace/source/remote"
 	mintsource "github.com/forbole/bdjuno/v3/modules/mint/source"
 	localmintsource "github.com/forbole/bdjuno/v3/modules/mint/source/local"
 	remotemintsource "github.com/forbole/bdjuno/v3/modules/mint/source/remote"
 	nftsource "github.com/forbole/bdjuno/v3/modules/nft/source"
 	productssource "github.com/forbole/bdjuno/v3/modules/products/source"
+	remoteproductssource "github.com/forbole/bdjuno/v3/modules/products/source/remote"
 	rbacsource "github.com/forbole/bdjuno/v3/modules/rbac/source"
+	remoterbacsource "github.com/forbole/bdjuno/v3/modules/rbac/source/remote"
 	reputationsource "github.com/forbole/bdjuno/v3/modules/reputation/source"
+	remotereputationsource "github.com/forbole/bdjuno/v3/modules/reputation/source/remote"
 	slashingsource "github.com/forbole/bdjuno/v3/modules/slashing/source"
 	localslashingsource "github.com/forbole/bdjuno/v3/modules/slashing/source/local"
 	remoteslashingsource "github.com/forbole/bdjuno/v3/modules/slashing/source/remote"
 	stakingsource "github.com/forbole/bdjuno/v3/modules/staking/source"
 	localstakingsource "github.com/forbole/bdjuno/v3/modules/staking/source/local"
 	remotestakingsource "github.com/forbole/bdjuno/v3/modules/staking/source/remote"
-	villagesource "github.com/forbole/bdjuno/v3/modules/village/source"
-
-	remotekycsource "github.com/forbole/bdjuno/v3/modules/kyc/source/remote"
-	remotemarketplacesource "github.com/forbole/bdjuno/v3/modules/marketplace/source/remote"
-	remoteproductssource "github.com/forbole/bdjuno/v3/modules/products/source/remote"
-	remoterbacsource "github.com/forbole/bdjuno/v3/modules/rbac/source/remote"
-	remotereputationsource "github.com/forbole/bdjuno/v3/modules/reputation/source/remote"
-	remotevillagesource "github.com/forbole/bdjuno/v3/modules/village/source/remote"
 )
 
 type Sources struct {
@@ -68,14 +67,14 @@ type Sources struct {
 	MintSource     mintsource.Source
 	SlashingSource slashingsource.Source
 	StakingSource  stakingsource.Source
+	NftSource      nftsource.Source
 
-	KycSource         kycsource.Source
-	MarketplaceSource marketplacesource.Source
-	ProductsSource    productssource.Source
+	IdentitySource    identitysource.Source
 	RbacSource        rbacsource.Source
 	ReputationSource  reputationsource.Source
-	VillageSource     villagesource.Source
-	NftSource         nftsource.Source
+	ProductsSource    productssource.Source
+	MarketplaceSource marketplacesource.Source
+	EconomicsSource   econsource.Source
 }
 
 func BuildSources(nodeCfg nodeconfig.Config, encodingConfig *params.EncodingConfig) (*Sources, error) {
@@ -155,11 +154,11 @@ func buildRemoteSources(cfg *remote.Details) (*Sources, error) {
 		SlashingSource:    remoteslashingsource.NewSource(source, slashingtypes.NewQueryClient(source.GrpcConn)),
 		StakingSource:     remotestakingsource.NewSource(source, stakingtypes.NewQueryClient(source.GrpcConn)),
 		NftSource:         remotenftsource.NewSource(source, nfttypes.NewQueryClient(source.GrpcConn)),
-		KycSource:         remotekycsource.NewSource(source, kyctypes.NewQueryClient(source.GrpcConn)),
-		MarketplaceSource: remotemarketplacesource.NewSource(source, marketplacetypes.NewQueryClient(source.GrpcConn)),
-		ProductsSource:    remoteproductssource.NewSource(source, productstypes.NewQueryClient(source.GrpcConn)),
+		IdentitySource:    remoteidentitysource.NewSource(source, identitytypes.NewQueryClient(source.GrpcConn)),
 		RbacSource:        remoterbacsource.NewSource(source, rbactypes.NewQueryClient(source.GrpcConn)),
 		ReputationSource:  remotereputationsource.NewSource(source, reputationtypes.NewQueryClient(source.GrpcConn)),
-		VillageSource:     remotevillagesource.NewSource(source, villagetypes.NewQueryClient(source.GrpcConn)),
+		ProductsSource:    remoteproductssource.NewSource(source, productstypes.NewQueryClient(source.GrpcConn)),
+		MarketplaceSource: remotemarketplacesource.NewSource(source, marketplacetypes.NewQueryClient(source.GrpcConn)),
+		EconomicsSource:   remoteeconsource.NewSource(source, econtypes.NewQueryClient(source.GrpcConn)),
 	}, nil
 }

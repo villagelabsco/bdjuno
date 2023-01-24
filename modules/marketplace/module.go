@@ -21,7 +21,7 @@ import (
 	"github.com/forbole/bdjuno/v3/database"
 	marketplacesource "github.com/forbole/bdjuno/v3/modules/marketplace/source"
 	"github.com/forbole/juno/v3/modules"
-	kyctypes "github.com/villagelabs/villaged/x/kyc/types"
+	marketplacetypes "github.com/villagelabs/villaged/x/marketplace/types"
 )
 
 var (
@@ -45,5 +45,5 @@ func NewModule(cdc codec.Codec, db *database.Db, src marketplacesource.Source) *
 }
 
 func (m *Module) Name() string {
-	return kyctypes.ModuleName
+	return marketplacetypes.ModuleName
 }

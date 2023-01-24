@@ -37,6 +37,14 @@ type Module struct {
 	src identitysource.Source
 }
 
+func NewModule(cdc codec.Codec, db *database.Db, src identitysource.Source) *Module {
+	return &Module{
+		cdc: cdc,
+		db:  db,
+		src: src,
+	}
+}
+
 func (m *Module) Name() string {
 	return identitytypes.ModuleName
 }

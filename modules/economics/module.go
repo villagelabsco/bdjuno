@@ -34,6 +34,14 @@ type Module struct {
 	src econsource.Source
 }
 
+func NewModule(cdc codec.Codec, db *database.Db, src econsource.Source) *Module {
+	return &Module{
+		cdc: cdc,
+		db:  db,
+		src: src,
+	}
+}
+
 func (m Module) Name() string {
 	return econtypes.ModuleName
 }
