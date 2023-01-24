@@ -173,13 +173,9 @@ func (m *Module) handleMsgRevokeNetwork(index int, tx *juno.Tx, msg *kyctypes.Ms
 }
 
 func (m *Module) handleMsgCreateHumanId(index int, tx *juno.Tx, msg *kyctypes.MsgCreateHumanId) error {
-	evt, err := tx.FindEventByType(index, utils.ProtoMsgName(&kyctypes.EvtCreatedHumanId{}))
+	idx, err := utils.FindEventAndAttr(index, tx, &kyctypes.EvtCreatedHumanId{}, "HumanId")
 	if err != nil {
-		return fmt.Errorf("error finding event %T: %s", &kyctypes.EvtCreatedHumanId{}, err)
-	}
-	idx, err := tx.FindAttributeByKey(evt, "HumanId")
-	if err != nil {
-		return fmt.Errorf("error finding attribute HumanId: %s", err)
+		return fmt.Errorf("error getting human id from created event: %s", err)
 	}
 	h, err := m.src.GetHuman(tx.Height, kyctypes.QueryGetHumanRequest{
 		Index: idx,

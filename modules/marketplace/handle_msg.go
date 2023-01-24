@@ -44,13 +44,9 @@ func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 }
 
 func (m *Module) HandleMsgCreateListing(index int, tx *juno.Tx, msg *marketplacetypes.MsgCreateListing) error {
-	evt, err := tx.FindEventByType(index, utils.ProtoMsgName(&marketplacetypes.EvtCreatedListing{}))
+	idx, err := utils.FindEventAndAttr(index, tx, &marketplacetypes.EvtCreatedListing{}, "Index")
 	if err != nil {
-		return fmt.Errorf("error while finding event %T: %s", &marketplacetypes.EvtCreatedListing{}, err)
-	}
-	idx, err := tx.FindAttributeByKey(evt, "Index")
-	if err != nil {
-		return fmt.Errorf("error while finding index attribute in created listing evt: %s", err)
+		return fmt.Errorf("error while handling create listing msg: %s", err)
 	}
 	lst, err := m.src.GetListing(tx.Height, marketplacetypes.QueryGetListingRequest{
 		Network: msg.Network,
