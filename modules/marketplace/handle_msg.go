@@ -57,7 +57,7 @@ func (m *Module) HandleMsgCreateListing(index int, tx *juno.Tx, msg *marketplace
 	}
 	listing := lst.Listing
 
-	if err := m.db.SaveListing(&listing); err != nil {
+	if err := m.db.SaveOrUpdateListing(&listing); err != nil {
 		return fmt.Errorf("error while handling create listing msg: %s", err)
 	}
 
@@ -74,7 +74,7 @@ func (m *Module) HandleMsgUpdateListing(index int, tx *juno.Tx, msg *marketplace
 	}
 	listing := lst.Listing
 
-	if err := m.db.UpdateListing(&listing); err != nil {
+	if err := m.db.SaveOrUpdateListing(&listing); err != nil {
 		return fmt.Errorf("error while handling update listing msg: %s", err)
 	}
 
