@@ -5,11 +5,12 @@ CREATE TABLE reputation_feedback (
     fb_type INTEGER NOT NULL,
     dst_account TEXT NOT NULL REFERENCES account (address),
     tx_id TEXT NOT NULL,
-    ref TEXT NOT NULL
+    ref TEXT NOT NULL,
+    primary key (id)
 );
 
 CREATE TABLE reputation_feedback_aggregate (
-    index TEXT PRIMARY KEY NOT NULL,
+    index TEXT NOT NULL,
     cpt_positive INTEGER NOT NULL,
     cpt_negative INTEGER NOT NULL,
     cpt_neutral INTEGER NOT NULL,
@@ -17,5 +18,6 @@ CREATE TABLE reputation_feedback_aggregate (
     negative jsonb NOT NULL,
     neutral jsonb NOT NULL,
     feedbackers jsonb NOT NULL,
-    last_change TIMESTAMP NOT NULL
+    last_change TIMESTAMP NOT NULL,
+    primary key (index)
 );

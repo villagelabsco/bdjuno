@@ -6,5 +6,6 @@ CREATE TABLE products_product_class_infos (
     name text not null,
     description text not null,
     metadata jsonb not null,
-    specific_metadata jsonb not null
+    specific_metadata jsonb not null,
+    primary key (full_class_id)
 );
