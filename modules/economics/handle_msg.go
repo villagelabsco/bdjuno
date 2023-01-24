@@ -127,54 +127,54 @@ func (m Module) handleMsgExecuteOneShotBurn(index int, tx *juno.Tx, msg *econtyp
 }
 
 func (m Module) handleMsgSetTransactionalHookPreMintTask(index int, tx *juno.Tx, msg *econtypes.MsgSetTransactionalHookPreMintTask) error {
-	return m.handleSetTransactionHook(tx.Height, msg.Network, msg.HookIdx)
+	return m.handleCreateTransactionHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
 func (m Module) handleMsgSetTransactionalHookPreMintAccountingTokenForTasks(index int, tx *juno.Tx, msg *econtypes.MsgSetTransactionalHookPreMintAccountingTokenForTasks) error {
-	return m.handleSetTransactionHook(tx.Height, msg.Network, msg.HookIdx)
+	return m.handleCreateTransactionHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
 func (m Module) handleMsgSetTransactionalHookMintShareToken(index int, tx *juno.Tx, msg *econtypes.MsgSetTransactionalHookMintShareToken) error {
-	return m.handleSetTransactionHook(tx.Height, msg.Network, msg.HookIdx)
+	return m.handleCreateTransactionHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
 func (m Module) handleMsgSetTransactionalHookAutoSwapProductForDenom(index int, tx *juno.Tx, msg *econtypes.MsgSetTransactionalHookAutoSwapProductForDenom) error {
-	return m.handleSetTransactionHook(tx.Height, msg.Network, msg.HookIdx)
+	return m.handleCreateTransactionHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
 func (m Module) handleMsgSetTransactionalHookApplyMarketplaceFees(index int, tx *juno.Tx, msg *econtypes.MsgSetTransactionalHookApplyMarketplaceFees) error {
-	return m.handleSetTransactionHook(tx.Height, msg.Network, msg.HookIdx)
+	return m.handleCreateTransactionHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
 func (m Module) handleMsgSetScheduledHookTransferDenomToShareholders(index int, tx *juno.Tx, msg *econtypes.MsgSetScheduledHookTransferDenomToShareholders) error {
-	return m.handleSetScheduledHook(tx.Height, msg.Network, msg.HookIdx)
+	return m.handleCreateScheduledHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
 func (m Module) handleMsgSetScheduledHookAutoSwapDenom(index int, tx *juno.Tx, msg *econtypes.MsgSetScheduledHookAutoSwapDenom) error {
-	return m.handleSetScheduledHook(tx.Height, msg.Network, msg.HookIdx)
+	return m.handleCreateScheduledHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
 func (m Module) handleMsgSetScheduledHookDecayDenomForInactiveAccounts(index int, tx *juno.Tx, msg *econtypes.MsgSetScheduledHookDecayDenomForInactiveAccounts) error {
-	return m.handleSetScheduledHook(tx.Height, msg.Network, msg.HookIdx)
+	return m.handleCreateScheduledHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
 func (m Module) handleMsgSetTransactionalHookPreMintProduct(index int, tx *juno.Tx, msg *econtypes.MsgSetTransactionalHookPreMintProduct) error {
-	return m.handleSetTransactionHook(tx.Height, msg.Network, msg.HookIdx)
+	return m.handleCreateTransactionHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
 func (m Module) handleMsgSetTransactionalHookMintAccountingTokenOnTransactions(index int, tx *juno.Tx, msg *econtypes.MsgSetTransactionalHookMintAccountingTokenOnTransactions) error {
-	return m.handleSetTransactionHook(tx.Height, msg.Network, msg.HookIdx)
+	return m.handleCreateTransactionHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
 func (m Module) handleMsgSetTransactionalHookPreMintGsvTrackingToken(index int, tx *juno.Tx, msg *econtypes.MsgSetTransactionalHookPreMintGsvTrackingToken) error {
-	return m.handleSetTransactionHook(tx.Height, msg.Network, msg.HookIdx)
+	return m.handleCreateTransactionHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
 func (m Module) handleMsgSetScheduledHookRecurringMintToken(index int, tx *juno.Tx, msg *econtypes.MsgSetScheduledHookRecurringMintToken) error {
-	return m.handleSetScheduledHook(tx.Height, msg.Network, msg.HookIdx)
+	return m.handleCreateScheduledHook(tx.Height, msg.Network, msg.HookIdx)
 }
 
-func (m Module) handleSetTransactionHook(height int64, network string, index uint64) error {
+func (m Module) handleCreateTransactionHook(height int64, network string, index uint64) error {
 	hk, err := m.src.GetTransactionHook(height, econtypes.QueryGetTransactionHookRequest{
 		Network: network,
 		Idx:     index,
@@ -187,7 +187,7 @@ func (m Module) handleSetTransactionHook(height int64, network string, index uin
 	return m.db.SaveEconomicsTransactionHook(&hook)
 }
 
-func (m Module) handleSetScheduledHook(height int64, network string, index uint64) error {
+func (m Module) handleCreateScheduledHook(height int64, network string, index uint64) error {
 	hk, err := m.src.GetScheduledHook(height, econtypes.QueryGetScheduledHookRequest{
 		Network: network,
 		HookIdx: index,
