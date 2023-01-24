@@ -2,6 +2,8 @@ package utils
 
 import (
 	"context"
+	"fmt"
+	juno "github.com/forbole/juno/v3/types"
 	"github.com/gogo/protobuf/proto"
 	"strconv"
 
@@ -34,4 +36,16 @@ func GetHeightRequestContext(context context.Context, height int64) context.Cont
 
 func ProtoMsgName(msg proto.Message) string {
 	return "/" + proto.MessageName(msg)
+}
+
+func FindEventAndAttr(index int, tx *juno.Tx, event proto.Message, attrKey string) (string, error) {
+	evt, err := tx.FindEventByType(index, ProtoMsgName(event))
+	if err != nil {
+		return "", fmt.Errorf("error while finding event %s: %s", ProtoMsgName(event), err)
+	}
+	res, err := tx.FindAttributeByKey(evt, attrKey)
+	if err != nil {
+		return "", fmt.Errorf("error while finding %s attribute in evt %s: %s", attrKey, ProtoMsgName(event), err)
+	}
+	return res, nil
 }

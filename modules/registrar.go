@@ -30,7 +30,6 @@ import (
 	"github.com/forbole/bdjuno/v3/modules/distribution"
 	"github.com/forbole/bdjuno/v3/modules/feegrant"
 
-	"github.com/forbole/bdjuno/v3/modules/classes"
 	dailyrefetch "github.com/forbole/bdjuno/v3/modules/daily_refetch"
 	"github.com/forbole/bdjuno/v3/modules/gov"
 	"github.com/forbole/bdjuno/v3/modules/mint"
@@ -94,8 +93,7 @@ func (r *Registrar) BuildModules(ctx registrar.Context) jmodules.Modules {
 	upgradeModule := upgrade.NewModule(db, stakingModule)
 	reputationModule := reputation.NewModule(cdc, db, sources.ReputationSource)
 	villageModule := village.NewModule(cdc, db)
-	kycModule := kyc.NewModule(cdc, db)
-	classesModule := classes.NewModule(cdc, db, sources.ClassesSource)
+	kycModule := kyc.NewModule(cdc, db, src)
 	marketplaceModule := marketplace.NewModule(cdc, db, sources.MarketplaceSource)
 	productsModule := products.NewModule(cdc, db, sources.ProductsSource)
 	rbacModule := rbac.NewModule(cdc, db)
