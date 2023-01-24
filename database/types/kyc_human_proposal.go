@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package db_types
+package types
 
-type DbKycStatus struct {
-	ProviderId string `db:"provider_id"`
-	HumanId    string `db:"human_id"`
-	DataHash   string `db:"data_hash"`
-	Timestamp  uint64 `db:"timestamp"`
+import sqlxtypes "github.com/jmoiron/sqlx/types"
+
+type DbKycHumanProposal struct {
+	HumanId   string             `db:"human_id"`
+	Proposals sqlxtypes.JSONText `db:"proposals"`
 }

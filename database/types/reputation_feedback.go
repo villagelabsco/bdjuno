@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package db_types
+package types
 
 import (
 	reputationtypes "github.com/villagelabs/villaged/x/reputation/types"

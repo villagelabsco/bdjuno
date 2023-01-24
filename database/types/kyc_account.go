@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package db_types
+package types
 
 type DbKycAccount struct {
 	Index      string `db:"index"`

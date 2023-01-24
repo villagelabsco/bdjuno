@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package db_types
+package types
 
 import (
 	kyctypes "github.com/villagelabs/villaged/x/kyc/types"

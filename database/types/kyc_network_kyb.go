@@ -14,14 +14,24 @@
  * limitations under the License.
  */
 
-package db_types
+package types
 
-import sqlxtypes "github.com/jmoiron/sqlx/types"
+import kyctypes "github.com/villagelabs/villaged/x/kyc/types"
 
-type DbKycPrimaryWalletTransferProposal struct {
-	Index                        string             `db:"index"`
-	ProposerAccount              string             `db:"proposer_account"`
-	HumanId                      string             `db:"human_id"`
-	SetAsPrimaryWalletForNetwork string             `db:"set_as_primary_wallet_for_network"`
-	Deposit                      sqlxtypes.JSONText `db:"deposit"`
+type DbKycNetworkKyb struct {
+	Index     string `db:"index"`
+	Status    uint64 `db:"status"`
+	DataHash  string `db:"data_hash"`
+	Timestamp uint64 `db:"timestamp"`
+	Metadata  string `db:"metadata"`
+}
+
+func (DbKycNetworkKyb) FromProto(kyb *kyctypes.NetworkKyb) DbKycNetworkKyb {
+	return DbKycNetworkKyb{
+		Index:     kyb.Index,
+		Status:    kyb.Status,
+		DataHash:  kyb.DataHash,
+		Timestamp: kyb.Timestamp,
+		Metadata:  kyb.Metadata,
+	}
 }

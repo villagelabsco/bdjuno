@@ -14,24 +14,9 @@
  * limitations under the License.
  */
 
-package db_types
+package types
 
-import kyctypes "github.com/villagelabs/villaged/x/kyc/types"
-
-type DbKycNetworkKyb struct {
-	Index     string `db:"index"`
-	Status    uint64 `db:"status"`
-	DataHash  string `db:"data_hash"`
-	Timestamp uint64 `db:"timestamp"`
-	Metadata  string `db:"metadata"`
-}
-
-func (DbKycNetworkKyb) FromProto(kyb *kyctypes.NetworkKyb) DbKycNetworkKyb {
-	return DbKycNetworkKyb{
-		Index:     kyb.Index,
-		Status:    kyb.Status,
-		DataHash:  kyb.DataHash,
-		Timestamp: kyb.Timestamp,
-		Metadata:  kyb.Metadata,
-	}
+type DbKycNbInvitesPerDay struct {
+	Network string `db:"network"`
+	Number  uint64 `db:"number"`
 }

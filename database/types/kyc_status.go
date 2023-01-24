@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package db_types
+package types
 
-type DbKycNbInvitesPerDay struct {
-	Network string `db:"network"`
-	Number  uint64 `db:"number"`
+type DbKycStatus struct {
+	ProviderId string `db:"provider_id"`
+	HumanId    string `db:"human_id"`
+	DataHash   string `db:"data_hash"`
+	Timestamp  uint64 `db:"timestamp"`
 }

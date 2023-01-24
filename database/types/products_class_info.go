@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package db_types
+package types
 
 import (
 	nfttypes "github.com/cosmos/cosmos-sdk/x/nft"

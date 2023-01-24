@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package db_types
+package types
 
 import sqlxtypes "github.com/jmoiron/sqlx/types"
 
-type DbKycHumanProposal struct {
-	HumanId   string             `db:"human_id"`
-	Proposals sqlxtypes.JSONText `db:"proposals"`
+type DbKycPrimaryWalletTransferProposal struct {
+	Index                        string             `db:"index"`
+	ProposerAccount              string             `db:"proposer_account"`
+	HumanId                      string             `db:"human_id"`
+	SetAsPrimaryWalletForNetwork string             `db:"set_as_primary_wallet_for_network"`
+	Deposit                      sqlxtypes.JSONText `db:"deposit"`
 }
