@@ -18,55 +18,36 @@ package database
 
 import (
 	"fmt"
+	"github.com/forbole/bdjuno/v3/database/types"
 	marketplacetypes "github.com/villagelabs/villaged/x/marketplace/types"
 )
 
-func (db *Db) Listing(network, index string) (*marketplacetypes.Listing, error) {
-	q := `
-		SELECT (network, index, product, nft, attributes, creator, active) FROM marketplace_listings
-		WHERE network = $1 AND index = $2
-	`
-
-	var listing marketplacetypes.Listing
-	if err := db.Sqlx.Select(&listing, q, network, index); err != nil {
-		return nil, fmt.Errorf("error while getting listing: %s", err)
-	}
-
-	return &listing, nil
-}
-
-func (db *Db) SaveListing(lst *marketplacetypes.Listing) error {
+func (db *Db) SaveOrUpdateListing(listing *marketplacetypes.Listing) error {
 	stmt := `
-		INSERT INTO marketplace_listings (network, index, product, nft, attributes, creator, active) 
-		VALUES ($1, $2, $3, $4, $5, $6, $7)
+		INSERT INTO marketplace_listings (network, index, reference, product_class_id, product_nft_id, attributes, creator, active) 
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+		ON CONFLICT (network, index) 
+		    DO UPDATE SET
+			reference = $3,
+			attributes = $6,
+			active = $8;
+			
 	`
 
+	lst, err := types.DbMarketplaceListing{}.FromProto(listing)
+	if err != nil {
+		return fmt.Errorf("error while converting to db listing: %s", err)
+	}
 	if _, err := db.Sql.Exec(stmt,
 		lst.Network,
 		lst.Index,
+		lst.Reference,
+		lst.ProductClassId,
+		lst.ProductNftId,
 		lst.Attributes,
 		lst.Creator,
 		lst.Active); err != nil {
 		return fmt.Errorf("error while storing listing: %s", err)
-	}
-
-	return nil
-}
-
-func (db *Db) UpdateListing(lst *marketplacetypes.Listing) error {
-	stmt := `
-		UPDATE marketplace_listings 
-		SET 
-			product = $1,
-			attributes = $2
-		WHERE network = $3 AND index = $4
-	`
-
-	if _, err := db.Sql.Exec(stmt,
-		lst.Attributes,
-		lst.Network,
-		lst.Index); err != nil {
-		return fmt.Errorf("error while updating listing: %s", err)
 	}
 
 	return nil
@@ -90,32 +71,26 @@ func (db *Db) UpdateListingActive(network, index string, active bool) error {
 	return nil
 }
 
-func (db *Db) Order(network, index string) (*marketplacetypes.Order, error) {
-	q := `
-		SELECT (network, creator, index, attributes, items) FROM marketplace_orders
-		WHERE network = $1 AND index = $2
+func (db *Db) InsertOrder(ord *marketplacetypes.Order) error {
+	stmt := `
+		INSERT INTO marketplace_orders (network, index, status, timestamp, creator, attributes, items, total)
+		VALUES ($1, $2, $3, $5, $6, $7, $8, $9)
 	`
 
-	var order marketplacetypes.Order
-	if err := db.Sqlx.Select(&order, q, network, index); err != nil {
-		return nil, fmt.Errorf("error while getting order: %s", err)
+	o, err := types.DbMarketplaceOrder{}.FromProto(ord)
+	if err != nil {
+		return fmt.Errorf("error while converting to db order: %s", err)
 	}
 
-	return &order, nil
-}
-
-func (db *Db) InsertOrder(od *marketplacetypes.Order) error {
-	stmt := `
-		INSERT INTO marketplace_orders (network, creator, index, attributes, items)
-		VALUES ($1, $2, $3, $5, $6)
-	`
-
 	if _, err := db.Sql.Exec(stmt,
-		od.Network,
-		od.Creator,
-		od.Index,
-		od.Attributes,
-		od.Items); err != nil {
+		o.Network,
+		o.Index,
+		o.Status,
+		o.Timestamp,
+		o.Creator,
+		o.Attributes,
+		o.Items,
+		o.Total); err != nil {
 		return fmt.Errorf("error while storing order: %s", err)
 	}
 
