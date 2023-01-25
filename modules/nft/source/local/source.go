@@ -25,10 +25,10 @@ import (
 
 type Source struct {
 	*local.Source
-	q nfttypes.QueryClient
+	q nfttypes.QueryServer
 }
 
-func NewSource(source *local.Source, q nfttypes.QueryClient) *Source {
+func NewSource(source *local.Source, q nfttypes.QueryServer) *Source {
 	return &Source{
 		Source: source,
 		q:      q,
