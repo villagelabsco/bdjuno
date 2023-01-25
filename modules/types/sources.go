@@ -6,12 +6,14 @@ import (
 	econsource "github.com/forbole/bdjuno/v3/modules/economics/source"
 	identitysource "github.com/forbole/bdjuno/v3/modules/identity/source"
 	remotenftsource "github.com/forbole/bdjuno/v3/modules/nft/source/remote"
+	remotetokensource "github.com/forbole/bdjuno/v3/modules/token/source/remote"
 	econtypes "github.com/villagelabs/villaged/x/economics/types"
 	identitytypes "github.com/villagelabs/villaged/x/identity/types"
 	marketplacetypes "github.com/villagelabs/villaged/x/marketplace/types"
 	productstypes "github.com/villagelabs/villaged/x/products/types"
 	rbactypes "github.com/villagelabs/villaged/x/rbac/types"
 	reputationtypes "github.com/villagelabs/villaged/x/reputation/types"
+	tokentypes "github.com/villagelabs/villaged/x/token/types"
 	"os"
 
 	"github.com/cosmos/cosmos-sdk/simapp"
@@ -58,6 +60,7 @@ import (
 	stakingsource "github.com/forbole/bdjuno/v3/modules/staking/source"
 	localstakingsource "github.com/forbole/bdjuno/v3/modules/staking/source/local"
 	remotestakingsource "github.com/forbole/bdjuno/v3/modules/staking/source/remote"
+	tokensource "github.com/forbole/bdjuno/v3/modules/token/source"
 )
 
 type Sources struct {
@@ -75,6 +78,7 @@ type Sources struct {
 	ProductsSource    productssource.Source
 	MarketplaceSource marketplacesource.Source
 	EconomicsSource   econsource.Source
+	TokenSource       tokensource.Source
 }
 
 func BuildSources(nodeCfg nodeconfig.Config, encodingConfig *params.EncodingConfig) (*Sources, error) {
@@ -160,5 +164,6 @@ func buildRemoteSources(cfg *remote.Details) (*Sources, error) {
 		ProductsSource:    remoteproductssource.NewSource(source, productstypes.NewQueryClient(source.GrpcConn)),
 		MarketplaceSource: remotemarketplacesource.NewSource(source, marketplacetypes.NewQueryClient(source.GrpcConn)),
 		EconomicsSource:   remoteeconsource.NewSource(source, econtypes.NewQueryClient(source.GrpcConn)),
+		TokenSource:       remotetokensource.NewSource(source, tokentypes.NewQueryClient(source.GrpcConn)),
 	}, nil
 }
