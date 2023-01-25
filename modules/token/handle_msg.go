@@ -19,6 +19,7 @@ package token
 import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/forbole/bdjuno/v3/utils"
 	juno "github.com/forbole/juno/v3/types"
 	tokentypes "github.com/villagelabs/villaged/x/token/types"
 )
@@ -61,15 +62,43 @@ func (m Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 }
 
 func (m Module) handleMsgCreateToken(index int, tx *juno.Tx, msg *tokentypes.MsgCreateToken) error {
-	return nil
+	denom, err := utils.FindEventAndAttr(index, tx, &tokentypes.EvtCreatedToken{}, "Denom")
+	if err != nil {
+		return fmt.Errorf("error while getting token denom from events: %s", err)
+	}
+
+	t, err := m.src.GetToken(tx.Height, tokentypes.QueryGetTokenRequest{
+		Denom: denom,
+	})
+	if err != nil {
+		return fmt.Errorf("error while getting token from source: %s", err)
+	}
+
+	return m.db.SaveOrUpdateTokenDenom(&t.Token)
 }
 
 func (m Module) handleMsgUpdateToken(index int, tx *juno.Tx, msg *tokentypes.MsgUpdateToken) error {
-	return nil
+	tkn, err := m.db.TokenDenom(msg.Denom)
+	if err != nil {
+		return fmt.Errorf("error getting saved token from db: %s", err)
+	}
+
+	tkn.Ticker = msg.Ticker
+	tkn.Description = msg.Description
+	tkn.IconPath = msg.IconPath
+
+	return m.db.SaveOrUpdateTokenDenom(tkn)
 }
 
 func (m Module) handleMsgTransferTokenOwnership(index int, tx *juno.Tx, msg *tokentypes.MsgTransferTokenOwnership) error {
-	return nil
+	tkn, err := m.db.TokenDenom(msg.Denom)
+	if err != nil {
+		return fmt.Errorf("error getting saved token from db: %s", err)
+	}
+
+	tkn.Admin = msg.NewAdminAccount
+
+	return m.db.SaveOrUpdateTokenDenom(tkn)
 }
 
 func (m Module) handleMsgMintTokens(index int, tx *juno.Tx, msg *tokentypes.MsgMintTokens) error {

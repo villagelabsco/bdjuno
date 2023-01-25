@@ -67,8 +67,8 @@ CREATE TABLE token_pending_balances (
 
 CREATE TABLE token_pending_clawbackable_operations (
     id serial not null,
-    from text not null references account (address),
-    to text not null references account (address),
+    "from" text not null references account (address),
+    "to" text not null references account (address),
     amount jsonb not null,
     clearing_timestamp timestamp not null,
     primary key (id)
