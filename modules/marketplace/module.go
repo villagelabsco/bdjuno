@@ -21,7 +21,7 @@ import (
 	"github.com/forbole/bdjuno/v3/database"
 	marketplacesource "github.com/forbole/bdjuno/v3/modules/marketplace/source"
 	"github.com/forbole/juno/v3/modules"
-	marketplacetypes "github.com/villagelabs/villaged/x/marketplace/types"
+	marketplacetypes "github.com/villagelabsco/villaged/x/marketplace/types"
 )
 
 var (

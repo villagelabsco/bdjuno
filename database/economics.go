@@ -19,7 +19,7 @@ package database
 import (
 	"fmt"
 	"github.com/forbole/bdjuno/v3/database/types"
-	econtypes "github.com/villagelabs/villaged/x/economics/types"
+	econtypes "github.com/villagelabsco/villaged/x/economics/types"
 )
 
 func (db *Db) SaveOrUpdateEconomicsNetworkEnabled(network string, val bool) error {

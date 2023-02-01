@@ -19,7 +19,7 @@ package database
 import (
 	"fmt"
 	"github.com/forbole/bdjuno/v3/database/types"
-	reputationtypes "github.com/villagelabs/villaged/x/reputation/types"
+	reputationtypes "github.com/villagelabsco/villaged/x/reputation/types"
 )
 
 func (db *Db) FeedbackAggregate(index string) (*reputationtypes.Feedback, error) {

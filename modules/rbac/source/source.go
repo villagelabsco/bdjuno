@@ -16,7 +16,7 @@
 
 package source
 
-import rbactypes "github.com/villagelabs/villaged/x/rbac/types"
+import rbactypes "github.com/villagelabsco/villaged/x/rbac/types"
 
 type Source interface {
 	GetParams(height int64) (rbactypes.Params, error)

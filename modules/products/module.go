@@ -22,7 +22,7 @@ import (
 	nftsource "github.com/forbole/bdjuno/v3/modules/nft/source"
 	productssource "github.com/forbole/bdjuno/v3/modules/products/source"
 	"github.com/forbole/juno/v3/modules"
-	productstypes "github.com/villagelabs/villaged/x/products/types"
+	productstypes "github.com/villagelabsco/villaged/x/products/types"
 )
 
 var (

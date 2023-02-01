@@ -16,7 +16,7 @@
 
 package source
 
-import reputationtypes "github.com/villagelabs/villaged/x/reputation/types"
+import reputationtypes "github.com/villagelabsco/villaged/x/reputation/types"
 
 type Source interface {
 	GetParams(height int64) (reputationtypes.Params, error)

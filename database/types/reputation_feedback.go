@@ -17,7 +17,7 @@
 package types
 
 import (
-	reputationtypes "github.com/villagelabs/villaged/x/reputation/types"
+	reputationtypes "github.com/villagelabsco/villaged/x/reputation/types"
 )
 
 type DbReputationFeedback struct {

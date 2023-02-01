@@ -20,7 +20,7 @@ import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/forbole/juno/v3/node/local"
-	reputationtypes "github.com/villagelabs/villaged/x/reputation/types"
+	reputationtypes "github.com/villagelabsco/villaged/x/reputation/types"
 )
 
 type Source struct {

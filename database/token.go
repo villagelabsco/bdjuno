@@ -19,7 +19,7 @@ package database
 import (
 	"fmt"
 	"github.com/forbole/bdjuno/v3/database/types"
-	tokentypes "github.com/villagelabs/villaged/x/token/types"
+	tokentypes "github.com/villagelabsco/villaged/x/token/types"
 )
 
 func (db *Db) TokenDenom(denom string) (*tokentypes.Token, error) {

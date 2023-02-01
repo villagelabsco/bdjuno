@@ -23,7 +23,7 @@ import (
 	nfttypes "github.com/cosmos/cosmos-sdk/x/nft"
 	juno "github.com/forbole/juno/v3/types"
 	"github.com/gogo/protobuf/proto"
-	productstypes "github.com/villagelabs/villaged/x/products/types"
+	productstypes "github.com/villagelabsco/villaged/x/products/types"
 )
 
 func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {

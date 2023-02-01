@@ -17,7 +17,7 @@
 package types
 
 import (
-	identitytypes "github.com/villagelabs/villaged/x/identity/types"
+	identitytypes "github.com/villagelabsco/villaged/x/identity/types"
 	"strings"
 )
 

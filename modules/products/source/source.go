@@ -16,7 +16,7 @@
 
 package source
 
-import productstypes "github.com/villagelabs/villaged/x/products/types"
+import productstypes "github.com/villagelabsco/villaged/x/products/types"
 
 type Source interface {
 	GetParams(height int64) (productstypes.Params, error)

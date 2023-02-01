@@ -16,7 +16,7 @@
 
 package types
 
-import reputationtypes "github.com/villagelabs/villaged/x/reputation/types"
+import reputationtypes "github.com/villagelabsco/villaged/x/reputation/types"
 
 func (receiver *ReputationFeedbackAggregate) ToDto() *reputationtypes.Feedback {
 	pos := make([]*reputationtypes.FeedbackItem, len(receiver.Positive))

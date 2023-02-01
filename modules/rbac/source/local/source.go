@@ -20,7 +20,7 @@ import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/forbole/juno/v3/node/local"
-	rbactypes "github.com/villagelabs/villaged/x/rbac/types"
+	rbactypes "github.com/villagelabsco/villaged/x/rbac/types"
 )
 
 type Source struct {

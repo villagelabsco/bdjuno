@@ -21,7 +21,7 @@ import (
 	"github.com/forbole/bdjuno/v3/database"
 	tokensource "github.com/forbole/bdjuno/v3/modules/token/source"
 	"github.com/forbole/juno/v3/modules"
-	tokentypes "github.com/villagelabs/villaged/x/token/types"
+	tokentypes "github.com/villagelabsco/villaged/x/token/types"
 )
 
 var (

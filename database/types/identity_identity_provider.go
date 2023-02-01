@@ -20,7 +20,7 @@ import (
 	"encoding/json"
 	"fmt"
 	sqlxtypes "github.com/jmoiron/sqlx/types"
-	identitytypes "github.com/villagelabs/villaged/x/identity/types"
+	identitytypes "github.com/villagelabsco/villaged/x/identity/types"
 )
 
 type DbIdentityProvider struct {

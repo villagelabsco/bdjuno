@@ -21,7 +21,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/forbole/bdjuno/v3/utils"
 	juno "github.com/forbole/juno/v3/types"
-	econtypes "github.com/villagelabs/villaged/x/economics/types"
+	econtypes "github.com/villagelabsco/villaged/x/economics/types"
 	"strconv"
 )
 

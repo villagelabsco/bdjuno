@@ -16,7 +16,7 @@
 
 package source
 
-import marketplacetypes "github.com/villagelabs/villaged/x/marketplace/types"
+import marketplacetypes "github.com/villagelabsco/villaged/x/marketplace/types"
 
 type Source interface {
 	GetParams(height int64) (marketplacetypes.Params, error)

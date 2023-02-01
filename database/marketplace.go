@@ -19,7 +19,7 @@ package database
 import (
 	"fmt"
 	"github.com/forbole/bdjuno/v3/database/types"
-	marketplacetypes "github.com/villagelabs/villaged/x/marketplace/types"
+	marketplacetypes "github.com/villagelabsco/villaged/x/marketplace/types"
 )
 
 func (db *Db) SaveOrUpdateListing(listing *marketplacetypes.Listing) error {

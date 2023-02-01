@@ -20,7 +20,7 @@ import (
 	"encoding/json"
 	"fmt"
 	sqlxtypes "github.com/jmoiron/sqlx/types"
-	econtypes "github.com/villagelabs/villaged/x/economics/types"
+	econtypes "github.com/villagelabsco/villaged/x/economics/types"
 )
 
 type DbEconomicsTransactionHook struct {

@@ -19,7 +19,7 @@ package remote
 import (
 	"fmt"
 	"github.com/forbole/juno/v3/node/remote"
-	tokentypes "github.com/villagelabs/villaged/x/token/types"
+	tokentypes "github.com/villagelabsco/villaged/x/token/types"
 )
 
 type Source struct {

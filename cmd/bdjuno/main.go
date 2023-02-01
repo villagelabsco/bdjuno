@@ -16,8 +16,7 @@ import (
 	"github.com/forbole/bdjuno/v3/database"
 	"github.com/forbole/bdjuno/v3/modules"
 
-	gaiaapp "github.com/cosmos/gaia/v7/app"
-	villagedapp "github.com/villagelabs/villaged/app"
+	villagedapp "github.com/villagelabsco/villaged/app"
 )
 
 func main() {
@@ -56,7 +55,6 @@ func main() {
 // This should be edited by custom implementations if needed.
 func getBasicManagers() []module.BasicManager {
 	return []module.BasicManager{
-		gaiaapp.ModuleBasics,
 		villagedapp.ModuleBasics,
 	}
 }

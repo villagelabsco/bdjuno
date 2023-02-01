@@ -20,7 +20,7 @@ import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/forbole/juno/v3/node/local"
-	productstypes "github.com/villagelabs/villaged/x/products/types"
+	productstypes "github.com/villagelabsco/villaged/x/products/types"
 )
 
 type Source struct {
@@ -85,4 +85,3 @@ func (s Source) GetAllProductClassInfo(height int64, req productstypes.QueryAllP
 
 	return *res, nil
 }
-

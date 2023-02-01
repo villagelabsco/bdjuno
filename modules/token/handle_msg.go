@@ -21,7 +21,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/forbole/bdjuno/v3/utils"
 	juno "github.com/forbole/juno/v3/types"
-	tokentypes "github.com/villagelabs/villaged/x/token/types"
+	tokentypes "github.com/villagelabsco/villaged/x/token/types"
 )
 
 func (m Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
