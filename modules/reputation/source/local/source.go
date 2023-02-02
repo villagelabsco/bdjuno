@@ -19,7 +19,7 @@ package local
 import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/forbole/juno/v3/node/local"
+	"github.com/forbole/juno/v4/node/local"
 	reputationtypes "github.com/villagelabsco/villaged/x/reputation/types"
 )
 

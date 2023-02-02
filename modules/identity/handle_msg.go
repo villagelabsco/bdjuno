@@ -20,7 +20,7 @@ import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/forbole/bdjuno/v3/utils"
-	juno "github.com/forbole/juno/v3/types"
+	juno "github.com/forbole/juno/v4/types"
 	identitytypes "github.com/villagelabsco/villaged/x/identity/types"
 )
 

@@ -20,7 +20,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/forbole/bdjuno/v3/database"
 	econsource "github.com/forbole/bdjuno/v3/modules/economics/source"
-	"github.com/forbole/juno/v3/modules"
+	"github.com/forbole/juno/v4/modules"
 	econtypes "github.com/villagelabsco/villaged/x/economics/types"
 )
 

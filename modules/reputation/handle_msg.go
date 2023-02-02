@@ -19,7 +19,7 @@ package reputation
 import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	juno "github.com/forbole/juno/v3/types"
+	juno "github.com/forbole/juno/v4/types"
 	"github.com/pkg/errors"
 	reputationtypes "github.com/villagelabsco/villaged/x/reputation/types"
 )

@@ -3,7 +3,7 @@ package utils
 import (
 	"context"
 	"fmt"
-	juno "github.com/forbole/juno/v3/types"
+	juno "github.com/forbole/juno/v4/types"
 	"github.com/gogo/protobuf/proto"
 	"strconv"
 

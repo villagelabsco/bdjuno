@@ -18,7 +18,7 @@ package local
 
 import (
 	"fmt"
-	"github.com/forbole/juno/v3/node/local"
+	"github.com/forbole/juno/v4/node/local"
 	tokentypes "github.com/villagelabsco/villaged/x/token/types"
 )
 

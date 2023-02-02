@@ -21,7 +21,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	nfttypes "github.com/cosmos/cosmos-sdk/x/nft"
-	juno "github.com/forbole/juno/v3/types"
+	juno "github.com/forbole/juno/v4/types"
 	"github.com/gogo/protobuf/proto"
 	productstypes "github.com/villagelabsco/villaged/x/products/types"
 )
