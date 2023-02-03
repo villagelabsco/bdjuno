@@ -3,9 +3,10 @@ table:
   schema: public
 select_permissions:
   - role: anonymous
-    allow_aggregations: false
-    columns:
-      - network
-      - number
-    filter: {}
-    limit: 100
+    permission:
+      allow_aggregations: false
+      columns:
+        - network
+        - number
+      filter: {}
+      limit: 100

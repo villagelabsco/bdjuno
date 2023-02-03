@@ -1,5 +1,5 @@
 table:
-  name: public_economics_network_enabled
+  name: economics_network_enabled
   schema: public
 select_permissions:
   - role: anonymous
@@ -8,3 +8,5 @@ select_permissions:
       columns:
         - network
         - active
+      filter: {}
+      limit: 100
