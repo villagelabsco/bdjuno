@@ -1,0 +1,21 @@
+table:
+  name: economics_scheduled_hooks
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      allow_aggregations: false
+      columns:
+        - network
+        - index
+        - type
+        - name_id
+        - description
+        - cron_rule
+        - dependencies
+        - auto_trigger
+        - params
+        - last_executed_timestamp
+        - last_executed_block
+      filter: {}
+      limit: 100

@@ -1,0 +1,14 @@
+table:
+  name: economics_scheduled_hooks_manual_triggers
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      allow_aggregations: false
+      columns:
+        - id
+        - creator
+        - network
+        - hook_idxs
+      filter: {}
+      limit: 100
