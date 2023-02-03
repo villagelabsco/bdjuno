@@ -1,0 +1,16 @@
+table:
+  name: rbac_authorizations
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      allow_aggregations: false
+      columns:
+        - index
+        - messages
+        - metadata
+        - group_id
+        - role_admins
+        - role_delegates
+      filter: {}
+      limit: 100
