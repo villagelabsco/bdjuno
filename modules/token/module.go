@@ -35,6 +35,10 @@ type Module struct {
 	src tokensource.Source
 }
 
+func NewModule(cdc codec.Codec, db *database.Db, src tokensource.Source) *Module {
+	return &Module{cdc: cdc, db: db, src: src}
+}
+
 func (m Module) Name() string {
 	return tokentypes.ModuleName
 }

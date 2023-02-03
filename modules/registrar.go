@@ -8,6 +8,7 @@ import (
 	"github.com/villagelabsco/bdjuno/v3/modules/products"
 	"github.com/villagelabsco/bdjuno/v3/modules/rbac"
 	"github.com/villagelabsco/bdjuno/v3/modules/reputation"
+	"github.com/villagelabsco/bdjuno/v3/modules/token"
 	"github.com/villagelabsco/bdjuno/v3/modules/types"
 	"github.com/villagelabsco/juno/v4/modules/pruning"
 	"github.com/villagelabsco/juno/v4/modules/telemetry"
@@ -96,6 +97,7 @@ func (r *Registrar) BuildModules(ctx registrar.Context) jmodules.Modules {
 	productsModule := products.NewModule(cdc, db, sources.ProductsSource, sources.NftSource)
 	rbacModule := rbac.NewModule(cdc, db)
 	economicsModule := economics.NewModule(cdc, db, sources.EconomicsSource)
+	tokenModule := token.NewModule(cdc, db, sources.TokenSource)
 
 	return []jmodules.Module{
 		messages.NewModule(r.parser, cdc, ctx.Database),
@@ -120,6 +122,7 @@ func (r *Registrar) BuildModules(ctx registrar.Context) jmodules.Modules {
 		identityModule,
 		rbacModule,
 		reputationModule,
+		tokenModule,
 		productsModule,
 		marketplaceModule,
 		economicsModule,

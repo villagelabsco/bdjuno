@@ -5,6 +5,7 @@ import (
 	"github.com/villagelabsco/bdjuno/v3/database"
 	reputationsource "github.com/villagelabsco/bdjuno/v3/modules/reputation/source"
 	"github.com/villagelabsco/juno/v4/modules"
+	reputationtypes "github.com/villagelabsco/villaged/x/reputation/types"
 )
 
 var (
@@ -30,5 +31,5 @@ func NewModule(cdc codec.Codec, db *database.Db, s reputationsource.Source) *Mod
 
 // Name implements modules.Module
 func (m *Module) Name() string {
-	return "reputation"
+	return reputationtypes.ModuleName
 }
