@@ -18,9 +18,9 @@ package marketplace
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/forbole/bdjuno/v3/database"
-	marketplacesource "github.com/forbole/bdjuno/v3/modules/marketplace/source"
-	"github.com/forbole/juno/v4/modules"
+	"github.com/villagelabsco/bdjuno/v3/database"
+	marketplacesource "github.com/villagelabsco/bdjuno/v3/modules/marketplace/source"
+	"github.com/villagelabsco/juno/v4/modules"
 	marketplacetypes "github.com/villagelabsco/villaged/x/marketplace/types"
 )
 

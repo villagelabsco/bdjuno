@@ -18,7 +18,7 @@ package remote
 
 import (
 	"fmt"
-	"github.com/forbole/juno/v4/node/remote"
+	"github.com/villagelabsco/juno/v4/node/remote"
 	productstypes "github.com/villagelabsco/villaged/x/products/types"
 )
 

@@ -18,7 +18,7 @@ package database
 
 import (
 	"fmt"
-	"github.com/forbole/bdjuno/v3/database/types"
+	"github.com/villagelabsco/bdjuno/v3/database/types"
 	identitytypes "github.com/villagelabsco/villaged/x/identity/types"
 	"strings"
 )
@@ -29,7 +29,7 @@ func (db *Db) SaveIdentityNetwork(network *identitytypes.Network) error {
 	VALUES ($1, $2, $3, $4, $5);`
 
 	n := types.DbIdentityNetwork{}.FromProto(network)
-	_, err := db.Sql.Exec(stmt, n.Index, n.Active, n.FullName, n.IdentityProvider, n.InviteOnly)
+	_, err := db.SQL.Exec(stmt, n.Index, n.Active, n.FullName, n.IdentityProvider, n.InviteOnly)
 	if err != nil {
 		return fmt.Errorf("error while inserting network: %s", err)
 	}
@@ -47,7 +47,7 @@ func (db *Db) UpdateIdentityNetwork(network *identitytypes.Network) error {
 	WHERE vn.index = $1;`
 
 	n := types.DbIdentityNetwork{}.FromProto(network)
-	_, err := db.Sql.Exec(stmt, n.Index, n.Active, n.FullName, n.IdentityProvider, n.InviteOnly)
+	_, err := db.SQL.Exec(stmt, n.Index, n.Active, n.FullName, n.IdentityProvider, n.InviteOnly)
 	if err != nil {
 		return fmt.Errorf("error while updating network: %s", err)
 	}
@@ -78,7 +78,7 @@ func (db *Db) SaveIdentityAccountNetworks(userNetworks *identitytypes.AccountNet
 	if err != nil {
 		return fmt.Errorf("error while converting user networks: %s", err)
 	}
-	_, err = db.Sql.Exec(stmt, un.Index, un.Networks)
+	_, err = db.SQL.Exec(stmt, un.Index, un.Networks)
 	if err != nil {
 		return fmt.Errorf("error while inserting user networks: %s", err)
 	}
@@ -96,7 +96,7 @@ func (db *Db) UpdateIdentityAccountNetworks(userNetworks *identitytypes.AccountN
 	if err != nil {
 		return fmt.Errorf("error while converting user networks: %s", err)
 	}
-	_, err = db.Sql.Exec(stmt, un.Index, un.Networks)
+	_, err = db.SQL.Exec(stmt, un.Index, un.Networks)
 	if err != nil {
 		return fmt.Errorf("error while updating user networks: %s", err)
 	}
@@ -110,7 +110,7 @@ func (db *Db) SaveIdentityInvite(network string, invite *identitytypes.Invite) e
 	VALUES ($1, $2, $3, $4, $5, $6, $7);`
 
 	inv := types.DbIdentityInvite{}.FromProto(network, invite)
-	_, err := db.Sql.Exec(stmt, network,
+	_, err := db.SQL.Exec(stmt, network,
 		inv.Challenge,
 		inv.Registered,
 		inv.ConfirmedAccount,
@@ -145,7 +145,7 @@ func (db *Db) SaveMultipleIdentityInvites(network string, invites []*identitytyp
 	}
 
 	stmt = fmt.Sprintf(stmt, strings.Join(values, ","))
-	_, err := db.Sql.Exec(stmt)
+	_, err := db.SQL.Exec(stmt)
 	if err != nil {
 		return fmt.Errorf("error while storing invites: %s", err)
 	}
@@ -161,7 +161,7 @@ func (db *Db) UpdateIdentityInvite(network string, challenge string, confirmedAc
 	    "confirmed_account" = $2 
 	WHERE "network" = $3 AND "challenge" = $4;`
 
-	_, err := db.Sql.Exec(stmt, true, confirmedAccount, network, challenge)
+	_, err := db.SQL.Exec(stmt, true, confirmedAccount, network, challenge)
 	if err != nil {
 		return fmt.Errorf("error while updating invite: %s", err)
 	}
@@ -175,7 +175,7 @@ func (db *Db) DeleteIdentityInvite(network string, challenge string) error {
 		WHERE "network" = $1 AND "challenge" = $2;
 	`
 
-	_, err := db.Sql.Exec(stmt, network, challenge)
+	_, err := db.SQL.Exec(stmt, network, challenge)
 	if err != nil {
 		return fmt.Errorf("error while deleting invite: %s", err)
 	}
@@ -201,7 +201,7 @@ func (db *Db) SaveOrUpdateIdentityProvider(ip identitytypes.IdentityProvider) er
 		return fmt.Errorf("error while converting identity provider: %s", err)
 	}
 
-	_, err = db.Sql.Exec(stmt,
+	_, err = db.SQL.Exec(stmt,
 		dbip.Index,
 		dbip.AdminAccounts,
 		dbip.ProviderAccounts,
@@ -229,7 +229,7 @@ func (db *Db) SaveOrUpdateIdentityNetworkKyb(kyb *identitytypes.NetworkKyb) erro
 	`
 
 	dbkyb := types.DbIdentityNetworkKyb{}.FromProto(kyb)
-	_, err := db.Sql.Exec(stmt,
+	_, err := db.SQL.Exec(stmt,
 		dbkyb.Index,
 		dbkyb.Status,
 		dbkyb.DataHash,
@@ -259,7 +259,7 @@ func (db *Db) SaveOrUpdateIdentityHuman(human *identitytypes.Human) error {
 	if err != nil {
 		return fmt.Errorf("error while converting human: %s", err)
 	}
-	_, err = db.Sql.Exec(stmt,
+	_, err = db.SQL.Exec(stmt,
 		dbHuman.Index,
 		dbHuman.VnsDomain,
 		dbHuman.Accounts,

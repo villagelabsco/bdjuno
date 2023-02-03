@@ -18,7 +18,7 @@ package database
 
 import (
 	"fmt"
-	"github.com/forbole/bdjuno/v3/database/types"
+	"github.com/villagelabsco/bdjuno/v3/database/types"
 	marketplacetypes "github.com/villagelabsco/villaged/x/marketplace/types"
 )
 
@@ -38,7 +38,7 @@ func (db *Db) SaveOrUpdateListing(listing *marketplacetypes.Listing) error {
 	if err != nil {
 		return fmt.Errorf("error while converting to db listing: %s", err)
 	}
-	if _, err := db.Sql.Exec(stmt,
+	if _, err := db.SQL.Exec(stmt,
 		lst.Network,
 		lst.Index,
 		lst.Reference,
@@ -61,7 +61,7 @@ func (db *Db) UpdateListingActive(network, index string, active bool) error {
 		WHERE network = $2 AND index = $3
 	`
 
-	if _, err := db.Sql.Exec(stmt,
+	if _, err := db.SQL.Exec(stmt,
 		active,
 		network,
 		index); err != nil {
@@ -82,7 +82,7 @@ func (db *Db) InsertOrder(ord *marketplacetypes.Order) error {
 		return fmt.Errorf("error while converting to db order: %s", err)
 	}
 
-	if _, err := db.Sql.Exec(stmt,
+	if _, err := db.SQL.Exec(stmt,
 		o.Network,
 		o.Index,
 		o.Status,
@@ -105,7 +105,7 @@ func (db *Db) UpdateOrder(od *marketplacetypes.Order) error {
 		WHERE network = $2 AND index = $3
 	`
 
-	if _, err := db.Sql.Exec(stmt,
+	if _, err := db.SQL.Exec(stmt,
 		od.Status,
 		od.Network,
 		od.Index); err != nil {
@@ -121,7 +121,7 @@ func (db *Db) DeleteOrder(network, index string) error {
 		WHERE network = $1 AND index = $2
 	`
 
-	if _, err := db.Sql.Exec(stmt,
+	if _, err := db.SQL.Exec(stmt,
 		network,
 		index); err != nil {
 		return fmt.Errorf("error while deleting order: %s", err)

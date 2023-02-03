@@ -3,13 +3,13 @@ package staking
 import (
 	"fmt"
 
-	parsecmdtypes "github.com/forbole/juno/v4/cmd/parse/types"
-	"github.com/forbole/juno/v4/types/config"
 	"github.com/spf13/cobra"
+	parsecmdtypes "github.com/villagelabsco/juno/v4/cmd/parse/types"
+	"github.com/villagelabsco/juno/v4/types/config"
 
-	"github.com/forbole/bdjuno/v3/database"
-	"github.com/forbole/bdjuno/v3/modules/staking"
-	modulestypes "github.com/forbole/bdjuno/v3/modules/types"
+	"github.com/villagelabsco/bdjuno/v3/database"
+	"github.com/villagelabsco/bdjuno/v3/modules/staking"
+	modulestypes "github.com/villagelabsco/bdjuno/v3/modules/types"
 )
 
 // poolCmd returns the Cobra command allowing to refresh x/staking pool
@@ -32,7 +32,7 @@ func poolCmd(parseConfig *parsecmdtypes.Config) *cobra.Command {
 			db := database.Cast(parseCtx.Database)
 
 			// Build staking module
-			stakingModule := staking.NewModule(sources.StakingSource, parseCtx.EncodingConfig.Marshaler, db)
+			stakingModule := staking.NewModule(sources.StakingSource, parseCtx.EncodingConfig.Codec, db)
 
 			err = stakingModule.UpdateStakingPool()
 			if err != nil {

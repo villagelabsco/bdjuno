@@ -3,12 +3,12 @@ package pricefeed
 import (
 	"fmt"
 
-	parsecmdtypes "github.com/forbole/juno/v4/cmd/parse/types"
-	"github.com/forbole/juno/v4/types/config"
+	parsecmdtypes "github.com/villagelabsco/juno/v4/cmd/parse/types"
+	"github.com/villagelabsco/juno/v4/types/config"
 	"github.com/spf13/cobra"
 
-	"github.com/forbole/bdjuno/v3/database"
-	"github.com/forbole/bdjuno/v3/modules/pricefeed"
+	"github.com/villagelabsco/bdjuno/v3/database"
+	"github.com/villagelabsco/bdjuno/v3/modules/pricefeed"
 )
 
 // priceCmd returns the Cobra command allowing to refresh token price

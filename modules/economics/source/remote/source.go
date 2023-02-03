@@ -18,7 +18,7 @@ package remote
 
 import (
 	"fmt"
-	"github.com/forbole/juno/v4/node/remote"
+	"github.com/villagelabsco/juno/v4/node/remote"
 	econtypes "github.com/villagelabsco/villaged/x/economics/types"
 )
 
@@ -111,24 +111,6 @@ func (s Source) GetAllNbTxPerDay(height int64, req econtypes.QueryAllNbTxPerDayR
 	res, err := s.q.NbTxPerDayAll(ctx, &req)
 	if err != nil {
 		return econtypes.QueryAllNbTxPerDayResponse{}, fmt.Errorf("error while getting all nb tx per day: %s", err)
-	}
-	return *res, nil
-}
-
-func (s Source) GetPendingTask(height int64, req econtypes.QueryGetPendingTaskRequest) (econtypes.QueryGetPendingTaskResponse, error) {
-	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.q.PendingTask(ctx, &req)
-	if err != nil {
-		return econtypes.QueryGetPendingTaskResponse{}, fmt.Errorf("error while getting pending task: %s", err)
-	}
-	return *res, nil
-}
-
-func (s Source) GetAllPendingTask(height int64, req econtypes.QueryAllPendingTaskRequest) (econtypes.QueryAllPendingTaskResponse, error) {
-	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.q.PendingTaskAll(ctx, &req)
-	if err != nil {
-		return econtypes.QueryAllPendingTaskResponse{}, fmt.Errorf("error while getting all pending tasks: %s", err)
 	}
 	return *res, nil
 }

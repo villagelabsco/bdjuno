@@ -21,8 +21,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	nfttypes "github.com/cosmos/cosmos-sdk/x/nft"
-	juno "github.com/forbole/juno/v4/types"
 	"github.com/gogo/protobuf/proto"
+	juno "github.com/villagelabsco/juno/v4/types"
 	productstypes "github.com/villagelabsco/villaged/x/products/types"
 )
 
@@ -62,7 +62,7 @@ func (m *Module) HandleMsgCreateProductClass(index int, tx *juno.Tx, msg *produc
 		return fmt.Errorf("error while handling create product class info msg: %s", err)
 	}
 
-	if err := m.db.SaveOrUpdateProductClass(class, nftClass, *metadata, *specificMetadata); err != nil {
+	if err := m.db.SaveOrUpdateProductClass(class, nftClass, *metadata, **specificMetadata); err != nil {
 		return fmt.Errorf("error while handling create product class info msg: %s", err)
 	}
 
@@ -90,7 +90,7 @@ func (m *Module) HandleMsgCreateTaskClass(index int, tx *juno.Tx, msg *productst
 		return fmt.Errorf("error while handling create task class info msg: %s", err)
 	}
 
-	if err := m.db.SaveOrUpdateTaskClass(class, nftClass, *metadata, *specificMetadata); err != nil {
+	if err := m.db.SaveOrUpdateTaskClass(class, nftClass, *metadata, **specificMetadata); err != nil {
 		return fmt.Errorf("error while handling create task class info msg: %s", err)
 	}
 
@@ -136,7 +136,7 @@ func (m *Module) HandleMsgUpdateClass(index int, tx *juno.Tx, msg *productstypes
 		if err != nil {
 			return fmt.Errorf("error while handling update class info msg: %s", err)
 		}
-		if err := m.db.SaveOrUpdateProductClass(class, nftClass, *metadata, *specificMetadata); err != nil {
+		if err := m.db.SaveOrUpdateProductClass(class, nftClass, *metadata, **specificMetadata); err != nil {
 			return fmt.Errorf("error while handling update class info msg: %s", err)
 		}
 	case productstypes.ClassType_CLASS_TYPE_TASK:
@@ -144,7 +144,7 @@ func (m *Module) HandleMsgUpdateClass(index int, tx *juno.Tx, msg *productstypes
 		if err != nil {
 			return fmt.Errorf("error while handling update class info msg: %s", err)
 		}
-		if err := m.db.SaveOrUpdateTaskClass(class, nftClass, *metadata, *specificMetadata); err != nil {
+		if err := m.db.SaveOrUpdateTaskClass(class, nftClass, *metadata, **specificMetadata); err != nil {
 			return fmt.Errorf("error while handling update class info msg: %s", err)
 		}
 	case productstypes.ClassType_CLASS_TYPE_SHIFT:
@@ -158,7 +158,7 @@ func (m *Module) HandleMsgUpdateClass(index int, tx *juno.Tx, msg *productstypes
 	return nil
 }
 
-func unmarshalProductClassMetadata[T proto.Unmarshaler](data *types.Any) (*productstypes.StdClassData, T, error) {
+func unmarshalProductClassMetadata[T proto.Unmarshaler](data *types.Any) (*productstypes.StdClassData, *T, error) {
 	var stdData *productstypes.StdClassData
 	if err := stdData.Unmarshal(data.Value); err != nil {
 		return nil, nil, fmt.Errorf("error while unmarshaling std product class data: %s", err)
@@ -169,5 +169,5 @@ func unmarshalProductClassMetadata[T proto.Unmarshaler](data *types.Any) (*produ
 		return nil, nil, fmt.Errorf("error while unmarshaling specific product class data: %s", err)
 	}
 
-	return stdData, spData, nil
+	return stdData, &spData, nil
 }

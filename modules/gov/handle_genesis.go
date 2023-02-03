@@ -6,9 +6,10 @@ import (
 
 	tmtypes "github.com/tendermint/tendermint/types"
 
-	"github.com/forbole/bdjuno/v3/types"
+	"github.com/villagelabsco/bdjuno/v3/types"
 
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	v1betagovtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 	"github.com/rs/zerolog/log"
 )
 
@@ -17,7 +18,7 @@ func (m *Module) HandleGenesis(doc *tmtypes.GenesisDoc, appState map[string]json
 	log.Debug().Str("module", "gov").Msg("parsing genesis")
 
 	// Read the genesis state
-	var genState govtypes.GenesisState
+	var genState v1betagovtypes.GenesisState
 	err := m.cdc.UnmarshalJSON(appState[govtypes.ModuleName], &genState)
 	if err != nil {
 		return fmt.Errorf("error while reading gov genesis data: %s", err)
@@ -44,7 +45,7 @@ func (m *Module) HandleGenesis(doc *tmtypes.GenesisDoc, appState map[string]json
 }
 
 // saveProposals save proposals from genesis file
-func (m *Module) saveProposals(slice govtypes.Proposals, genDoc *tmtypes.GenesisDoc) error {
+func (m *Module) saveProposals(slice v1betagovtypes.Proposals, genDoc *tmtypes.GenesisDoc) error {
 	proposals := make([]types.Proposal, len(slice))
 	tallyResults := make([]types.TallyResult, len(slice))
 	deposits := make([]types.Deposit, len(slice))

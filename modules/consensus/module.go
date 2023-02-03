@@ -1,9 +1,9 @@
 package consensus
 
 import (
-	"github.com/forbole/bdjuno/v3/database"
+	"github.com/villagelabsco/bdjuno/v3/database"
 
-	"github.com/forbole/juno/v4/modules"
+	"github.com/villagelabsco/juno/v4/modules"
 )
 
 var (

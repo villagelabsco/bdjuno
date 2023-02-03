@@ -18,10 +18,10 @@ package products
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/forbole/bdjuno/v3/database"
-	nftsource "github.com/forbole/bdjuno/v3/modules/nft/source"
-	productssource "github.com/forbole/bdjuno/v3/modules/products/source"
-	"github.com/forbole/juno/v4/modules"
+	"github.com/villagelabsco/bdjuno/v3/database"
+	nftsource "github.com/villagelabsco/bdjuno/v3/modules/nft/source"
+	productssource "github.com/villagelabsco/bdjuno/v3/modules/products/source"
+	"github.com/villagelabsco/juno/v4/modules"
 	productstypes "github.com/villagelabsco/villaged/x/products/types"
 )
 

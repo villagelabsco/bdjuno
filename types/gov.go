@@ -5,7 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	govbeta1types "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 )
 
 const (
@@ -19,7 +19,7 @@ type DepositParams struct {
 }
 
 // NewDepositParam allows to build a new DepositParams
-func NewDepositParam(d govtypes.DepositParams) DepositParams {
+func NewDepositParam(d govbeta1types.DepositParams) DepositParams {
 	return DepositParams{
 		MinDeposit:       d.MinDeposit,
 		MaxDepositPeriod: d.MaxDepositPeriod.Nanoseconds(),
@@ -32,7 +32,7 @@ type VotingParams struct {
 }
 
 // NewVotingParams allows to build a new VotingParams instance
-func NewVotingParams(v govtypes.VotingParams) VotingParams {
+func NewVotingParams(v govbeta1types.VotingParams) VotingParams {
 	return VotingParams{
 		VotingPeriod: v.VotingPeriod.Nanoseconds(),
 	}
@@ -54,7 +54,7 @@ type TallyParams struct {
 }
 
 // NewTallyParams allows to build a new TallyParams instance
-func NewTallyParams(t govtypes.TallyParams) TallyParams {
+func NewTallyParams(t govbeta1types.TallyParams) TallyParams {
 	return TallyParams{
 		Quorum:        t.Quorum,
 		Threshold:     t.Threshold,
@@ -79,7 +79,7 @@ type Proposal struct {
 	ProposalRoute   string
 	ProposalType    string
 	ProposalID      uint64
-	Content         govtypes.Content
+	Content         govbeta1types.Content
 	Status          string
 	SubmitTime      time.Time
 	DepositEndTime  time.Time
@@ -93,7 +93,7 @@ func NewProposal(
 	proposalID uint64,
 	proposalRoute string,
 	proposalType string,
-	content govtypes.Content,
+	content govbeta1types.Content,
 	status string,
 	submitTime time.Time,
 	depositEndTime time.Time,
@@ -183,7 +183,7 @@ func NewDeposit(
 type Vote struct {
 	ProposalID uint64
 	Voter      string
-	Option     govtypes.VoteOption
+	Option     govbeta1types.VoteOption
 	Timestamp  time.Time
 	Height     int64
 }
@@ -192,7 +192,7 @@ type Vote struct {
 func NewVote(
 	proposalID uint64,
 	voter string,
-	option govtypes.VoteOption,
+	option govbeta1types.VoteOption,
 	timestamp time.Time,
 	height int64,
 ) Vote {

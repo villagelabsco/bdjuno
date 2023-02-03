@@ -3,8 +3,8 @@ package utils
 import (
 	"context"
 	"fmt"
-	juno "github.com/forbole/juno/v4/types"
 	"github.com/gogo/protobuf/proto"
+	juno "github.com/villagelabsco/juno/v4/types"
 	"strconv"
 
 	grpctypes "github.com/cosmos/cosmos-sdk/types/grpc"

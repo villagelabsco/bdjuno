@@ -2,10 +2,10 @@ package mint
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/forbole/juno/v4/modules"
+	"github.com/villagelabsco/juno/v4/modules"
 
-	"github.com/forbole/bdjuno/v3/database"
-	mintsource "github.com/forbole/bdjuno/v3/modules/mint/source"
+	"github.com/villagelabsco/bdjuno/v3/database"
+	mintsource "github.com/villagelabsco/bdjuno/v3/modules/mint/source"
 )
 
 var (

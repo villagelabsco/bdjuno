@@ -18,7 +18,7 @@ package database
 
 import (
 	"fmt"
-	"github.com/forbole/bdjuno/v3/database/types"
+	"github.com/villagelabsco/bdjuno/v3/database/types"
 	reputationtypes "github.com/villagelabsco/villaged/x/reputation/types"
 )
 
@@ -51,7 +51,7 @@ func (db *Db) SaveFeedbackAggregate(fb *reputationtypes.Feedback) error {
 	if err != nil {
 		return fmt.Errorf("error while converting reputation feedback aggregate to db type: %s", err)
 	}
-	_, err = db.Sql.Exec(q, fa.Index, fa.CptPositive, fa.CptNegative, fa.CptNeutral, fa.Positive, fa.Negative, fa.Neutral, fa.Feedbackers, fa.LastChange)
+	_, err = db.SQL.Exec(q, fa.Index, fa.CptPositive, fa.CptNegative, fa.CptNeutral, fa.Positive, fa.Negative, fa.Neutral, fa.Feedbackers, fa.LastChange)
 	if err != nil {
 		return fmt.Errorf("error while inserting reputation feedback aggregate: %s", err)
 	}
@@ -76,7 +76,7 @@ func (db *Db) UpdateFeedbackAggregate(fb *reputationtypes.Feedback) error {
 	if err != nil {
 		return fmt.Errorf("error while converting reputation feedback aggregate to db type: %s", err)
 	}
-	_, err = db.Sql.Exec(stmt,
+	_, err = db.SQL.Exec(stmt,
 		fa.Index,
 		fa.LastChange,
 		fa.CptPositive,
@@ -100,7 +100,7 @@ func (db *Db) SavePostFeedback(msg *reputationtypes.MsgPostFeedback) error {
 	VALUES ($1, $2, $3, $4, $5, $6)`
 
 	pfb := types.DbReputationFeedback{}.FromProto(msg)
-	_, err := db.Sql.Exec(stmt, pfb.Creator, pfb.Network, pfb.FbType, pfb.DstAccount, pfb.TxId, pfb.Ref)
+	_, err := db.SQL.Exec(stmt, pfb.Creator, pfb.Network, pfb.FbType, pfb.DstAccount, pfb.TxId, pfb.Ref)
 	if err != nil {
 		return fmt.Errorf("error while saving reputation feedback: %s", err)
 	}

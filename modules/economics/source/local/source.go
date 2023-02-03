@@ -19,7 +19,7 @@ package local
 import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/forbole/juno/v4/node/local"
+	"github.com/villagelabsco/juno/v4/node/local"
 	econtypes "github.com/villagelabsco/villaged/x/economics/types"
 )
 
@@ -183,40 +183,6 @@ func (s Source) GetAllNbTxPerDay(height int64, req econtypes.QueryAllNbTxPerDayR
 	)
 	if err != nil {
 		return econtypes.QueryAllNbTxPerDayResponse{}, fmt.Errorf("error while getting all nb tx per day: %s", err)
-	}
-
-	return *res, nil
-}
-
-func (s Source) GetPendingTask(height int64, req econtypes.QueryGetPendingTaskRequest) (econtypes.QueryGetPendingTaskResponse, error) {
-	ctx, err := s.LoadHeight(height)
-	if err != nil {
-		return econtypes.QueryGetPendingTaskResponse{}, fmt.Errorf("error while loading height: %s", err)
-	}
-
-	res, err := s.q.PendingTask(
-		sdk.WrapSDKContext(ctx),
-		&req,
-	)
-	if err != nil {
-		return econtypes.QueryGetPendingTaskResponse{}, fmt.Errorf("error while getting pending task: %s", err)
-	}
-
-	return *res, nil
-}
-
-func (s Source) GetAllPendingTask(height int64, req econtypes.QueryAllPendingTaskRequest) (econtypes.QueryAllPendingTaskResponse, error) {
-	ctx, err := s.LoadHeight(height)
-	if err != nil {
-		return econtypes.QueryAllPendingTaskResponse{}, fmt.Errorf("error while loading height: %s", err)
-	}
-
-	res, err := s.q.PendingTaskAll(
-		sdk.WrapSDKContext(ctx),
-		&req,
-	)
-	if err != nil {
-		return econtypes.QueryAllPendingTaskResponse{}, fmt.Errorf("error while getting all pending tasks: %s", err)
 	}
 
 	return *res, nil

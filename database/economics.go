@@ -18,7 +18,7 @@ package database
 
 import (
 	"fmt"
-	"github.com/forbole/bdjuno/v3/database/types"
+	"github.com/villagelabsco/bdjuno/v3/database/types"
 	econtypes "github.com/villagelabsco/villaged/x/economics/types"
 )
 
@@ -29,7 +29,7 @@ func (db *Db) SaveOrUpdateEconomicsNetworkEnabled(network string, val bool) erro
 		ON CONFLICT (network) DO UPDATE SET active = $2;
 	`
 
-	if _, err := db.Sql.Exec(stmt, network, val); err != nil {
+	if _, err := db.SQL.Exec(stmt, network, val); err != nil {
 		return fmt.Errorf("error while storing economics network enabled: %s", err)
 	}
 
@@ -46,7 +46,7 @@ func (db *Db) SaveEconomicsTransactionHook(hook *econtypes.TransactionHook) erro
 	if err != nil {
 		return fmt.Errorf("error while converting economics transaction hook: %s", err)
 	}
-	if _, err := db.Sql.Exec(stmt,
+	if _, err := db.SQL.Exec(stmt,
 		h.Network,
 		h.Index,
 		h.Type,
@@ -70,7 +70,7 @@ func (db *Db) SaveEconomicsScheduledHook(hook *econtypes.ScheduledHook) error {
 		return fmt.Errorf("error while converting economics scheduled hook: %s", err)
 	}
 
-	if _, err := db.Sql.Exec(stmt,
+	if _, err := db.SQL.Exec(stmt,
 		h.Network,
 		h.Index,
 		h.Type,
@@ -94,7 +94,7 @@ func (db *Db) RemoveEconomicsTransactionHook(network string, idx uint64) error {
 		WHERE network = $1 AND index = $2;
 	`
 
-	if _, err := db.Sql.Exec(stmt, network, idx); err != nil {
+	if _, err := db.SQL.Exec(stmt, network, idx); err != nil {
 		return fmt.Errorf("error while removing economics transaction hook: %s", err)
 	}
 
@@ -107,7 +107,7 @@ func (db *Db) RemoveEconomicsScheduledHook(network string, idx uint64) error {
 		WHERE network = $1 AND index = $2;
 	`
 
-	if _, err := db.Sql.Exec(stmt, network, idx); err != nil {
+	if _, err := db.SQL.Exec(stmt, network, idx); err != nil {
 		return fmt.Errorf("error while removing economics scheduled hook: %s", err)
 	}
 
@@ -125,7 +125,7 @@ func (db *Db) SaveEconomicsScheduledHookManualTrigger(msg *econtypes.MsgTriggerS
 		return fmt.Errorf("error while converting economics scheduled hook execution: %s", err)
 	}
 
-	if _, err := db.Sql.Exec(stmt,
+	if _, err := db.SQL.Exec(stmt,
 		h.Creator,
 		h.Network,
 		h.HookIdxs); err != nil {

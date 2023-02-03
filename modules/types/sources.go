@@ -3,10 +3,10 @@ package types
 import (
 	"fmt"
 	nfttypes "github.com/cosmos/cosmos-sdk/x/nft"
-	econsource "github.com/forbole/bdjuno/v3/modules/economics/source"
-	identitysource "github.com/forbole/bdjuno/v3/modules/identity/source"
-	remotenftsource "github.com/forbole/bdjuno/v3/modules/nft/source/remote"
-	remotetokensource "github.com/forbole/bdjuno/v3/modules/token/source/remote"
+	econsource "github.com/villagelabsco/bdjuno/v3/modules/economics/source"
+	identitysource "github.com/villagelabsco/bdjuno/v3/modules/identity/source"
+	remotenftsource "github.com/villagelabsco/bdjuno/v3/modules/nft/source/remote"
+	remotetokensource "github.com/villagelabsco/bdjuno/v3/modules/token/source/remote"
 	econtypes "github.com/villagelabsco/villaged/x/economics/types"
 	identitytypes "github.com/villagelabsco/villaged/x/identity/types"
 	marketplacetypes "github.com/villagelabsco/villaged/x/marketplace/types"
@@ -20,47 +20,46 @@ import (
 	"github.com/cosmos/cosmos-sdk/simapp/params"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
+	v1beta1govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	"github.com/forbole/juno/v4/node/local"
-	"github.com/forbole/juno/v4/node/remote"
 	"github.com/tendermint/tendermint/libs/log"
+	"github.com/villagelabsco/juno/v4/node/local"
+	"github.com/villagelabsco/juno/v4/node/remote"
 
-	nodeconfig "github.com/forbole/juno/v4/node/config"
+	nodeconfig "github.com/villagelabsco/juno/v4/node/config"
 
-	banksource "github.com/forbole/bdjuno/v3/modules/bank/source"
-	localbanksource "github.com/forbole/bdjuno/v3/modules/bank/source/local"
-	remotebanksource "github.com/forbole/bdjuno/v3/modules/bank/source/remote"
-	distrsource "github.com/forbole/bdjuno/v3/modules/distribution/source"
-	localdistrsource "github.com/forbole/bdjuno/v3/modules/distribution/source/local"
-	remotedistrsource "github.com/forbole/bdjuno/v3/modules/distribution/source/remote"
-	remoteeconsource "github.com/forbole/bdjuno/v3/modules/economics/source/remote"
-	govsource "github.com/forbole/bdjuno/v3/modules/gov/source"
-	localgovsource "github.com/forbole/bdjuno/v3/modules/gov/source/local"
-	remotegovsource "github.com/forbole/bdjuno/v3/modules/gov/source/remote"
-	remoteidentitysource "github.com/forbole/bdjuno/v3/modules/identity/source/remote"
-	marketplacesource "github.com/forbole/bdjuno/v3/modules/marketplace/source"
-	remotemarketplacesource "github.com/forbole/bdjuno/v3/modules/marketplace/source/remote"
-	mintsource "github.com/forbole/bdjuno/v3/modules/mint/source"
-	localmintsource "github.com/forbole/bdjuno/v3/modules/mint/source/local"
-	remotemintsource "github.com/forbole/bdjuno/v3/modules/mint/source/remote"
-	nftsource "github.com/forbole/bdjuno/v3/modules/nft/source"
-	productssource "github.com/forbole/bdjuno/v3/modules/products/source"
-	remoteproductssource "github.com/forbole/bdjuno/v3/modules/products/source/remote"
-	rbacsource "github.com/forbole/bdjuno/v3/modules/rbac/source"
-	remoterbacsource "github.com/forbole/bdjuno/v3/modules/rbac/source/remote"
-	reputationsource "github.com/forbole/bdjuno/v3/modules/reputation/source"
-	remotereputationsource "github.com/forbole/bdjuno/v3/modules/reputation/source/remote"
-	slashingsource "github.com/forbole/bdjuno/v3/modules/slashing/source"
-	localslashingsource "github.com/forbole/bdjuno/v3/modules/slashing/source/local"
-	remoteslashingsource "github.com/forbole/bdjuno/v3/modules/slashing/source/remote"
-	stakingsource "github.com/forbole/bdjuno/v3/modules/staking/source"
-	localstakingsource "github.com/forbole/bdjuno/v3/modules/staking/source/local"
-	remotestakingsource "github.com/forbole/bdjuno/v3/modules/staking/source/remote"
-	tokensource "github.com/forbole/bdjuno/v3/modules/token/source"
+	banksource "github.com/villagelabsco/bdjuno/v3/modules/bank/source"
+	localbanksource "github.com/villagelabsco/bdjuno/v3/modules/bank/source/local"
+	remotebanksource "github.com/villagelabsco/bdjuno/v3/modules/bank/source/remote"
+	distrsource "github.com/villagelabsco/bdjuno/v3/modules/distribution/source"
+	localdistrsource "github.com/villagelabsco/bdjuno/v3/modules/distribution/source/local"
+	remotedistrsource "github.com/villagelabsco/bdjuno/v3/modules/distribution/source/remote"
+	remoteeconsource "github.com/villagelabsco/bdjuno/v3/modules/economics/source/remote"
+	govsource "github.com/villagelabsco/bdjuno/v3/modules/gov/source"
+	remotegovsource "github.com/villagelabsco/bdjuno/v3/modules/gov/source/remote"
+	remoteidentitysource "github.com/villagelabsco/bdjuno/v3/modules/identity/source/remote"
+	marketplacesource "github.com/villagelabsco/bdjuno/v3/modules/marketplace/source"
+	remotemarketplacesource "github.com/villagelabsco/bdjuno/v3/modules/marketplace/source/remote"
+	mintsource "github.com/villagelabsco/bdjuno/v3/modules/mint/source"
+	localmintsource "github.com/villagelabsco/bdjuno/v3/modules/mint/source/local"
+	remotemintsource "github.com/villagelabsco/bdjuno/v3/modules/mint/source/remote"
+	nftsource "github.com/villagelabsco/bdjuno/v3/modules/nft/source"
+	productssource "github.com/villagelabsco/bdjuno/v3/modules/products/source"
+	remoteproductssource "github.com/villagelabsco/bdjuno/v3/modules/products/source/remote"
+	rbacsource "github.com/villagelabsco/bdjuno/v3/modules/rbac/source"
+	remoterbacsource "github.com/villagelabsco/bdjuno/v3/modules/rbac/source/remote"
+	reputationsource "github.com/villagelabsco/bdjuno/v3/modules/reputation/source"
+	remotereputationsource "github.com/villagelabsco/bdjuno/v3/modules/reputation/source/remote"
+	slashingsource "github.com/villagelabsco/bdjuno/v3/modules/slashing/source"
+	localslashingsource "github.com/villagelabsco/bdjuno/v3/modules/slashing/source/local"
+	remoteslashingsource "github.com/villagelabsco/bdjuno/v3/modules/slashing/source/remote"
+	stakingsource "github.com/villagelabsco/bdjuno/v3/modules/staking/source"
+	localstakingsource "github.com/villagelabsco/bdjuno/v3/modules/staking/source/local"
+	remotestakingsource "github.com/villagelabsco/bdjuno/v3/modules/staking/source/remote"
+	tokensource "github.com/villagelabsco/bdjuno/v3/modules/token/source"
 )
 
 type Sources struct {
@@ -105,9 +104,9 @@ func buildLocalSources(cfg *local.Details, encodingConfig *params.EncodingConfig
 	)
 
 	sources := &Sources{
-		BankSource:     localbanksource.NewSource(source, banktypes.QueryServer(sapp.BankKeeper)),
-		DistrSource:    localdistrsource.NewSource(source, distrtypes.QueryServer(sapp.DistrKeeper)),
-		GovSource:      localgovsource.NewSource(source, govtypes.QueryServer(sapp.GovKeeper)),
+		BankSource:  localbanksource.NewSource(source, banktypes.QueryServer(sapp.BankKeeper)),
+		DistrSource: localdistrsource.NewSource(source, distrtypes.QueryServer(sapp.DistrKeeper)),
+		//GovSource:      localgovsource.NewSource(source, v1beta1govtypes.QueryServer(sapp.GovKeeper)),
 		MintSource:     localmintsource.NewSource(source, minttypes.QueryServer(sapp.MintKeeper)),
 		SlashingSource: localslashingsource.NewSource(source, slashingtypes.QueryServer(sapp.SlashingKeeper)),
 		StakingSource:  localstakingsource.NewSource(source, stakingkeeper.Querier{Keeper: sapp.StakingKeeper}),
@@ -153,7 +152,7 @@ func buildRemoteSources(cfg *remote.Details) (*Sources, error) {
 	return &Sources{
 		BankSource:        remotebanksource.NewSource(source, banktypes.NewQueryClient(source.GrpcConn)),
 		DistrSource:       remotedistrsource.NewSource(source, distrtypes.NewQueryClient(source.GrpcConn)),
-		GovSource:         remotegovsource.NewSource(source, govtypes.NewQueryClient(source.GrpcConn)),
+		GovSource:         remotegovsource.NewSource(source, v1beta1govtypes.NewQueryClient(source.GrpcConn)),
 		MintSource:        remotemintsource.NewSource(source, minttypes.NewQueryClient(source.GrpcConn)),
 		SlashingSource:    remoteslashingsource.NewSource(source, slashingtypes.NewQueryClient(source.GrpcConn)),
 		StakingSource:     remotestakingsource.NewSource(source, stakingtypes.NewQueryClient(source.GrpcConn)),

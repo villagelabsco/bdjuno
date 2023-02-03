@@ -20,7 +20,7 @@ import (
 	"encoding/json"
 	"fmt"
 	nfttypes "github.com/cosmos/cosmos-sdk/x/nft"
-	"github.com/forbole/bdjuno/v3/database/types"
+	"github.com/villagelabsco/bdjuno/v3/database/types"
 	productstypes "github.com/villagelabsco/villaged/x/products/types"
 )
 
@@ -71,7 +71,7 @@ func (db *Db) UpdateProductClassDisabled(fullClassId string, val bool) error {
 		WHERE full_class_id = $2
 	`
 
-	_, err := db.Sql.Exec(stmt, val, fullClassId)
+	_, err := db.SQL.Exec(stmt, val, fullClassId)
 	if err != nil {
 		return fmt.Errorf("error while updating product class metadata: %s", err)
 	}
@@ -91,7 +91,7 @@ func (db *Db) saveOrUpdateProductClass(pci types.DbProductClassInfo) error {
 		        specific_metadata = $8
 	`
 
-	_, err := db.Sql.Exec(stmt,
+	_, err := db.SQL.Exec(stmt,
 		pci.Network,
 		pci.ClassId,
 		pci.FullClassId,

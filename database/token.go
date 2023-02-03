@@ -18,7 +18,7 @@ package database
 
 import (
 	"fmt"
-	"github.com/forbole/bdjuno/v3/database/types"
+	"github.com/villagelabsco/bdjuno/v3/database/types"
 	tokentypes "github.com/villagelabsco/villaged/x/token/types"
 )
 
@@ -60,7 +60,7 @@ func (db *Db) SaveOrUpdateTokenDenom(token *tokentypes.Token) error {
 	`
 
 	t := types.DbToken{}.FromProto(token)
-	_, err := db.Sql.Exec(stmt,
+	_, err := db.SQL.Exec(stmt,
 		t.Network,
 		t.Denom,
 		t.Ticker,

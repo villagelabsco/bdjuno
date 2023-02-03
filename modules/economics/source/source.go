@@ -30,8 +30,6 @@ type Source interface {
 	GetAllNetworkEnabled(height int64, req econtypes.QueryAllNetworkEnabledRequest) (econtypes.QueryAllNetworkEnabledResponse, error)
 	GetNbTxPerDay(height int64, req econtypes.QueryGetNbTxPerDayRequest) (econtypes.QueryGetNbTxPerDayResponse, error)
 	GetAllNbTxPerDay(height int64, req econtypes.QueryAllNbTxPerDayRequest) (econtypes.QueryAllNbTxPerDayResponse, error)
-	GetPendingTask(height int64, req econtypes.QueryGetPendingTaskRequest) (econtypes.QueryGetPendingTaskResponse, error)
-	GetAllPendingTask(height int64, req econtypes.QueryAllPendingTaskRequest) (econtypes.QueryAllPendingTaskResponse, error)
 	GetScheduledHookExecutionState(height int64, req econtypes.QueryGetScheduledHookExecutionStateRequest) (econtypes.QueryGetScheduledHookExecutionStateResponse, error)
 	GetAllScheduledHookExecutionState(height int64, req econtypes.QueryAllScheduledHookExecutionStateRequest) (econtypes.QueryAllScheduledHookExecutionStateResponse, error)
 }
