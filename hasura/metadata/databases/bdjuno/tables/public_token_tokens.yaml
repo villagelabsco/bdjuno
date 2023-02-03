@@ -1,0 +1,25 @@
+table:
+  name: token_tokens
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      allow_aggregations: false
+      columns:
+        - network
+        - denom
+        - ticker
+        - description
+        - nb_decimals
+        - transferable
+        - backing_asset
+        - admin
+        - name_id
+        - incentive_type
+        - icon_path
+        - referenced_denom
+        - offramp_enabled
+        - clawback_enabled
+        - clawback_period_sec
+      filter: {}
+      limit: 100

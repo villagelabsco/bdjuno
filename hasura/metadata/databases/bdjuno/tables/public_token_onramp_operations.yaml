@@ -1,0 +1,14 @@
+table:
+  name: token_onramp_operations
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      allow_aggregations: false
+      columns:
+        - id
+        - payment_ref
+        - amount
+        - account
+      filter: {}
+      limit: 100

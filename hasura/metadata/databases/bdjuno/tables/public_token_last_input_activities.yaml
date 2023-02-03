@@ -1,0 +1,14 @@
+table:
+  name: token_last_input_activities
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      allow_aggregations: false
+      columns:
+        - denom
+        - account
+        - timestamp
+        - block_height
+      filter: {}
+      limit: 100
