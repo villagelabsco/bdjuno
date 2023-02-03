@@ -1,0 +1,16 @@
+table:
+  name: identity_providers
+  schema: public
+select_permissions:
+- role: anonymous
+  permission:
+    allow_aggregations: false
+    columns:
+        - index
+        - admin_accounts
+        - provider_accounts
+        - asset_minter_accounts
+        - asset_burner_accounts
+    filter: {}
+    limit: 100
+
