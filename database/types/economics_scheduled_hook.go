@@ -19,6 +19,7 @@ package types
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gogo/protobuf/proto"
 	sqlxtypes "github.com/jmoiron/sqlx/types"
 	econtypes "github.com/villagelabsco/villaged/x/economics/types"
 	"time"
@@ -38,15 +39,29 @@ type DbEconomicsScheduledHook struct {
 	LastExecutedBlock     uint64                      `db:"last_executed_block"`
 }
 
-func (p DbEconomicsScheduledHook) FromProto(hook *econtypes.ScheduledHook) (DbEconomicsScheduledHook, error) {
+func (h DbEconomicsScheduledHook) FromProto(hook *econtypes.ScheduledHook) (DbEconomicsScheduledHook, error) {
+	var p proto.Unmarshaler
+	if hook.HookParams != nil {
+		switch hook.HookType {
+		case econtypes.ScheduledHookType_SCHEDHOOKTYPE_TRANSFER_DENOM_TO_SHAREHOLDERS:
+			p = new(econtypes.HookParamsTransferDenomToShareholders)
+		case econtypes.ScheduledHookType_SCHEDHOOKTYPE_AUTO_SWAP_DENOM:
+			p = new(econtypes.HookParamsAutoSwapDenom)
+		case econtypes.ScheduledHookType_SCHEDHOOKTYPE_DECAY_DENOM_FOR_INACTIVE_ACCOUNT:
+			p = new(econtypes.HookParamsDecayDenomForInactiveAccounts)
+		case econtypes.ScheduledHookType_SCHEDHOOKTYPE_RECURRING_MINT_TOKEN:
+			p = new(econtypes.HookParamsRecurringMintToken)
+		}
+	}
+
+	bParams, err := json.Marshal(p)
+	if err != nil {
+		return DbEconomicsScheduledHook{}, fmt.Errorf("error while marshalling hook params: %v", err)
+	}
+
 	dps, err := json.Marshal(hook.HookDependencies)
 	if err != nil {
 		return DbEconomicsScheduledHook{}, fmt.Errorf("error while marshalling hook dependencies: %v", err)
-	}
-
-	params, err := json.Marshal(hook.HookParams)
-	if err != nil {
-		return DbEconomicsScheduledHook{}, fmt.Errorf("error while marshalling hook params: %v", err)
 	}
 
 	return DbEconomicsScheduledHook{
@@ -58,7 +73,7 @@ func (p DbEconomicsScheduledHook) FromProto(hook *econtypes.ScheduledHook) (DbEc
 		CronRule:              hook.CronRule,
 		Dependencies:          dps,
 		AutoTrigger:           hook.AutoTrigger,
-		Params:                params,
+		Params:                bParams,
 		LastExecutedTimestamp: time.Unix(0, int64(hook.LastExecutedTimestamp)),
 		LastExecutedBlock:     hook.LastExecutedBlock,
 	}, nil
