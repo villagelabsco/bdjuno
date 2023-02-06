@@ -16,9 +16,20 @@
 
 package types
 
-type DbIdentityStatus struct {
-	ProviderId string `db:"provider_id"`
-	HumanId    string `db:"human_id"`
-	DataHash   string `db:"data_hash"`
-	Timestamp  uint64 `db:"timestamp"`
+import identitytypes "github.com/villagelabsco/villaged/x/identity/types"
+
+type DbIdentityKycStatus struct {
+	HumanId   string `db:"human_id"`
+	Status    uint64 `db:"status"`
+	DataHash  string `db:"data_hash"`
+	Timestamp uint64 `db:"timestamp"`
+}
+
+func (DbIdentityKycStatus) FromProto(st *identitytypes.KycStatus) DbIdentityKycStatus {
+	return DbIdentityKycStatus{
+		HumanId:   st.HumanId,
+		Status:    st.Status,
+		DataHash:  st.DataHash,
+		Timestamp: st.Timestamp,
+	}
 }

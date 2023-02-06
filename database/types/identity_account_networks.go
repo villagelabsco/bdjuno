@@ -39,3 +39,16 @@ func (vn DbIdentityAccountNetworks) FromProto(n *identitytypes.AccountNetworks) 
 		Networks: networks,
 	}, nil
 }
+
+func (vn DbIdentityAccountNetworks) ToProto() (*identitytypes.AccountNetworks, error) {
+	var networks []string
+	err := json.Unmarshal(vn.Networks, &networks)
+	if err != nil {
+		return nil, fmt.Errorf("error unmarshalling networks: %v", err)
+	}
+
+	return &identitytypes.AccountNetworks{
+		Index:    vn.Index,
+		Networks: networks,
+	}, nil
+}

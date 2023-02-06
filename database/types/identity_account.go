@@ -16,8 +16,18 @@
 
 package types
 
+import identitytypes "github.com/villagelabsco/villaged/x/identity/types"
+
 type DbIdentityAccount struct {
 	Index      string `db:"index"`
 	HumanId    string `db:"human_id"`
 	PrivateAcc bool   `db:"private_acc"`
+}
+
+func (DbIdentityAccount) FromProto(acc *identitytypes.Account) DbIdentityAccount {
+	return DbIdentityAccount{
+		Index:      acc.Index,
+		HumanId:    acc.HumanId,
+		PrivateAcc: acc.PrivateAcc,
+	}
 }
