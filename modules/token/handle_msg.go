@@ -56,13 +56,13 @@ func (m Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 		return m.handleMsgCreateRootCurrencyToken(index, tx, cosmosMsg)
 	case *tokentypes.MsgClawbackTokens:
 		return m.handleMsgClawbackTokens(index, tx, cosmosMsg)
-	default:
-		return fmt.Errorf("unrecognized token message type: %T", cosmosMsg)
 	}
+
+	return nil
 }
 
 func (m Module) handleMsgCreateToken(index int, tx *juno.Tx, msg *tokentypes.MsgCreateToken) error {
-	denom, err := utils.FindEventAndAttr(index, tx, &tokentypes.EvtCreatedToken{}, "Denom")
+	denom, err := utils.FindEventAndAttr(index, tx, &tokentypes.EvtCreatedToken{}, "denom")
 	if err != nil {
 		return fmt.Errorf("error while getting token denom from events: %s", err)
 	}

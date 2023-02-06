@@ -36,9 +36,9 @@ func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 		return m.HandleMsgFreezeClass(index, tx, cosmosMsg)
 	case *productstypes.MsgUpdateClass:
 		return m.HandleMsgUpdateClass(index, tx, cosmosMsg)
-	default:
-		return fmt.Errorf("unrecognized products message type: %T", msg)
 	}
+
+	return nil
 }
 
 func (m *Module) HandleMsgCreateProductClass(index int, tx *juno.Tx, msg *productstypes.MsgCreateProductClass) error {
@@ -57,9 +57,11 @@ func (m *Module) HandleMsgCreateProductClass(index int, tx *juno.Tx, msg *produc
 	}
 	nftClass := nftCl.Class
 
-	metadata, specificMetadata, err := unmarshalProductClassMetadata[*productstypes.ProductClassData](nftClass.Data)
+	pdata := new(productstypes.ProductClassData)
+	metadata, specificMetadata, err := unmarshalProductClassMetadata[*productstypes.ProductClassData](nftClass.Data, pdata)
 	if err != nil {
 		return fmt.Errorf("error while handling create product class info msg: %s", err)
+
 	}
 
 	if err := m.db.SaveOrUpdateProductClass(class, nftClass, *metadata, **specificMetadata); err != nil {
@@ -85,7 +87,8 @@ func (m *Module) HandleMsgCreateTaskClass(index int, tx *juno.Tx, msg *productst
 	}
 	nftClass := nftCl.Class
 
-	metadata, specificMetadata, err := unmarshalProductClassMetadata[*productstypes.TaskClassData](nftClass.Data)
+	pdata := new(productstypes.TaskClassData)
+	metadata, specificMetadata, err := unmarshalProductClassMetadata[*productstypes.TaskClassData](nftClass.Data, pdata)
 	if err != nil {
 		return fmt.Errorf("error while handling create task class info msg: %s", err)
 	}
@@ -132,7 +135,8 @@ func (m *Module) HandleMsgUpdateClass(index int, tx *juno.Tx, msg *productstypes
 
 	switch class.ClassType {
 	case productstypes.ClassType_CLASS_TYPE_PRODUCT:
-		metadata, specificMetadata, err := unmarshalProductClassMetadata[*productstypes.ProductClassData](nftClass.Data)
+		pdata := new(productstypes.ProductClassData)
+		metadata, specificMetadata, err := unmarshalProductClassMetadata[*productstypes.ProductClassData](nftClass.Data, pdata)
 		if err != nil {
 			return fmt.Errorf("error while handling update class info msg: %s", err)
 		}
@@ -140,7 +144,8 @@ func (m *Module) HandleMsgUpdateClass(index int, tx *juno.Tx, msg *productstypes
 			return fmt.Errorf("error while handling update class info msg: %s", err)
 		}
 	case productstypes.ClassType_CLASS_TYPE_TASK:
-		metadata, specificMetadata, err := unmarshalProductClassMetadata[*productstypes.TaskClassData](nftClass.Data)
+		pdata := new(productstypes.TaskClassData)
+		metadata, specificMetadata, err := unmarshalProductClassMetadata[*productstypes.TaskClassData](nftClass.Data, pdata)
 		if err != nil {
 			return fmt.Errorf("error while handling update class info msg: %s", err)
 		}
@@ -158,15 +163,18 @@ func (m *Module) HandleMsgUpdateClass(index int, tx *juno.Tx, msg *productstypes
 	return nil
 }
 
-func unmarshalProductClassMetadata[T proto.Unmarshaler](data *types.Any) (*productstypes.StdClassData, *T, error) {
-	var stdData *productstypes.StdClassData
-	if err := stdData.Unmarshal(data.Value); err != nil {
-		return nil, nil, fmt.Errorf("error while unmarshaling std product class data: %s", err)
+func unmarshalProductClassMetadata[T proto.Unmarshaler](data *types.Any, spData T) (*productstypes.StdClassData, *T, error) {
+	stdData := new(productstypes.StdClassData)
+	if len(data.Value) > 0 {
+		if err := stdData.Unmarshal(data.Value); err != nil {
+			return nil, nil, fmt.Errorf("error while unmarshaling std product class data: %s", err)
+		}
 	}
 
-	var spData T
-	if err := spData.Unmarshal(stdData.SpecificMetadata.Value); err != nil {
-		return nil, nil, fmt.Errorf("error while unmarshaling specific product class data: %s", err)
+	if stdData.SpecificMetadata != nil {
+		if err := spData.Unmarshal(stdData.SpecificMetadata.Value); err != nil {
+			return nil, nil, fmt.Errorf("error while unmarshaling specific product class data: %s", err)
+		}
 	}
 
 	return stdData, &spData, nil

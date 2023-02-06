@@ -69,9 +69,9 @@ func (m Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 		return m.handleMsgSetScheduledHookDecayDenomForInactiveAccounts(index, tx, cosmosMsg)
 	case *econtypes.MsgSetScheduledHookRecurringMintToken:
 		return m.handleMsgSetScheduledHookRecurringMintToken(index, tx, cosmosMsg)
-	default:
-		return fmt.Errorf("unrecognized economics message type: %T", msg)
 	}
+
+	return nil
 }
 
 func (m Module) handleMsgRemoveHook(index int, tx *juno.Tx, msg *econtypes.MsgRemoveHook) error {
@@ -95,7 +95,7 @@ func (m Module) handleMsgTriggerScheduledHooks(index int, tx *juno.Tx, msg *econ
 }
 
 func (m Module) handleMsgEnableDisableNetworkEconomics(index int, tx *juno.Tx, msg *econtypes.MsgEnableDisableNetworkEconomics) error {
-	active, err := utils.FindEventAndAttr(index, tx, &econtypes.NetworkEnabled{}, "Active")
+	active, err := utils.FindEventAndAttr(index, tx, &econtypes.NetworkEnabledDisabled{}, "status")
 	if err != nil {
 		return fmt.Errorf("error while getting economics active from event: %s", err)
 	}

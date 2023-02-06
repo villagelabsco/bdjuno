@@ -17,7 +17,6 @@
 package rbac
 
 import (
-	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	juno "github.com/villagelabsco/juno/v4/types"
 	rbactypes "github.com/villagelabsco/villaged/x/rbac/types"
@@ -35,9 +34,9 @@ func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 		return m.HandleMsgUpdateRole(index, tx, cosmosMsg)
 	case *rbactypes.MsgSetRoleDelegates:
 		return m.HandleMsgSetRoleDelegates(index, tx, cosmosMsg)
-	default:
-		return fmt.Errorf("unrecognized rbac message type: %T", msg)
 	}
+
+	return nil
 }
 
 func (m *Module) HandleMsgDeclareRole(index int, height *juno.Tx, msg *rbactypes.MsgDeclareRole) error {

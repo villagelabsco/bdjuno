@@ -62,9 +62,9 @@ func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 		return m.handleMsgProposeLinkAccountToHuman(index, tx, cosmosMsg)
 	case *identitytypes.MsgCreateNetwork:
 		return m.handleMsgCreateNetwork(index, tx, cosmosMsg)
-	default:
-		return fmt.Errorf("unrecognized kyc message type: %T", msg)
 	}
+
+	return nil
 }
 
 func (m *Module) handleMsgVerifyAccount(index int, tx *juno.Tx, msg *identitytypes.MsgVerifyAccount) error {

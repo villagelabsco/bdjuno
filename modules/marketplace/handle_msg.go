@@ -38,13 +38,13 @@ func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 		return m.HandleMsgUpdateOrder(index, tx, cosmosMsg)
 	case *marketplacetypes.MsgDeleteOrder:
 		return m.HandleMsgDeleteOrder(index, tx, cosmosMsg)
-	default:
-		return fmt.Errorf("unrecognized marketplace message type: %T", msg)
 	}
+
+	return nil
 }
 
 func (m *Module) HandleMsgCreateListing(index int, tx *juno.Tx, msg *marketplacetypes.MsgCreateListing) error {
-	idx, err := utils.FindEventAndAttr(index, tx, &marketplacetypes.EvtCreatedListing{}, "Index")
+	idx, err := utils.FindEventAndAttr(index, tx, &marketplacetypes.EvtCreatedListing{}, "index")
 	if err != nil {
 		return fmt.Errorf("error while handling create listing msg: %s", err)
 	}
