@@ -19,6 +19,7 @@ package identity
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/villagelabsco/bdjuno/v3/database"
+	rbacsource "github.com/villagelabsco/bdjuno/v3/modules/rbac/source"
 	"github.com/villagelabsco/juno/v4/modules"
 	identitytypes "github.com/villagelabsco/villaged/x/identity/types"
 
@@ -34,14 +35,16 @@ type Module struct {
 	cdc codec.Codec
 	db  *database.Db
 
-	src identitysource.Source
+	src     identitysource.Source
+	rbacSrc rbacsource.Source
 }
 
-func NewModule(cdc codec.Codec, db *database.Db, src identitysource.Source) *Module {
+func NewModule(cdc codec.Codec, db *database.Db, src identitysource.Source, rbacSrc rbacsource.Source) *Module {
 	return &Module{
-		cdc: cdc,
-		db:  db,
-		src: src,
+		cdc:     cdc,
+		db:      db,
+		src:     src,
+		rbacSrc: rbacSrc,
 	}
 }
 

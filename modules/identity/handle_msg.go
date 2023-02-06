@@ -22,6 +22,7 @@ import (
 	"github.com/villagelabsco/bdjuno/v3/utils"
 	juno "github.com/villagelabsco/juno/v4/types"
 	identitytypes "github.com/villagelabsco/villaged/x/identity/types"
+	rbactypes "github.com/villagelabsco/villaged/x/rbac/types"
 )
 
 func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
@@ -68,10 +69,46 @@ func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 }
 
 func (m *Module) handleMsgVerifyAccount(index int, tx *juno.Tx, msg *identitytypes.MsgVerifyAccount) error {
+	humanId, err := utils.FindEventAndAttr(index, tx, &identitytypes.EvtVerifiedAccount{}, "humanId")
+	if err != nil {
+		return fmt.Errorf("error finding humanId from event: %s", err)
+	}
+
+	st, err := m.src.GetKycStatus(tx.Height, identitytypes.QueryGetKycStatusRequest{
+		IdProvider: msg.IdProvider,
+		HumanId:    humanId,
+	})
+	if err != nil {
+		return fmt.Errorf("error getting kyc status: %s", err)
+	}
+	status := st.KycStatus
+
+	if err := m.db.SaveOrUpdateKycStatus(&status); err != nil {
+		return fmt.Errorf("error saving kyc status: %s", err)
+	}
+
 	return nil
 }
 
 func (m *Module) handleMsgRevokeAccount(index int, tx *juno.Tx, msg *identitytypes.MsgRevokeAccount) error {
+	humanId, err := utils.FindEventAndAttr(index, tx, &identitytypes.EvtRevokedAccount{}, "humanId")
+	if err != nil {
+		return fmt.Errorf("error finding humanId from event: %s", err)
+	}
+
+	st, err := m.src.GetKycStatus(tx.Height, identitytypes.QueryGetKycStatusRequest{
+		IdProvider: msg.IdProvider,
+		HumanId:    humanId,
+	})
+	if err != nil {
+		return fmt.Errorf("error getting kyc status: %s", err)
+	}
+	status := st.KycStatus
+
+	if err := m.db.SaveOrUpdateKycStatus(&status); err != nil {
+		return fmt.Errorf("error saving kyc status: %s", err)
+	}
+
 	return nil
 }
 
@@ -87,28 +124,37 @@ func (m *Module) handleMsgCreateInvite(index int, tx *juno.Tx, msg *identitytype
 }
 
 func (m *Module) handleMsgClaimInvite(index int, tx *juno.Tx, msg *identitytypes.MsgClaimInvite) error {
-	if err := m.db.UpdateIdentityInvite(msg.Network, msg.Challenge, msg.Creator); err != nil {
+	if err := m.db.UpdateIdentityInvite(msg.Network, msg.Challenge, msg.Creator, true); err != nil {
 		return fmt.Errorf("error updating invite: %s", err)
 	}
 
-	// Update the user networks mapping
-	un, err := m.db.IdentityAccountNetworks(msg.Creator)
+	humanId, err := utils.FindEventAndAttr(index, tx, &identitytypes.EvtClaimedInvite{}, "humanId")
 	if err != nil {
-		return fmt.Errorf("error getting user networks: %s", err)
+		return fmt.Errorf("error finding humanId from event: %s", err)
 	}
 
-	if un.Index == "" {
-		un.Index = msg.Creator
-		un.Networks = make([]string, 1)
-		un.Networks[0] = msg.Network
-		if err := m.db.SaveIdentityAccountNetworks(un); err != nil {
-			return fmt.Errorf("error inserting user networks: %s", err)
-		}
-	} else {
-		un.Networks = append(un.Networks, msg.Network)
-		if err := m.db.UpdateIdentityAccountNetworks(un); err != nil {
-			return fmt.Errorf("error updating user networks: %s", err)
-		}
+	acc := &identitytypes.Account{
+		Index:      msg.Creator,
+		HumanId:    humanId,
+		PrivateAcc: false,
+	}
+	if err := m.db.SaveOrUpdateIdentityAccount(acc); err != nil {
+		return fmt.Errorf("error updating user networks: %s", err)
+	}
+
+	h, err := m.src.GetHuman(tx.Height, identitytypes.QueryGetHumanRequest{
+		Index: humanId,
+	})
+	if err != nil {
+		return fmt.Errorf("error getting human: %s", err)
+	}
+
+	if err := m.db.SaveOrUpdateIdentityHuman(&h.Human); err != nil {
+		return fmt.Errorf("error updating human: %s", err)
+	}
+
+	if err := m.db.SaveOrAppendIdentityAccountNetworks(msg.Creator, msg.Network); err != nil {
+		return fmt.Errorf("error updating user networks: %s", err)
 	}
 
 	return nil
@@ -175,7 +221,7 @@ func (m *Module) handleMsgRevokeNetwork(index int, tx *juno.Tx, msg *identitytyp
 }
 
 func (m *Module) handleMsgCreateHumanId(index int, tx *juno.Tx, msg *identitytypes.MsgCreateHumanId) error {
-	idx, err := utils.FindEventAndAttr(index, tx, &identitytypes.EvtCreatedHumanId{}, "HumanId")
+	idx, err := utils.FindEventAndAttr(index, tx, &identitytypes.EvtCreatedHumanId{}, "humanId")
 	if err != nil {
 		return fmt.Errorf("error getting human id from created event: %s", err)
 	}
@@ -243,6 +289,41 @@ func (m *Module) handleMsgSetIdentityProviderProviderAccounts(index int, tx *jun
 }
 
 func (m *Module) handleMsgJoinNetwork(index int, tx *juno.Tx, msg *identitytypes.MsgJoinNetwork) error {
+	humanId, err := utils.FindEventAndAttr(index, tx, &identitytypes.EvtJoinNetwork{}, "humanId")
+	if err != nil {
+		return fmt.Errorf("error getting human id from join network event: %s", err)
+	}
+
+	h, err := m.src.GetHuman(tx.Height, identitytypes.QueryGetHumanRequest{
+		Index: humanId,
+	})
+	if err != nil {
+		return fmt.Errorf("error getting human: %s", err)
+	}
+	human := h.Human
+
+	if err := m.db.SaveOrUpdateIdentityHuman(&human); err != nil {
+		return fmt.Errorf("error saving human: %s", err)
+	}
+
+	ip, err := utils.FindEventAndAttr(index, tx, &identitytypes.EvtJoinNetwork{}, "identityProvider")
+	if err != nil {
+		return fmt.Errorf("error getting identity provider from join network event: %s", err)
+	}
+
+	st, err := m.src.GetKycStatus(tx.Height, identitytypes.QueryGetKycStatusRequest{
+		IdProvider: ip,
+		HumanId:    humanId,
+	})
+	if err != nil {
+		return fmt.Errorf("error getting kyc status: %s", err)
+	}
+	status := st.KycStatus
+
+	if err := m.db.SaveOrUpdateKycStatus(&status); err != nil {
+		return fmt.Errorf("error saving kyc status: %s", err)
+	}
+
 	return nil
 }
 
@@ -263,11 +344,62 @@ func (m *Module) handleMsgProposeLinkAccountToHuman(index int, tx *juno.Tx, msg 
 }
 
 func (m *Module) handleMsgCreateNetwork(index int, tx *juno.Tx, msg *identitytypes.MsgCreateNetwork) error {
-	return m.db.SaveIdentityNetwork(&identitytypes.Network{
+	if err := m.db.SaveIdentityNetwork(&identitytypes.Network{
 		Index:            msg.ShortName,
 		Active:           true,
 		FullName:         msg.FullName,
 		IdentityProvider: msg.IdentityProvider,
 		InviteOnly:       msg.InviteOnly,
+	}); err != nil {
+		return fmt.Errorf("error saving network: %s", err)
+	}
+
+	ownerAuthorization := msg.ShortName + identitytypes.NamespaceSeparator + identitytypes.InitAdminGroupName
+	auth, err := m.rbacSrc.GetAuthorizations(tx.Height, rbactypes.QueryGetAuthorizationsRequest{
+		Index: ownerAuthorization,
 	})
+	if err != nil {
+		return fmt.Errorf("error getting authorizations: %s", err)
+	}
+	authorizations := auth.Authorizations
+
+	if err := m.db.SaveOrUpdateRbacAuthorization(&authorizations); err != nil {
+		return fmt.Errorf("error saving authorizations: %s", err)
+	}
+
+	humanId, err := utils.FindEventAndAttr(index, tx, &identitytypes.EvtJoinNetwork{}, "humanId")
+	if err != nil {
+		return fmt.Errorf("error getting human id from join network event: %s", err)
+	}
+
+	h, err := m.src.GetHuman(tx.Height, identitytypes.QueryGetHumanRequest{
+		Index: humanId,
+	})
+	if err != nil {
+		return fmt.Errorf("error getting human: %s", err)
+	}
+	human := h.Human
+
+	if err := m.db.SaveOrUpdateIdentityHuman(&human); err != nil {
+		return fmt.Errorf("error saving human: %s", err)
+	}
+
+	st, err := m.src.GetKycStatus(tx.Height, identitytypes.QueryGetKycStatusRequest{
+		IdProvider: msg.IdentityProvider,
+		HumanId:    humanId,
+	})
+	if err != nil {
+		return fmt.Errorf("error getting kyc status: %s", err)
+	}
+	status := st.KycStatus
+
+	if err := m.db.SaveOrUpdateKycStatus(&status); err != nil {
+		return fmt.Errorf("error saving kyc status: %s", err)
+	}
+
+	if err := m.db.SaveOrAppendIdentityAccountNetworks(msg.Creator, msg.ShortName); err != nil {
+		return fmt.Errorf("error saving account networks: %s", err)
+	}
+
+	return nil
 }
