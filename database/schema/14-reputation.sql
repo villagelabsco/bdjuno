@@ -18,6 +18,6 @@ CREATE TABLE reputation_feedback_aggregate (
     negative jsonb NOT NULL,
     neutral jsonb NOT NULL,
     feedbackers jsonb NOT NULL,
-    last_change TIMESTAMP NOT NULL,
+    last_change TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     primary key (index)
 );

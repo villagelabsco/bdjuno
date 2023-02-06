@@ -70,7 +70,7 @@ CREATE TABLE token_pending_clawbackable_operations (
     "from" text not null references account (address),
     "to" text not null references account (address),
     amount jsonb not null,
-    clearing_timestamp timestamp not null,
+    clearing_timestamp TIMESTAMP WITHOUT TIME ZONE not null,
     primary key (id)
 );
 
@@ -78,7 +78,7 @@ CREATE TABLE token_pending_clawbackable_multi_operations (
    id serial not null,
    inputs jsonb not null,
    outputs jsonb not null,
-   clearing_timestamp timestamp not null,
+   clearing_timestamp TIMESTAMP WITHOUT TIME ZONE not null,
    primary key (id)
 );
 

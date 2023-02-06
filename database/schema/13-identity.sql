@@ -54,7 +54,7 @@ CREATE TABLE identity_kyc_statuses (
     identity_provider TEXT NOT NULL REFERENCES identity_providers (index),
     status numeric NOT NULL,
     data_hash TEXT NOT NULL,
-    timestamp TIMESTAMP NOT NULL,
+    timestamp TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     primary key (human_id, identity_provider)
 );
 
@@ -68,7 +68,7 @@ CREATE TABLE identity_network_kyb (
     index TEXT NOT NULL,
     status numeric NOT NULL,
     data_hash TEXT NOT NULL,
-    timestamp TIMESTAMP NOT NULL,
+    timestamp TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     metadata TEXT NOT NULL,
     primary key (index)
 );
