@@ -49,10 +49,12 @@ func (db *Db) SaveEconomicsTransactionHook(hook *econtypes.TransactionHook) erro
 	if _, err := db.SQL.Exec(stmt,
 		h.Network,
 		h.Index,
+		h.Trigger,
 		h.Type,
 		h.NameId,
 		h.Description,
-		h.Params); err != nil {
+		h.Params,
+	); err != nil {
 		return fmt.Errorf("error while storing economics transaction hook: %s", err)
 	}
 
@@ -81,7 +83,8 @@ func (db *Db) SaveEconomicsScheduledHook(hook *econtypes.ScheduledHook) error {
 		h.AutoTrigger,
 		h.Params,
 		h.LastExecutedTimestamp,
-		h.LastExecutedBlock); err != nil {
+		h.LastExecutedBlock,
+	); err != nil {
 		return fmt.Errorf("error while storing economics scheduled hook: %s", err)
 	}
 
