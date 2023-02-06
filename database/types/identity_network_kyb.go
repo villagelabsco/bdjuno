@@ -18,14 +18,15 @@ package types
 
 import (
 	identitytypes "github.com/villagelabsco/villaged/x/identity/types"
+	"time"
 )
 
 type DbIdentityNetworkKyb struct {
-	Index     string `db:"index"`
-	Status    uint64 `db:"status"`
-	DataHash  string `db:"data_hash"`
-	Timestamp uint64 `db:"timestamp"`
-	Metadata  string `db:"metadata"`
+	Index     string    `db:"index"`
+	Status    uint64    `db:"status"`
+	DataHash  string    `db:"data_hash"`
+	Timestamp time.Time `db:"timestamp"`
+	Metadata  string    `db:"metadata"`
 }
 
 func (DbIdentityNetworkKyb) FromProto(kyb *identitytypes.NetworkKyb) DbIdentityNetworkKyb {
@@ -33,7 +34,7 @@ func (DbIdentityNetworkKyb) FromProto(kyb *identitytypes.NetworkKyb) DbIdentityN
 		Index:     kyb.Index,
 		Status:    kyb.Status,
 		DataHash:  kyb.DataHash,
-		Timestamp: kyb.Timestamp,
+		Timestamp: time.Unix(int64(kyb.Timestamp), 0),
 		Metadata:  kyb.Metadata,
 	}
 }
