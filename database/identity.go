@@ -292,10 +292,10 @@ func (db *Db) SaveOrUpdateIdentityAccount(account *identitytypes.Account) error 
 	return nil
 }
 
-func (db *Db) SaveOrUpdateKycStatus(status *identitytypes.KycStatus) error {
+func (db *Db) SaveOrUpdateKycStatus(provider string, status *identitytypes.KycStatus) error {
 	stmt := `
 		INSERT INTO identity_kyc_statuses (human_id, identity_provider, status, data_hash, timestamp) 
-		VALUES ($1, $2, $3, $4)
+		VALUES ($1, $2, $3, $4, $5)
 		ON CONFLICT (human_id) DO
 		UPDATE
 		    SET
@@ -306,9 +306,10 @@ func (db *Db) SaveOrUpdateKycStatus(status *identitytypes.KycStatus) error {
 		        timestamp = $5;
 	`
 
-	dbSt := types.DbIdentityKycStatus{}.FromProto(status)
+	dbSt := types.DbIdentityKycStatus{}.FromProto(provider, status)
 	_, err := db.SQL.Exec(stmt,
 		dbSt.HumanId,
+		dbSt.IdentityProvider,
 		dbSt.Status,
 		dbSt.DataHash,
 		dbSt.Timestamp,
