@@ -83,7 +83,7 @@ func (m *Module) handleMsgVerifyAccount(index int, tx *juno.Tx, msg *identitytyp
 	}
 	status := st.KycStatus
 
-	if err := m.db.SaveOrUpdateKycStatus(&status); err != nil {
+	if err := m.db.SaveOrUpdateKycStatus(msg.IdProvider, &status); err != nil {
 		return fmt.Errorf("error saving kyc status: %s", err)
 	}
 
@@ -105,7 +105,7 @@ func (m *Module) handleMsgRevokeAccount(index int, tx *juno.Tx, msg *identitytyp
 	}
 	status := st.KycStatus
 
-	if err := m.db.SaveOrUpdateKycStatus(&status); err != nil {
+	if err := m.db.SaveOrUpdateKycStatus(msg.IdProvider, &status); err != nil {
 		return fmt.Errorf("error saving kyc status: %s", err)
 	}
 
@@ -320,7 +320,7 @@ func (m *Module) handleMsgJoinNetwork(index int, tx *juno.Tx, msg *identitytypes
 	}
 	status := st.KycStatus
 
-	if err := m.db.SaveOrUpdateKycStatus(&status); err != nil {
+	if err := m.db.SaveOrUpdateKycStatus(ip, &status); err != nil {
 		return fmt.Errorf("error saving kyc status: %s", err)
 	}
 
@@ -393,7 +393,7 @@ func (m *Module) handleMsgCreateNetwork(index int, tx *juno.Tx, msg *identitytyp
 	}
 	status := st.KycStatus
 
-	if err := m.db.SaveOrUpdateKycStatus(&status); err != nil {
+	if err := m.db.SaveOrUpdateKycStatus(msg.IdentityProvider, &status); err != nil {
 		return fmt.Errorf("error saving kyc status: %s", err)
 	}
 
