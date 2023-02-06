@@ -22,7 +22,7 @@ CREATE TABLE token_offramp_operations (
     account text not null references account (address),
     human_id text not null,
     executed boolean not null,
-    amount jsonb not null,
+    amount COIN not null,
     creation_block numeric not null,
     execution_block numeric not null,
     funds_transfer_method_pseudo_id text not null,
@@ -33,7 +33,7 @@ CREATE TABLE token_offramp_operations (
 CREATE TABLE token_onramp_operations (
     id serial not null,
     payment_ref text not null,
-    amount jsonb not null,
+    amount COIN not null,
     account text not null references account (address),
     primary key (id)
 );
@@ -57,19 +57,19 @@ CREATE TABLE token_known_accounts (
 
 CREATE TABLE token_immobilized_funds (
     account text not null references account (address),
-    amount jsonb not null
+    amount COIN not null
 );
 
 CREATE TABLE token_pending_balances (
     account text not null references account (address),
-    amount jsonb not null
+    amount COIN not null
 );
 
 CREATE TABLE token_pending_clawbackable_operations (
     id serial not null,
     "from" text not null references account (address),
     "to" text not null references account (address),
-    amount jsonb not null,
+    amount COIN not null,
     clearing_timestamp TIMESTAMP WITHOUT TIME ZONE not null,
     primary key (id)
 );
