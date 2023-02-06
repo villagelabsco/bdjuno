@@ -20,7 +20,6 @@ import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	juno "github.com/villagelabsco/juno/v4/types"
-	"github.com/pkg/errors"
 	reputationtypes "github.com/villagelabsco/villaged/x/reputation/types"
 )
 
@@ -38,11 +37,6 @@ func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 }
 
 func (m *Module) HandleMsgPostFeedback(index int, tx *juno.Tx, msg *reputationtypes.MsgPostFeedback) error {
-	err := m.db.SavePostFeedback(msg)
-	if err != nil {
-		return errors.Wrap(err, "error while saving reputation post feedback")
-	}
-
 	fb, err := m.s.GetFeedback(tx.Height, reputationtypes.QueryGetFeedbackRequest{
 		Network: msg.Network,
 		Index:   msg.DstAccount,
@@ -51,18 +45,8 @@ func (m *Module) HandleMsgPostFeedback(index int, tx *juno.Tx, msg *reputationty
 		return fmt.Errorf("error while getting feedback: %s", err)
 	}
 
-	existing, err := m.db.FeedbackAggregate(msg.DstAccount)
-	if err != nil {
-		return fmt.Errorf("error while getting feedback aggregate: %s", err)
-	}
-	if existing == nil {
-		if err := m.db.SaveFeedbackAggregate(&fb.Feedback); err != nil {
-			return fmt.Errorf("error while inserting feedback aggregate: %s", err)
-		}
-	} else {
-		if err := m.db.UpdateFeedbackAggregate(&fb.Feedback); err != nil {
-			return fmt.Errorf("error while updating feedback aggregate: %s", err)
-		}
+	if err := m.db.SaveOrUpdateReputationFeedback(&fb.Feedback); err != nil {
+		return fmt.Errorf("error while saving feedback: %s", err)
 	}
 
 	return nil
