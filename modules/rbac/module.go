@@ -19,6 +19,7 @@ package rbac
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/villagelabsco/bdjuno/v3/database"
+	rbacsource "github.com/villagelabsco/bdjuno/v3/modules/rbac/source"
 	"github.com/villagelabsco/juno/v4/modules"
 	rbactypes "github.com/villagelabsco/villaged/x/rbac/types"
 )
@@ -31,10 +32,16 @@ var (
 type Module struct {
 	cdc codec.Codec
 	db  *database.Db
+
+	src rbacsource.Source
 }
 
-func NewModule(cdc codec.Codec, db *database.Db) *Module {
-	return &Module{cdc: cdc, db: db}
+func NewModule(cdc codec.Codec, db *database.Db, src rbacsource.Source) *Module {
+	return &Module{
+		cdc: cdc,
+		db:  db,
+		src: src,
+	}
 }
 
 func (m *Module) Name() string {

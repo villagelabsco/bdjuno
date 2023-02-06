@@ -22,10 +22,18 @@ import (
 	rbactypes "github.com/villagelabsco/villaged/x/rbac/types"
 )
 
-func (db *Db) SaveOrUpdateAuthorization(au *rbactypes.Authorizations) error {
+func (db *Db) SaveOrUpdateRbacAuthorization(au *rbactypes.Authorizations) error {
 	stmt := `
 		INSERT INTO rbac_authorizations (index, messages, metadata, group_id, role_admins, role_delegates) 
 		VALUES ($1, $2, $3, $4, $5, $6)
+		ON CONFLICT (index) DO 
+		UPDATE 
+		    SET
+		        messages = $2,
+		        metadata = $3,
+		        group_id = $4,
+		        role_admins = $5,
+		        role_delegates = $6;      
 	`
 
 	dbau, err := types.DbRbacAuthorization{}.FromProto(au)
