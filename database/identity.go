@@ -57,48 +57,45 @@ func (db *Db) UpdateIdentityNetwork(network *identitytypes.Network) error {
 
 func (db *Db) IdentityAccountNetworks(index string) (*identitytypes.AccountNetworks, error) {
 	q := `
-	SELECT ("index", "networks") FROM identity_user_networks 
-	WHERE "index" = $1;`
+	SELECT (index, networks) FROM identity_account_networks 
+	WHERE index = $1
+	LIMIT 1;`
 
-	var userNetworks identitytypes.AccountNetworks
-	err := db.Sqlx.Select(&userNetworks, q, index)
+	var userNetworks types.DbIdentityAccountNetworks
+	err := db.SQL.Select(&userNetworks, q, index)
 	if err != nil {
 		return nil, fmt.Errorf("error while getting user networks: %s", err)
 	}
 
-	return &userNetworks, nil
+	res, err := userNetworks.ToProto()
+	if err != nil {
+		return nil, fmt.Errorf("error while converting user networks: %s", err)
+	}
+
+	return res, nil
 }
 
-func (db *Db) SaveIdentityAccountNetworks(userNetworks *identitytypes.AccountNetworks) error {
+func (db *Db) SaveOrAppendIdentityAccountNetworks(index, network string) error {
 	stmt := `
-	INSERT INTO identity_user_networks ("index", "networks")
-	VALUES ($1, $2);`
+	INSERT INTO identity_account_networks as ian ("index", "networks") 
+	VALUES ($1, $2) 
+	ON CONFLICT (index) DO
+	UPDATE
+		SET
+		    networks = ian.networks || $2::jsonb;
+	`
 
-	un, err := types.DbIdentityAccountNetworks{}.FromProto(userNetworks)
+	un, err := types.DbIdentityAccountNetworks{}.FromProto(
+		&identitytypes.AccountNetworks{
+			Index:    index,
+			Networks: []string{network},
+		})
 	if err != nil {
 		return fmt.Errorf("error while converting user networks: %s", err)
 	}
 	_, err = db.SQL.Exec(stmt, un.Index, un.Networks)
 	if err != nil {
 		return fmt.Errorf("error while inserting user networks: %s", err)
-	}
-
-	return nil
-}
-
-func (db *Db) UpdateIdentityAccountNetworks(userNetworks *identitytypes.AccountNetworks) error {
-	stmt := `
-	UPDATE identity_user_networks AS vun
-	SET networks = $2
-	WHERE vun.index = $1;`
-
-	un, err := types.DbIdentityAccountNetworks{}.FromProto(userNetworks)
-	if err != nil {
-		return fmt.Errorf("error while converting user networks: %s", err)
-	}
-	_, err = db.SQL.Exec(stmt, un.Index, un.Networks)
-	if err != nil {
-		return fmt.Errorf("error while updating user networks: %s", err)
 	}
 
 	return nil
@@ -127,8 +124,9 @@ func (db *Db) SaveIdentityInvite(network string, invite *identitytypes.Invite) e
 
 func (db *Db) SaveMultipleIdentityInvites(network string, invites []*identitytypes.Invite) error {
 	stmt := `
-	INSERT INTO identity_invites ("network", "challenge", "registered", "confirmed_account", "invite_creator", "human_id", "given_roles")
-	VALUES %s;`
+		INSERT INTO identity_invites ("network", "challenge", "registered", "confirmed_account", "invite_creator", "human_id", "given_roles")
+		VALUES %s;
+		`
 
 	values := make([]string, 0, len(invites))
 	for _, invite := range invites {
@@ -153,7 +151,7 @@ func (db *Db) SaveMultipleIdentityInvites(network string, invites []*identitytyp
 	return nil
 }
 
-func (db *Db) UpdateIdentityInvite(network string, challenge string, confirmedAccount string) error {
+func (db *Db) UpdateIdentityInvite(network, challenge, confirmedAccount string, registered bool) error {
 	stmt := `
 	UPDATE identity_invites
 	SET 
@@ -245,14 +243,15 @@ func (db *Db) SaveOrUpdateIdentityNetworkKyb(kyb *identitytypes.NetworkKyb) erro
 
 func (db *Db) SaveOrUpdateIdentityHuman(human *identitytypes.Human) error {
 	stmt := `
-		INSERT INTO identity_humans (index, vns_domain, accounts, network_primary_wallet) 
-		VALUES ($1, $2, $3, $4)
+		INSERT INTO identity_humans (index, vns_domain, accounts, networks, network_primary_wallet) 
+		VALUES ($1, $2, $3, $4, $5)
 		ON CONFLICT (index) DO
 		UPDATE
 		    SET
 		        vns_domain = $2,
 		        accounts = $3,
-		        network_primary_wallet = $4;
+		        networks = $4,
+		        network_primary_wallet = $5;
 	`
 
 	dbHuman, err := types.DbIdentityHuman{}.FromProto(human)
@@ -263,10 +262,59 @@ func (db *Db) SaveOrUpdateIdentityHuman(human *identitytypes.Human) error {
 		dbHuman.Index,
 		dbHuman.VnsDomain,
 		dbHuman.Accounts,
+		dbHuman.Networks,
 		dbHuman.NetworkPrimaryWallet,
 	)
 	if err != nil {
 		return fmt.Errorf("error while storing human: %s", err)
+	}
+
+	return nil
+}
+
+func (db *Db) SaveOrUpdateIdentityAccount(account *identitytypes.Account) error {
+	stmt := `
+		INSERT INTO identity_accounts (index, human_id, private_acc) 
+		VALUES ($1, $2, $3)
+		ON CONFLICT (index) DO 
+		UPDATE
+			SET
+			    human_id = $2,
+			    private_acc = $3
+	`
+
+	dbAcc := types.DbIdentityAccount{}.FromProto(account)
+	_, err := db.SQL.Exec(stmt, dbAcc.Index, dbAcc.HumanId, dbAcc.PrivateAcc)
+	if err != nil {
+		return fmt.Errorf("error while storing account: %s", err)
+	}
+
+	return nil
+}
+
+func (db *Db) SaveOrUpdateKycStatus(status *identitytypes.KycStatus) error {
+	stmt := `
+		INSERT INTO identity_kyc_statuses (human_id, identity_provider, status, data_hash, timestamp) 
+		VALUES ($1, $2, $3, $4)
+		ON CONFLICT (human_id) DO
+		UPDATE
+		    SET
+		        human_id = $1,
+		        identity_provider = $2,
+		        status = $3,
+		        data_hash = $4,
+		        timestamp = $5;
+	`
+
+	dbSt := types.DbIdentityKycStatus{}.FromProto(status)
+	_, err := db.SQL.Exec(stmt,
+		dbSt.HumanId,
+		dbSt.Status,
+		dbSt.DataHash,
+		dbSt.Timestamp,
+	)
+	if err != nil {
+		return fmt.Errorf("error while storing kyc status: %s", err)
 	}
 
 	return nil

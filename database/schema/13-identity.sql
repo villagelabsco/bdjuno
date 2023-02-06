@@ -11,6 +11,7 @@ CREATE TABLE identity_humans (
     index TEXT NOT NULL,
     vns_domain TEXT NOT NULL,
     accounts jsonb NOT NULL,
+    networks jsonb NOT NULL,
     network_primary_wallet jsonb NOT NULL,
     primary key (index)
 );
@@ -41,19 +42,20 @@ CREATE TABLE identity_invites (
     network TEXT NOT NULL,
     challenge TEXT NOT NULL,
     registered bool NOT NULL,
-    confirmed_account TEXT NOT NULL REFERENCES account (address),
+    confirmed_account TEXT,
     invite_creator TEXT NOT NULL REFERENCES account (address),
     human_id TEXT NOT NULL REFERENCES identity_humans (index),
     given_roles text NOT NULL,
     primary key (challenge)
 );
 
-CREATE TABLE identity_statuses (
-    provider_id TEXT NOT NULL REFERENCES identity_providers (index),
+CREATE TABLE identity_kyc_statuses (
     human_id TEXT NOT NULL REFERENCES identity_humans (index),
+    identity_provider TEXT NOT NULL REFERENCES identity_providers (index),
+    status numeric NOT NULL,
     data_hash TEXT NOT NULL,
     timestamp TIMESTAMP NOT NULL,
-    primary key (human_id)
+    primary key (human_id, identity_provider)
 );
 
 CREATE TABLE identity_nb_invite_per_day (

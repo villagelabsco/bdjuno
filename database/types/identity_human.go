@@ -27,6 +27,7 @@ type DbIdentityHuman struct {
 	Index                string             `db:"index"`
 	VnsDomain            string             `db:"vns_domain"`
 	Accounts             sqlxtypes.JSONText `db:"accounts"`
+	Networks             sqlxtypes.JSONText `db:"networks"`
 	NetworkPrimaryWallet sqlxtypes.JSONText `db:"network_primary_wallet"`
 }
 
@@ -39,11 +40,16 @@ func (DbIdentityHuman) FromProto(h *identitytypes.Human) (DbIdentityHuman, error
 	if err != nil {
 		return DbIdentityHuman{}, fmt.Errorf("error while marshalling network primary wallet: %s", err)
 	}
+	nwks, err := json.Marshal(h.Networks)
+	if err != nil {
+		return DbIdentityHuman{}, fmt.Errorf("error while marshalling networks: %s", err)
+	}
 
 	return DbIdentityHuman{
 		Index:                h.Index,
 		VnsDomain:            h.VnsDomain,
 		Accounts:             accs,
+		Networks:             nwks,
 		NetworkPrimaryWallet: npw,
 	}, nil
 }
