@@ -6,6 +6,7 @@ import (
 	"github.com/gogo/protobuf/proto"
 	juno "github.com/villagelabsco/juno/v4/types"
 	"strconv"
+	"strings"
 
 	grpctypes "github.com/cosmos/cosmos-sdk/types/grpc"
 	"google.golang.org/grpc/metadata"
@@ -35,7 +36,7 @@ func GetHeightRequestContext(context context.Context, height int64) context.Cont
 }
 
 func ProtoMsgName(msg proto.Message) string {
-	return "/" + proto.MessageName(msg)
+	return proto.MessageName(msg)
 }
 
 func FindEventAndAttr(index int, tx *juno.Tx, event proto.Message, attrKey string) (string, error) {
@@ -47,5 +48,7 @@ func FindEventAndAttr(index int, tx *juno.Tx, event proto.Message, attrKey strin
 	if err != nil {
 		return "", fmt.Errorf("error while finding %s attribute in evt %s: %s", attrKey, ProtoMsgName(event), err)
 	}
+
+	res = strings.Replace(res, "\"", "", -1)
 	return res, nil
 }
