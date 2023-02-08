@@ -22,19 +22,19 @@ import (
 )
 
 type DbIdentityKycStatus struct {
-	HumanId          string    `db:"human_id"`
-	IdentityProvider string    `db:"identity_provider"`
-	Status           time.Time `db:"status"`
-	DataHash         string    `db:"data_hash"`
-	Timestamp        uint64    `db:"timestamp"`
+	HumanId          string                      `db:"human_id"`
+	IdentityProvider string                      `db:"identity_provider"`
+	Status           identitytypes.KycStatusType `db:"status"`
+	DataHash         string                      `db:"data_hash"`
+	Timestamp        time.Time                   `db:"timestamp"`
 }
 
 func (DbIdentityKycStatus) FromProto(provider string, st *identitytypes.KycStatus) DbIdentityKycStatus {
 	return DbIdentityKycStatus{
 		HumanId:          st.HumanId,
 		IdentityProvider: provider,
-		Status:           time.Unix(int64(st.Status), 0),
+		Status:           identitytypes.KycStatusType(st.Status),
 		DataHash:         st.DataHash,
-		Timestamp:        st.Timestamp,
+		Timestamp:        time.Unix(int64(st.Timestamp), 0),
 	}
 }

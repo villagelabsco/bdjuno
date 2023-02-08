@@ -33,7 +33,9 @@ CREATE TABLE identity_networks (
 );
 
 CREATE TABLE identity_account_networks (
-    index TEXT NOT NULL REFERENCES identity_accounts (index),
+    index TEXT NOT NULL
+        REFERENCES account (address)
+        REFERENCES identity_accounts (index),
     networks jsonb NOT NULL,
     primary key (index)
 );
@@ -43,7 +45,9 @@ CREATE TABLE identity_invites (
     challenge TEXT NOT NULL,
     registered bool NOT NULL,
     confirmed_account TEXT,
-    invite_creator TEXT NOT NULL REFERENCES account (address),
+    invite_creator TEXT NOT NULL
+        REFERENCES account (address)
+        REFERENCES identity_accounts (index),
     human_id TEXT NOT NULL REFERENCES identity_humans (index),
     given_roles text NOT NULL,
     primary key (challenge)
@@ -73,18 +77,13 @@ CREATE TABLE identity_network_kyb (
     primary key (index)
 );
 
-CREATE TABLE identity_primary_wallet_transfer_proposals (
-   index TEXT NOT NULL,
-   proposer_account TEXT NOT NULL REFERENCES account (address),
-   human_id TEXT NOT NULL REFERENCES identity_humans (index),
-   set_as_primary_wallet_for_network TEXT NOT NULL REFERENCES identity_networks (index),
-   deposit jsonb NOT NULL,
-   primary key (index)
+CREATE TABLE identity_account_link_proposals (
+    index TEXT NOT NULL,
+    proposer_account TEXT NOT NULL
+        REFERENCES account (address)
+        REFERENCES identity_accounts (index),
+    human_id TEXT NOT NULL REFERENCES identity_humans (index),
+    set_as_primary_wallet_for_network TEXT NOT NULL REFERENCES identity_networks (index),
+    deposit COIN NOT NULL,
+    primary key (index)
 );
-
-CREATE TABLE identity_human_proposals (
-     human_id TEXT NOT NULL REFERENCES identity_humans (index),
-     proposals jsonb NOT NULL,
-     primary key (human_id)
-);
-

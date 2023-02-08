@@ -157,6 +157,8 @@ func (m *Module) handleMsgClaimInvite(index int, tx *juno.Tx, msg *identitytypes
 		return fmt.Errorf("error updating user networks: %s", err)
 	}
 
+	fg, err := m.src.
+
 	return nil
 }
 
@@ -328,18 +330,29 @@ func (m *Module) handleMsgJoinNetwork(index int, tx *juno.Tx, msg *identitytypes
 }
 
 func (m *Module) handleMsgCreateMultipleHumanIds(index int, tx *juno.Tx, msg *identitytypes.MsgCreateMultipleHumanIds) error {
+	// TODO: How do we get multiple events being sent out?
+	// Or we need a different event being sent out?
 	return nil
 }
 
 func (m *Module) handleMsgSetPrimaryNetworkWallet(index int, tx *juno.Tx, msg *identitytypes.MsgSetPrimaryNetworkWallet) error {
-	return nil
-}
+	humanId, err := utils.FindEventAndAttr(index, tx, &identitytypes.EvtSetPrimaryNetworkWallet{}, "humanId")
+	if err != nil {
+		return fmt.Errorf("error getting human id from set primary network wallet event: %s", err)
+	}
 
-func (m *Module) handleMsgAcceptLinkWalletToHumanProposal(index int, tx *juno.Tx, msg *identitytypes.MsgAcceptLinkWalletToHumanProposal) error {
-	return nil
-}
+	h, err := m.src.GetHuman(tx.Height, identitytypes.QueryGetHumanRequest{
+		Index: humanId,
+	})
+	if err != nil {
+		return fmt.Errorf("error getting human: %s", err)
+	}
+	human := h.Human
 
-func (m *Module) handleMsgProposeLinkAccountToHuman(index int, tx *juno.Tx, msg *identitytypes.MsgProposeLinkAccountToHuman) error {
+	if err := m.db.SaveOrUpdateIdentityHuman(&human); err != nil {
+		return fmt.Errorf("error saving human: %s", err)
+	}
+
 	return nil
 }
 
@@ -384,6 +397,15 @@ func (m *Module) handleMsgCreateNetwork(index int, tx *juno.Tx, msg *identitytyp
 		return fmt.Errorf("error saving human: %s", err)
 	}
 
+	acc := identitytypes.Account{
+		Index:      msg.Creator,
+		HumanId:    humanId,
+		PrivateAcc: false,
+	}
+	if err := m.db.SaveOrUpdateIdentityAccount(&acc); err != nil {
+		return fmt.Errorf("error saving account: %s", err)
+	}
+
 	st, err := m.src.GetKycStatus(tx.Height, identitytypes.QueryGetKycStatusRequest{
 		IdProvider: msg.IdentityProvider,
 		HumanId:    humanId,
@@ -399,6 +421,66 @@ func (m *Module) handleMsgCreateNetwork(index int, tx *juno.Tx, msg *identitytyp
 
 	if err := m.db.SaveOrAppendIdentityAccountNetworks(msg.Creator, msg.ShortName); err != nil {
 		return fmt.Errorf("error saving account networks: %s", err)
+	}
+
+	return nil
+}
+
+func (m *Module) handleMsgAcceptLinkWalletToHumanProposal(index int, tx *juno.Tx, msg *identitytypes.MsgAcceptLinkWalletToHumanProposal) error {
+	if err := m.db.DeleteIdentityAccountLinkProposal(msg.ProposalId); err != nil {
+		return fmt.Errorf("error deleting account link proposal: %s", err)
+	}
+
+	proposerAcc, err := utils.FindEventAndAttr(index, tx, &identitytypes.EvtLinkAccountToHumanApproved{}, "proposerAccount")
+	if err != nil {
+		return fmt.Errorf("error getting proposer account from link account to human approved event: %s", err)
+	}
+
+	humanId, err := utils.FindEventAndAttr(index, tx, &identitytypes.EvtLinkAccountToHumanApproved{}, "humanId")
+	if err != nil {
+		return fmt.Errorf("error getting human id from link account to human approved event: %s", err)
+	}
+
+	acc := identitytypes.Account{
+		Index:      proposerAcc,
+		HumanId:    humanId,
+		PrivateAcc: false,
+	}
+	if err := m.db.SaveOrUpdateIdentityAccount(&acc); err != nil {
+		return fmt.Errorf("error saving account: %s", err)
+	}
+
+	h, err := m.src.GetHuman(tx.Height, identitytypes.QueryGetHumanRequest{
+		Index: humanId,
+	})
+	if err != nil {
+		return fmt.Errorf("error getting human: %s", err)
+	}
+	human := h.Human
+
+	if err := m.db.SaveOrUpdateIdentityHuman(&human); err != nil {
+		return fmt.Errorf("error saving human: %s", err)
+	}
+
+	return nil
+}
+
+func (m *Module) handleMsgProposeLinkAccountToHuman(index int, tx *juno.Tx, msg *identitytypes.MsgProposeLinkAccountToHuman) error {
+	propIdx, err := utils.FindEventAndAttr(index, tx, &identitytypes.EvtProposeLinkAccountToHuman{}, "proposalIdx")
+	if err != nil {
+		return fmt.Errorf("error getting proposal index from propose link account to human event: %s", err)
+	}
+
+	p, err := m.src.GetAccountLinkProposal(tx.Height, identitytypes.QueryGetAccountLinkProposalRequest{
+		Index: propIdx,
+	})
+	if err != nil {
+		return fmt.Errorf("error getting account link proposal: %s", err)
+	}
+	proposal := p.AccountLinkProposal
+
+	if err := m.db.SaveOrUpdateIdentityAccountLinkProposal(&proposal); err != nil {
+		return fmt.Errorf("error saving account link proposal: %s", err)
 	}
 
 	return nil

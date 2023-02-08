@@ -296,7 +296,7 @@ func (db *Db) SaveOrUpdateKycStatus(provider string, status *identitytypes.KycSt
 	stmt := `
 		INSERT INTO identity_kyc_statuses (human_id, identity_provider, status, data_hash, timestamp) 
 		VALUES ($1, $2, $3, $4, $5)
-		ON CONFLICT (human_id) DO
+		ON CONFLICT (human_id, identity_provider) DO
 		UPDATE
 		    SET
 		        human_id = $1,
@@ -316,6 +316,47 @@ func (db *Db) SaveOrUpdateKycStatus(provider string, status *identitytypes.KycSt
 	)
 	if err != nil {
 		return fmt.Errorf("error while storing kyc status: %s", err)
+	}
+
+	return nil
+}
+
+func (db *Db) SaveOrUpdateIdentityAccountLinkProposal(prop *identitytypes.AccountLinkProposal) error {
+	stmt := `
+		INSERT INTO identity_account_link_proposals (index, proposer_account, human_id, set_as_primary_wallet_for_network, deposit) 
+		VALUES ($1, $2, $3, $4, $5)
+		ON CONFLICT (index) DO
+		UPDATE
+		    SET
+		        proposer_account = $2,
+		        human_id = $3,
+		        set_as_primary_wallet_for_network = $4,
+		        deposit = $5;
+	`
+
+	dbProp := types.DbIdentityAccountLinkProposal{}.FromProto(prop)
+	_, err := db.SQL.Exec(stmt,
+		dbProp.Index,
+		dbProp.ProposerAccount,
+		dbProp.HumanId,
+		dbProp.SetAsPrimaryWalletForNetwork,
+		dbProp.Deposit,
+	)
+	if err != nil {
+		return fmt.Errorf("error while storing account link proposal: %s", err)
+	}
+
+	return nil
+}
+
+func (db *Db) DeleteIdentityAccountLinkProposal(index string) error {
+	stmt := `
+		DELETE FROM identity_account_link_proposals WHERE index = $1;
+	`
+
+	_, err := db.SQL.Exec(stmt, index)
+	if err != nil {
+		return fmt.Errorf("error while deleting account link proposal: %s", err)
 	}
 
 	return nil
