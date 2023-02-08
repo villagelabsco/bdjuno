@@ -45,18 +45,18 @@ func (m Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 		return m.handleMsgOracleExecuteOfframpBurn(index, tx, cosmosMsg)
 	case *tokentypes.MsgRequestOfframpBurn:
 		return m.handleMsgRequestOfframpBurn(index, tx, cosmosMsg)
-	case *tokentypes.MsgSwapAccountingToken:
-		return m.handleMsgSwapAccountingToken(index, tx, cosmosMsg)
-	case *tokentypes.MsgClaimPendingBalance:
-		return m.handleMsgClaimPendingBalance(index, tx, cosmosMsg)
+	//case *tokentypes.MsgSwapAccountingToken:
+	//	return m.handleMsgSwapAccountingToken(index, tx, cosmosMsg)
+	//case *tokentypes.MsgClaimPendingBalance:
+	//	return m.handleMsgClaimPendingBalance(index, tx, cosmosMsg)
 	case *tokentypes.MsgCancelOfframpRequest:
 		return m.handleMsgCancelOfframpRequest(index, tx, cosmosMsg)
 	case *tokentypes.MsgCreateAccountingToken:
 		return m.handleMsgCreateAccountingToken(index, tx, cosmosMsg)
 	case *tokentypes.MsgCreateRootCurrencyToken:
 		return m.handleMsgCreateRootCurrencyToken(index, tx, cosmosMsg)
-	case *tokentypes.MsgClawbackTokens:
-		return m.handleMsgClawbackTokens(index, tx, cosmosMsg)
+		//case *tokentypes.MsgClawbackTokens:
+		//	return m.handleMsgClawbackTokens(index, tx, cosmosMsg)
 	}
 
 	return nil
@@ -203,14 +203,6 @@ func (m Module) handleMsgRequestOfframpBurn(index int, tx *juno.Tx, msg *tokenty
 	return nil
 }
 
-func (m Module) handleMsgSwapAccountingToken(index int, tx *juno.Tx, msg *tokentypes.MsgSwapAccountingToken) error {
-	return nil
-}
-
-func (m Module) handleMsgClaimPendingBalance(index int, tx *juno.Tx, msg *tokentypes.MsgClaimPendingBalance) error {
-	return nil
-}
-
 func (m Module) handleMsgCancelOfframpRequest(index int, tx *juno.Tx, msg *tokentypes.MsgCancelOfframpRequest) error {
 	op, err := m.src.GetOffRampOperations(tx.Height, tokentypes.QueryGetOfframpOperationsRequest{
 		Account: msg.Creator,
@@ -242,13 +234,43 @@ func (m Module) handleMsgCancelOfframpRequest(index int, tx *juno.Tx, msg *token
 }
 
 func (m Module) handleMsgCreateAccountingToken(index int, tx *juno.Tx, msg *tokentypes.MsgCreateAccountingToken) error {
+	denomName, err := utils.FindEventAndAttr(index, tx, &tokentypes.EvtCreatedAccountingToken{}, "denomName")
+	if err != nil {
+		return fmt.Errorf("error while getting denomName from events: %s", err)
+	}
+
+	t, err := m.src.GetToken(tx.Height, tokentypes.QueryGetTokenRequest{
+		Denom: denomName,
+	})
+	if err != nil {
+		return fmt.Errorf("error while getting token from source: %s", err)
+	}
+	token := t.Token
+
+	if err := m.db.SaveOrUpdateTokenDenom(&token); err != nil {
+		return fmt.Errorf("error while saving token denom: %s", err)
+	}
+
 	return nil
 }
 
 func (m Module) handleMsgCreateRootCurrencyToken(index int, tx *juno.Tx, msg *tokentypes.MsgCreateRootCurrencyToken) error {
-	return nil
-}
+	denomName, err := utils.FindEventAndAttr(index, tx, &tokentypes.EvtCreatedAccountingToken{}, "denomName")
+	if err != nil {
+		return fmt.Errorf("error while getting denomName from events: %s", err)
+	}
 
-func (m Module) handleMsgClawbackTokens(index int, tx *juno.Tx, msg *tokentypes.MsgClawbackTokens) error {
+	t, err := m.src.GetToken(tx.Height, tokentypes.QueryGetTokenRequest{
+		Denom: denomName,
+	})
+	if err != nil {
+		return fmt.Errorf("error while getting token from source: %s", err)
+	}
+	token := t.Token
+
+	if err := m.db.SaveOrUpdateTokenDenom(&token); err != nil {
+		return fmt.Errorf("error while saving token denom: %s", err)
+	}
+
 	return nil
 }
