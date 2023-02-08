@@ -19,6 +19,9 @@ package identity
 import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/query"
+	feegranttypes "github.com/cosmos/cosmos-sdk/x/feegrant"
+	"github.com/villagelabsco/bdjuno/v3/types"
 	"github.com/villagelabsco/bdjuno/v3/utils"
 	juno "github.com/villagelabsco/juno/v4/types"
 	identitytypes "github.com/villagelabsco/villaged/x/identity/types"
@@ -157,7 +160,20 @@ func (m *Module) handleMsgClaimInvite(index int, tx *juno.Tx, msg *identitytypes
 		return fmt.Errorf("error updating user networks: %s", err)
 	}
 
-	fg, err := m.src.
+	alwnc, err := m.feeGrantSrc.GetAllowances(tx.Height, feegranttypes.QueryAllowancesRequest{
+		Grantee: msg.Creator,
+		Pagination: &query.PageRequest{
+			Limit: 1,
+		},
+	})
+	if err != nil {
+		return fmt.Errorf("error getting allowances: %s", err)
+	}
+	allowances := alwnc.Allowances
+
+	if err := m.db.SaveFeeGrantAllowance(types.NewFeeGrant(*allowances[0], tx.Height)); err != nil {
+		return fmt.Errorf("error saving fee grant allowance: %s", err)
+	}
 
 	return nil
 }
