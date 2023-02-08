@@ -17,16 +17,15 @@
 package types
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	identitytypes "github.com/villagelabsco/villaged/x/identity/types"
 )
 
 type DbIdentityAccountLinkProposal struct {
-	Index                        string  `db:"index"`
-	ProposerAccount              string  `db:"proposer_account"`
-	HumanId                      string  `db:"human_id"`
-	SetAsPrimaryWalletForNetwork string  `db:"set_as_primary_wallet_for_network"`
-	Deposit                      DbCoins `db:"deposit"`
+	Index                        string `db:"index"`
+	ProposerAccount              string `db:"proposer_account"`
+	HumanId                      string `db:"human_id"`
+	SetAsPrimaryWalletForNetwork string `db:"set_as_primary_wallet_for_network"`
+	Deposit                      DbCoin `db:"deposit"`
 }
 
 func (DbIdentityAccountLinkProposal) FromProto(alp *identitytypes.AccountLinkProposal) DbIdentityAccountLinkProposal {
@@ -35,6 +34,6 @@ func (DbIdentityAccountLinkProposal) FromProto(alp *identitytypes.AccountLinkPro
 		ProposerAccount:              alp.ProposerAccount,
 		HumanId:                      alp.HumanId,
 		SetAsPrimaryWalletForNetwork: alp.SetAsPrimaryWalletForNetwork,
-		Deposit:                      NewDbCoins(sdk.NewCoins(alp.Deposit)),
+		Deposit:                      NewDbCoin(alp.Deposit),
 	}
 }

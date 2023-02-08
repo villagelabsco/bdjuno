@@ -18,24 +18,27 @@ CREATE TABLE token_tokens (
 );
 
 CREATE TABLE token_offramp_operations (
-    id serial not null,
-    account text not null references account (address),
+    id numeric not null,
+    account text not null
+        references account (address)
+        references identity_accounts (index),
     human_id text not null,
     executed boolean not null,
     amount COIN not null,
     creation_block numeric not null,
     execution_block numeric not null,
     funds_transfer_method_pseudo_id text not null,
-    id_provider text not null,
+    id_provider text not null references identity_providers (index),
     primary key (id)
 );
 
 CREATE TABLE token_onramp_operations (
-    id serial not null,
     payment_ref text not null,
     amount COIN not null,
-    account text not null references account (address),
-    primary key (id)
+    account text not null
+        references account (address)
+        references identity_accounts (index),
+    primary key (payment_ref)
 );
 
 CREATE TABLE token_nb_token_creation_per_day (
@@ -56,8 +59,11 @@ CREATE TABLE token_known_accounts (
 );
 
 CREATE TABLE token_immobilized_funds (
-    account text not null references account (address),
-    amount COIN not null
+    account text not null
+        references account (address)
+        references identity_accounts (index),
+    amount COIN not null,
+    primary key (account)
 );
 
 CREATE TABLE token_pending_balances (

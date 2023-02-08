@@ -83,3 +83,88 @@ func (db *Db) SaveOrUpdateTokenDenom(token *tokentypes.Token) error {
 
 	return nil
 }
+
+func (db *Db) SaveTokenOnrampOperation(op tokentypes.OnrampOperations) error {
+	stmt := `
+		INSERT INTO token_onramp_operations (payment_ref, account, amount)
+		VALUES ($1, $2, $3);
+	`
+
+	dbOp := types.DbTokenOnrampOperation{}.FromProto(op)
+	_, err := db.SQL.Exec(stmt,
+		dbOp.PaymentRef,
+		dbOp.Account,
+		dbOp.Amount,
+	)
+	if err != nil {
+		return fmt.Errorf("error while storing token onramp operation: %s", err)
+	}
+
+	return nil
+}
+
+func (db *Db) SaveOrUpdateTokenOfframpOperation(op tokentypes.OfframpOperations) error {
+	stmt := `
+		INSERT INTO token_offramp_operations (id, account, human_id, executed, amount, creation_block, execution_block, funds_transfer_method_pseudo_id, id_provider) 
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+		ON CONFLICT (id) DO UPDATE SET
+			account = $2,
+			human_id = $3,
+			executed = $4,
+			amount = $5,
+			creation_block = $6,
+			execution_block = $7,
+			funds_transfer_method_pseudo_id = $8,
+			id_provider = $9;
+	`
+
+	dbOp := types.DbTokenOfframpOperation{}.FromProto(op)
+	_, err := db.SQL.Exec(stmt,
+		dbOp.Id,
+		dbOp.Account,
+		dbOp.HumanId,
+		dbOp.Executed,
+		dbOp.Amount,
+		dbOp.CreationBlock,
+		dbOp.ExecutionBlock,
+		dbOp.FundsTransferMethodPseudoId,
+		dbOp.IdProvider,
+	)
+	if err != nil {
+		return fmt.Errorf("error while storing or updating token offramp operation: %s", err)
+	}
+
+	return nil
+}
+
+func (db *Db) SaveOrUpdateTokenImmobilizedFunds(i tokentypes.ImmobilizedFunds) error {
+	stmt := `
+		INSERT INTO token_immobilized_funds (account, amount) 
+		VALUES ($1, $2) ON CONFLICT (account) 
+		DO UPDATE SET amount = $2;
+	`
+
+	dbImm := types.DbTokenImmobilizedFunds{}.FromProto(i)
+	_, err := db.SQL.Exec(stmt,
+		dbImm.Account,
+		dbImm.Amount,
+	)
+	if err != nil {
+		return fmt.Errorf("error while storing or updating token immobilized funds: %s", err)
+	}
+
+	return nil
+}
+
+func (db *Db) DeleteTokenOfframpOperation(id uint64) error {
+	stmt := `
+		DELETE FROM token_offramp_operations WHERE id = $1;
+	`
+
+	_, err := db.SQL.Exec(stmt, id)
+	if err != nil {
+		return fmt.Errorf("error while deleting token offramp operation: %s", err)
+	}
+
+	return nil
+}

@@ -22,6 +22,7 @@ import (
 	"github.com/villagelabsco/bdjuno/v3/utils"
 	juno "github.com/villagelabsco/juno/v4/types"
 	tokentypes "github.com/villagelabsco/villaged/x/token/types"
+	"strconv"
 )
 
 func (m Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
@@ -32,10 +33,10 @@ func (m Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 		return m.handleMsgUpdateToken(index, tx, cosmosMsg)
 	case *tokentypes.MsgTransferTokenOwnership:
 		return m.handleMsgTransferTokenOwnership(index, tx, cosmosMsg)
-	case *tokentypes.MsgMintTokens:
-		return m.handleMsgMintTokens(index, tx, cosmosMsg)
-	case *tokentypes.MsgBurnTokens:
-		return m.handleMsgBurnTokens(index, tx, cosmosMsg)
+	//case *tokentypes.MsgMintTokens:
+	//	return m.handleMsgMintTokens(index, tx, cosmosMsg)
+	//case *tokentypes.MsgBurnTokens:
+	//	return m.handleMsgBurnTokens(index, tx, cosmosMsg)
 	case *tokentypes.MsgOracleExecuteOnrampMintForTreasury:
 		return m.handleMsgOracleExecuteOnrampMintForTreasury(index, tx, cosmosMsg)
 	case *tokentypes.MsgOracleExecuteOnrampMintForAccount:
@@ -101,27 +102,104 @@ func (m Module) handleMsgTransferTokenOwnership(index int, tx *juno.Tx, msg *tok
 	return m.db.SaveOrUpdateTokenDenom(tkn)
 }
 
-func (m Module) handleMsgMintTokens(index int, tx *juno.Tx, msg *tokentypes.MsgMintTokens) error {
-	return nil
-}
-
-func (m Module) handleMsgBurnTokens(index int, tx *juno.Tx, msg *tokentypes.MsgBurnTokens) error {
-	return nil
-}
-
 func (m Module) handleMsgOracleExecuteOnrampMintForTreasury(index int, tx *juno.Tx, msg *tokentypes.MsgOracleExecuteOnrampMintForTreasury) error {
+	op, err := m.src.GetOnRampOperations(tx.Height, tokentypes.QueryGetOnrampOperationsRequest{
+		PaymentRef: msg.PaymentRef,
+	})
+	if err != nil {
+		return fmt.Errorf("error while getting onramp operation from source: %s", err)
+	}
+	operation := op.OnrampOperations
+
+	if err := m.db.SaveTokenOnrampOperation(operation); err != nil {
+		return fmt.Errorf("error while saving onramp operation: %s", err)
+	}
+
 	return nil
 }
 
 func (m Module) handleMsgOracleExecuteOnrampMintForAccount(index int, tx *juno.Tx, msg *tokentypes.MsgOracleExecuteOnrampMintForAccount) error {
+	op, err := m.src.GetOnRampOperations(tx.Height, tokentypes.QueryGetOnrampOperationsRequest{
+		PaymentRef: msg.PaymentRef,
+	})
+	if err != nil {
+		return fmt.Errorf("error while getting onramp operation from source: %s", err)
+	}
+	operation := op.OnrampOperations
+
+	if err := m.db.SaveTokenOnrampOperation(operation); err != nil {
+		return fmt.Errorf("error while saving onramp operation: %s", err)
+	}
+
 	return nil
 }
 
 func (m Module) handleMsgOracleExecuteOfframpBurn(index int, tx *juno.Tx, msg *tokentypes.MsgOracleExecuteOfframpBurn) error {
+	op, err := m.src.GetOffRampOperations(tx.Height, tokentypes.QueryGetOfframpOperationsRequest{
+		Account: msg.Account,
+		Id:      uint64(msg.OfframpOperationIdx),
+	})
+	if err != nil {
+		return fmt.Errorf("error while getting offramp operation from source: %s", err)
+	}
+	operation := op.OfframpOperations
+
+	if err := m.db.SaveOrUpdateTokenOfframpOperation(operation); err != nil {
+		return fmt.Errorf("error while saving offramp operation: %s", err)
+	}
+
+	imm, err := m.src.GetImmobilizedFunds(tx.Height, tokentypes.QueryGetImmobilizedFundsRequest{
+		Denom:   op.OfframpOperations.Amount.Denom,
+		Account: msg.Account,
+	})
+	if err != nil {
+		return fmt.Errorf("error while getting immobilized funds from source: %s", err)
+	}
+	immobilizedFunds := imm.ImmobilizedFunds
+
+	if err := m.db.SaveOrUpdateTokenImmobilizedFunds(immobilizedFunds); err != nil {
+		return fmt.Errorf("error while saving immobilized funds: %s", err)
+	}
+
 	return nil
 }
 
 func (m Module) handleMsgRequestOfframpBurn(index int, tx *juno.Tx, msg *tokentypes.MsgRequestOfframpBurn) error {
+	idx, err := utils.FindEventAndAttr(index, tx, &tokentypes.EvtRequestedBurnVillageUsd{}, "itemIdx")
+	if err != nil {
+		return fmt.Errorf("error while getting operation itemIdx from events: %s", err)
+	}
+	id, err := strconv.Atoi(idx)
+	if err != nil {
+		return fmt.Errorf("error while converting operation itemIdx to int: %s", err)
+	}
+
+	op, err := m.src.GetOffRampOperations(tx.Height, tokentypes.QueryGetOfframpOperationsRequest{
+		Account: msg.Creator,
+		Id:      uint64(id),
+	})
+	if err != nil {
+		return fmt.Errorf("error while getting offramp operation from source: %s", err)
+	}
+	operation := op.OfframpOperations
+
+	if err := m.db.SaveOrUpdateTokenOfframpOperation(operation); err != nil {
+		return fmt.Errorf("error while saving offramp operation: %s", err)
+	}
+
+	imm, err := m.src.GetImmobilizedFunds(tx.Height, tokentypes.QueryGetImmobilizedFundsRequest{
+		Denom:   msg.Amount.Denom,
+		Account: msg.Creator,
+	})
+	if err != nil {
+		return fmt.Errorf("error while getting immobilized funds from source: %s", err)
+	}
+	immobilizedFunds := imm.ImmobilizedFunds
+
+	if err := m.db.SaveOrUpdateTokenImmobilizedFunds(immobilizedFunds); err != nil {
+		return fmt.Errorf("error while saving immobilized funds: %s", err)
+	}
+
 	return nil
 }
 
@@ -134,6 +212,32 @@ func (m Module) handleMsgClaimPendingBalance(index int, tx *juno.Tx, msg *tokent
 }
 
 func (m Module) handleMsgCancelOfframpRequest(index int, tx *juno.Tx, msg *tokentypes.MsgCancelOfframpRequest) error {
+	op, err := m.src.GetOffRampOperations(tx.Height, tokentypes.QueryGetOfframpOperationsRequest{
+		Account: msg.Creator,
+		Id:      msg.Id,
+	})
+	if err != nil {
+		return fmt.Errorf("error while getting offramp operation from source: %s", err)
+	}
+	operation := op.OfframpOperations
+
+	imm, err := m.src.GetImmobilizedFunds(tx.Height, tokentypes.QueryGetImmobilizedFundsRequest{
+		Denom:   op.OfframpOperations.Amount.Denom,
+		Account: msg.Creator,
+	})
+	if err != nil {
+		return fmt.Errorf("error while getting immobilized funds from source: %s", err)
+	}
+	immobilizedFunds := imm.ImmobilizedFunds
+
+	if err := m.db.DeleteTokenOfframpOperation(operation.Id); err != nil {
+		return fmt.Errorf("error while saving offramp operation: %s", err)
+	}
+
+	if err := m.db.SaveOrUpdateTokenImmobilizedFunds(immobilizedFunds); err != nil {
+		return fmt.Errorf("error while saving immobilized funds: %s", err)
+	}
+
 	return nil
 }
 
