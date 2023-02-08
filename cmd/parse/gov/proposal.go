@@ -3,11 +3,12 @@ package gov
 import (
 	"encoding/hex"
 	"fmt"
+	v1govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	"strconv"
 	"time"
 
-	modulestypes "github.com/villagelabsco/bdjuno/v3/modules/types"
 	"github.com/rs/zerolog/log"
+	modulestypes "github.com/villagelabsco/bdjuno/v3/modules/types"
 
 	v1beta1govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 	"github.com/spf13/cobra"
@@ -102,6 +103,11 @@ func refreshProposalDetails(parseCtx *parser.Context, proposalID uint64, govModu
 		return fmt.Errorf("expecting only one create proposal transaction, found %d", len(txs))
 	}
 
+	if len(txs) == 0 {
+		fmt.Printf("error: couldn't find submit proposal tx info")
+		return nil
+	}
+
 	// Get the tx details
 	tx, err := parseCtx.Node.Tx(hex.EncodeToString(txs[0].Tx.Hash()))
 	if err != nil {
@@ -141,7 +147,7 @@ func refreshProposalDeposits(parseCtx *parser.Context, proposalID uint64, govMod
 
 		// Handle the MsgDeposit messages
 		for index, msg := range junoTx.GetMsgs() {
-			if _, ok := msg.(*v1beta1govtypes.MsgDeposit); !ok {
+			if _, ok := msg.(*v1govtypes.MsgDeposit); !ok {
 				continue
 			}
 
@@ -173,7 +179,7 @@ func refreshProposalVotes(parseCtx *parser.Context, proposalID uint64, govModule
 
 		// Handle the MsgVote messages
 		for index, msg := range junoTx.GetMsgs() {
-			if _, ok := msg.(*v1beta1govtypes.MsgVote); !ok {
+			if _, ok := msg.(*v1govtypes.MsgVote); !ok {
 				continue
 			}
 

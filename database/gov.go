@@ -3,6 +3,7 @@ package database
 import (
 	"encoding/json"
 	"fmt"
+	v1govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	"time"
 
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -47,6 +48,39 @@ WHERE gov_params.height <= excluded.height`
 	_, err = db.SQL.Exec(stmt, string(depositParamsBz), string(votingParamsBz), string(tallyingParams), params.Height)
 	if err != nil {
 		return fmt.Errorf("error while storing gov params: %s", err)
+	}
+
+	return nil
+}
+
+func (db *Db) SaveGenesisGovParams(params *types.GenesisGovParams) error {
+	depositParamsBz, err := json.Marshal(&params.DepositParams)
+	if err != nil {
+		return fmt.Errorf("error while marshaling genesis deposit params: %s", err)
+	}
+
+	votingParamsBz, err := json.Marshal(&params.VotingParams)
+	if err != nil {
+		return fmt.Errorf("error while marshaling genesis voting params: %s", err)
+	}
+
+	tallyingParams, err := json.Marshal(&params.TallyParams)
+	if err != nil {
+		return fmt.Errorf("error while marshaling genesis tally params: %s", err)
+	}
+
+	stmt := `
+INSERT INTO gov_params(deposit_params, voting_params, tally_params, height)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT (one_row_id) DO UPDATE
+	SET deposit_params = excluded.deposit_params,
+  		voting_params = excluded.voting_params,
+		tally_params = excluded.tally_params,
+		height = excluded.height
+WHERE gov_params.height <= excluded.height`
+	_, err = db.SQL.Exec(stmt, string(depositParamsBz), string(votingParamsBz), string(tallyingParams), params.Height)
+	if err != nil {
+		return fmt.Errorf("error while storing genesis gov params: %s", err)
 	}
 
 	return nil
@@ -210,7 +244,7 @@ func (db *Db) GetProposal(id uint64) (*types.Proposal, error) {
 func (db *Db) GetOpenProposalsIds(blockTime time.Time) ([]uint64, error) {
 	var ids []uint64
 	stmt := `SELECT id FROM proposal WHERE status = $1 OR status = $2`
-	err := db.Sqlx.Select(&ids, stmt, v1beta1govtypes.StatusDepositPeriod.String(), v1beta1govtypes.StatusVotingPeriod.String())
+	err := db.Sqlx.Select(&ids, stmt, v1beta1govtypes.StatusDepositPeriod.String(), v1govtypes.StatusVotingPeriod.String())
 	if err != nil {
 		return ids, err
 	}
@@ -251,6 +285,7 @@ func (db *Db) SaveDeposits(deposits []types.Deposit) error {
 	query := `INSERT INTO proposal_deposit (proposal_id, depositor_address, amount, timestamp, height) VALUES `
 	var param []interface{}
 
+	var accounts []types.Account
 	for i, deposit := range deposits {
 		vi := i * 5
 		query += fmt.Sprintf("($%d,$%d,$%d,$%d,$%d),", vi+1, vi+2, vi+3, vi+4, vi+5)
@@ -260,7 +295,15 @@ func (db *Db) SaveDeposits(deposits []types.Deposit) error {
 			deposit.Timestamp,
 			deposit.Height,
 		)
+		accounts = append(accounts, types.NewAccount(deposit.Depositor))
 	}
+
+	// Store the depositor account
+	err := db.SaveAccounts(accounts)
+	if err != nil {
+		return fmt.Errorf("error while storing depositor account: %s", err)
+	}
+
 	query = query[:len(query)-1] // Remove trailing ","
 	query += `
 ON CONFLICT ON CONSTRAINT unique_deposit DO UPDATE
@@ -268,7 +311,7 @@ ON CONFLICT ON CONSTRAINT unique_deposit DO UPDATE
 		timestamp = excluded.timestamp,
 		height = excluded.height
 WHERE proposal_deposit.height <= excluded.height`
-	_, err := db.SQL.Exec(query, param...)
+	_, err = db.SQL.Exec(query, param...)
 	if err != nil {
 		return fmt.Errorf("error while storing deposits: %s", err)
 	}

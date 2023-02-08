@@ -25,16 +25,16 @@ func (m *Module) HandleGenesis(doc *tmtypes.GenesisDoc, appState map[string]json
 	}
 
 	// Save the proposals
-	err = m.saveProposals(genState.Proposals, doc)
+	err = m.saveGenesisProposals(genState.Proposals, doc)
 	if err != nil {
 		return fmt.Errorf("error while storing genesis governance proposals: %s", err)
 	}
 
 	// Save the params
-	err = m.db.SaveGovParams(types.NewGovParams(
-		types.NewVotingParams(genState.VotingParams),
-		types.NewDepositParam(genState.DepositParams),
-		types.NewTallyParams(genState.TallyParams),
+	err = m.db.SaveGenesisGovParams(types.NewGenesisGovParams(
+		types.NewGenesisVotingParams(&genState.VotingParams),
+		types.NewGenesisDepositParam(&genState.DepositParams),
+		types.NewGenesisTallyParams(&genState.TallyParams),
 		doc.InitialHeight,
 	))
 	if err != nil {
@@ -44,8 +44,8 @@ func (m *Module) HandleGenesis(doc *tmtypes.GenesisDoc, appState map[string]json
 	return nil
 }
 
-// saveProposals save proposals from genesis file
-func (m *Module) saveProposals(slice v1betagovtypes.Proposals, genDoc *tmtypes.GenesisDoc) error {
+// saveGenesisProposals save proposals from genesis file
+func (m *Module) saveGenesisProposals(slice v1betagovtypes.Proposals, genDoc *tmtypes.GenesisDoc) error {
 	proposals := make([]types.Proposal, len(slice))
 	tallyResults := make([]types.TallyResult, len(slice))
 	deposits := make([]types.Deposit, len(slice))

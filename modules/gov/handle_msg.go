@@ -2,6 +2,7 @@ package gov
 
 import (
 	"fmt"
+	v1govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	"time"
 
 	"strconv"
@@ -24,10 +25,10 @@ func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 	case *v1beta1govtypes.MsgSubmitProposal:
 		return m.handleMsgSubmitProposal(tx, index, cosmosMsg)
 
-	case *v1beta1govtypes.MsgDeposit:
+	case *v1govtypes.MsgDeposit:
 		return m.handleMsgDeposit(tx, cosmosMsg)
 
-	case *v1beta1govtypes.MsgVote:
+	case *v1govtypes.MsgVote:
 		return m.handleMsgVote(tx, cosmosMsg)
 	}
 
@@ -87,7 +88,7 @@ func (m *Module) handleMsgSubmitProposal(tx *juno.Tx, index int, msg *v1beta1gov
 }
 
 // handleMsgDeposit allows to properly handle a handleMsgDeposit
-func (m *Module) handleMsgDeposit(tx *juno.Tx, msg *v1beta1govtypes.MsgDeposit) error {
+func (m *Module) handleMsgDeposit(tx *juno.Tx, msg *v1govtypes.MsgDeposit) error {
 	deposit, err := m.source.ProposalDeposit(tx.Height, msg.ProposalId, msg.Depositor)
 	if err != nil {
 		return fmt.Errorf("error while getting proposal deposit: %s", err)
@@ -104,7 +105,7 @@ func (m *Module) handleMsgDeposit(tx *juno.Tx, msg *v1beta1govtypes.MsgDeposit) 
 }
 
 // handleMsgVote allows to properly handle a handleMsgVote
-func (m *Module) handleMsgVote(tx *juno.Tx, msg *v1beta1govtypes.MsgVote) error {
+func (m *Module) handleMsgVote(tx *juno.Tx, msg *v1govtypes.MsgVote) error {
 	txTimestamp, err := time.Parse(time.RFC3339, tx.Timestamp)
 	if err != nil {
 		return fmt.Errorf("error while parsing time: %s", err)

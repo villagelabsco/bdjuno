@@ -26,10 +26,8 @@ func (m *Module) UpdateProposal(height int64, blockTime time.Time, id uint64) er
 	// Get the proposal
 	proposal, err := m.source.Proposal(height, id)
 	if err != nil {
-		// Check if proposal has reached the voting end time
-		passedVotingPeriod := blockTime.After(proposal.VotingEndTime)
-
-		if strings.Contains(err.Error(), codes.NotFound.String()) && passedVotingPeriod {
+		// Check if proposal exist on the chain
+		if strings.Contains(err.Error(), codes.NotFound.String()) && strings.Contains(err.Error(), "doesn't exist") {
 			// Handle case when a proposal is deleted from the chain (did not pass deposit period)
 			return m.updateDeletedProposalStatus(id)
 		}
@@ -160,10 +158,10 @@ func (m *Module) updateProposalTallyResult(proposal v1betagovtypes.Proposal) err
 	return m.db.SaveTallyResults([]types.TallyResult{
 		types.NewTallyResult(
 			proposal.ProposalId,
-			result.Yes.String(),
-			result.Abstain.String(),
-			result.No.String(),
-			result.NoWithVeto.String(),
+			result.YesCount,
+			result.AbstainCount,
+			result.NoCount,
+			result.NoWithVetoCount,
 			height,
 		),
 	})
