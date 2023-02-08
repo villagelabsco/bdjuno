@@ -2,8 +2,11 @@ package types
 
 import (
 	"fmt"
+	feegranttypes "github.com/cosmos/cosmos-sdk/x/feegrant"
+	v1betagovtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 	nfttypes "github.com/cosmos/cosmos-sdk/x/nft"
 	econsource "github.com/villagelabsco/bdjuno/v3/modules/economics/source"
+	feegrantsource "github.com/villagelabsco/bdjuno/v3/modules/feegrant/source"
 	identitysource "github.com/villagelabsco/bdjuno/v3/modules/identity/source"
 	remotenftsource "github.com/villagelabsco/bdjuno/v3/modules/nft/source/remote"
 	remotetokensource "github.com/villagelabsco/bdjuno/v3/modules/token/source/remote"
@@ -20,7 +23,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/simapp/params"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
-	v1beta1govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
@@ -31,6 +33,7 @@ import (
 
 	nodeconfig "github.com/villagelabsco/juno/v4/node/config"
 
+	v1govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	banksource "github.com/villagelabsco/bdjuno/v3/modules/bank/source"
 	localbanksource "github.com/villagelabsco/bdjuno/v3/modules/bank/source/local"
 	remotebanksource "github.com/villagelabsco/bdjuno/v3/modules/bank/source/remote"
@@ -38,7 +41,10 @@ import (
 	localdistrsource "github.com/villagelabsco/bdjuno/v3/modules/distribution/source/local"
 	remotedistrsource "github.com/villagelabsco/bdjuno/v3/modules/distribution/source/remote"
 	remoteeconsource "github.com/villagelabsco/bdjuno/v3/modules/economics/source/remote"
+	localfeegrantsource "github.com/villagelabsco/bdjuno/v3/modules/feegrant/source/local"
+	remotefeegrantsource "github.com/villagelabsco/bdjuno/v3/modules/feegrant/source/remote"
 	govsource "github.com/villagelabsco/bdjuno/v3/modules/gov/source"
+	localgovsource "github.com/villagelabsco/bdjuno/v3/modules/gov/source/local"
 	remotegovsource "github.com/villagelabsco/bdjuno/v3/modules/gov/source/remote"
 	remoteidentitysource "github.com/villagelabsco/bdjuno/v3/modules/identity/source/remote"
 	marketplacesource "github.com/villagelabsco/bdjuno/v3/modules/marketplace/source"
@@ -70,6 +76,7 @@ type Sources struct {
 	SlashingSource slashingsource.Source
 	StakingSource  stakingsource.Source
 	NftSource      nftsource.Source
+	FeeGrantSource feegrantsource.Source
 
 	IdentitySource    identitysource.Source
 	RbacSource        rbacsource.Source
@@ -105,12 +112,13 @@ func buildLocalSources(cfg *local.Details, encodingConfig *params.EncodingConfig
 	)
 
 	sources := &Sources{
-		BankSource:  localbanksource.NewSource(source, banktypes.QueryServer(sapp.BankKeeper)),
-		DistrSource: localdistrsource.NewSource(source, distrtypes.QueryServer(sapp.DistrKeeper)),
-		//GovSource:      localgovsource.NewSource(source, v1beta1govtypes.QueryServer(sapp.GovKeeper)),
+		BankSource:     localbanksource.NewSource(source, banktypes.QueryServer(sapp.BankKeeper)),
+		DistrSource:    localdistrsource.NewSource(source, distrtypes.QueryServer(sapp.DistrKeeper)),
+		GovSource:      localgovsource.NewSource(source, v1govtypes.QueryServer(sapp.GovKeeper), nil),
 		MintSource:     localmintsource.NewSource(source, minttypes.QueryServer(sapp.MintKeeper)),
 		SlashingSource: localslashingsource.NewSource(source, slashingtypes.QueryServer(sapp.SlashingKeeper)),
 		StakingSource:  localstakingsource.NewSource(source, stakingkeeper.Querier{Keeper: sapp.StakingKeeper}),
+		FeeGrantSource: localfeegrantsource.NewSource(source, feegranttypes.QueryServer(sapp.FeeGrantKeeper)),
 		//NftSource:         localnftsource.NewSource(source, nfttypes.QueryServer(sapp.NFTKeeper)),
 		//KycSource:         localkycsource.NewSource(source, kyctypes.QueryServer(sapp.KycKeeper)),
 		//MarketplaceSource: localmarketplacesource.NewSource(source, marketplacetypes.QueryServer(sapp.MarketplaceKeeper)),
@@ -153,11 +161,12 @@ func buildRemoteSources(cfg *remote.Details) (*Sources, error) {
 	return &Sources{
 		BankSource:        remotebanksource.NewSource(source, banktypes.NewQueryClient(source.GrpcConn)),
 		DistrSource:       remotedistrsource.NewSource(source, distrtypes.NewQueryClient(source.GrpcConn)),
-		GovSource:         remotegovsource.NewSource(source, v1beta1govtypes.NewQueryClient(source.GrpcConn)),
+		GovSource:         remotegovsource.NewSource(source, v1govtypes.NewQueryClient(source.GrpcConn), v1betagovtypes.NewQueryClient(source.GrpcConn)),
 		MintSource:        remotemintsource.NewSource(source, minttypes.NewQueryClient(source.GrpcConn)),
 		SlashingSource:    remoteslashingsource.NewSource(source, slashingtypes.NewQueryClient(source.GrpcConn)),
 		StakingSource:     remotestakingsource.NewSource(source, stakingtypes.NewQueryClient(source.GrpcConn)),
 		NftSource:         remotenftsource.NewSource(source, nfttypes.NewQueryClient(source.GrpcConn)),
+		FeeGrantSource:    remotefeegrantsource.NewSource(source, feegranttypes.NewQueryClient(source.GrpcConn)),
 		IdentitySource:    remoteidentitysource.NewSource(source, identitytypes.NewQueryClient(source.GrpcConn)),
 		RbacSource:        remoterbacsource.NewSource(source, rbactypes.NewQueryClient(source.GrpcConn)),
 		ReputationSource:  remotereputationsource.NewSource(source, reputationtypes.NewQueryClient(source.GrpcConn)),

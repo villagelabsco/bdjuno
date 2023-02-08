@@ -23,6 +23,7 @@ import (
 	"github.com/villagelabsco/juno/v4/modules"
 	identitytypes "github.com/villagelabsco/villaged/x/identity/types"
 
+	feegrantsource "github.com/villagelabsco/bdjuno/v3/modules/feegrant/source"
 	identitysource "github.com/villagelabsco/bdjuno/v3/modules/identity/source"
 )
 
@@ -35,16 +36,23 @@ type Module struct {
 	cdc codec.Codec
 	db  *database.Db
 
-	src     identitysource.Source
-	rbacSrc rbacsource.Source
+	src         identitysource.Source
+	rbacSrc     rbacsource.Source
+	feeGrantSrc feegrantsource.Source
 }
 
-func NewModule(cdc codec.Codec, db *database.Db, src identitysource.Source, rbacSrc rbacsource.Source) *Module {
+func NewModule(
+	cdc codec.Codec,
+	db *database.Db,
+	src identitysource.Source,
+	rbacSrc rbacsource.Source,
+	feeGrantSrc feegrantsource.Source) *Module {
 	return &Module{
-		cdc:     cdc,
-		db:      db,
-		src:     src,
-		rbacSrc: rbacSrc,
+		cdc:         cdc,
+		db:          db,
+		src:         src,
+		rbacSrc:     rbacSrc,
+		feeGrantSrc: feeGrantSrc,
 	}
 }
 

@@ -92,7 +92,7 @@ func (r *Registrar) BuildModules(ctx registrar.Context) jmodules.Modules {
 	govModule := gov.NewModule(sources.GovSource, authModule, distrModule, mintModule, slashingModule, stakingModule, cdc, db)
 	upgradeModule := upgrade.NewModule(db, stakingModule)
 	reputationModule := reputation.NewModule(cdc, db, sources.ReputationSource)
-	identityModule := identity.NewModule(cdc, db, sources.IdentitySource, sources.RbacSource)
+	identityModule := identity.NewModule(cdc, db, sources.IdentitySource, sources.RbacSource, sources.FeeGrantSource)
 	marketplaceModule := marketplace.NewModule(cdc, db, sources.MarketplaceSource)
 	productsModule := products.NewModule(cdc, db, sources.ProductsSource, sources.NftSource)
 	rbacModule := rbac.NewModule(cdc, db, sources.RbacSource)
