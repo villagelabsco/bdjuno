@@ -41,53 +41,10 @@ CREATE TABLE token_onramp_operations (
     primary key (payment_ref)
 );
 
-CREATE TABLE token_nb_token_creation_per_day (
-    network text not null references identity_networks (index),
-    number numeric not null,
-    primary key (network)
-);
-
-CREATE TABLE token_last_input_activities (
-    denom text not null references token_tokens (denom),
-    account text not null references account (address),
-    timestamp timestamp not null,
-    block_height numeric not null
-);
-
-CREATE TABLE token_known_accounts (
-    account text not null references account (address)
-);
-
 CREATE TABLE token_immobilized_funds (
     account text not null
         references account (address)
         references identity_accounts (index),
     amount COIN not null,
     primary key (account)
-);
-
-CREATE TABLE token_pending_balances (
-    account text not null references account (address),
-    amount COIN not null
-);
-
-CREATE TABLE token_pending_clawbackable_operations (
-    id serial not null,
-    "from" text not null references account (address),
-    "to" text not null references account (address),
-    amount COIN not null,
-    clearing_timestamp TIMESTAMP WITHOUT TIME ZONE not null,
-    primary key (id)
-);
-
-CREATE TABLE token_pending_clawbackable_multi_operations (
-   id serial not null,
-   inputs jsonb not null,
-   outputs jsonb not null,
-   clearing_timestamp TIMESTAMP WITHOUT TIME ZONE not null,
-   primary key (id)
-);
-
-CREATE TABLE token_id_provider_manager_accounts (
-    account text not null references account (address)
 );

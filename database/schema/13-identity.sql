@@ -62,12 +62,6 @@ CREATE TABLE identity_kyc_statuses (
     primary key (human_id, identity_provider)
 );
 
-CREATE TABLE identity_nb_invite_per_day (
-   network TEXT NOT NULL REFERENCES identity_networks (index),
-   number TEXT NOT NULL,
-   primary key (network)
-);
-
 CREATE TABLE identity_network_kyb (
     index TEXT NOT NULL,
     status numeric NOT NULL,

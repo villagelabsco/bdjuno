@@ -24,12 +24,6 @@ CREATE TABLE economics_scheduled_hooks (
     primary key (network, index)
 );
 
-CREATE TABLE economics_nb_tx_per_day (
-    network text not null references identity_networks (index),
-    number numeric not null,
-    primary key (network)
-);
-
 CREATE TABLE economics_network_enabled (
     network text not null references identity_networks (index),
     active boolean not null,
