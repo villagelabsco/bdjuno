@@ -75,31 +75,21 @@ func (m Module) handleMsgCreateToken(index int, tx *juno.Tx, msg *tokentypes.Msg
 		return fmt.Errorf("error while getting token from source: %s", err)
 	}
 
-	return m.db.SaveOrUpdateTokenDenom(&t.Token)
+	return m.db.SaveTokenDenom(&t.Token)
 }
 
 func (m Module) handleMsgUpdateToken(index int, tx *juno.Tx, msg *tokentypes.MsgUpdateToken) error {
-	tkn, err := m.db.TokenDenom(msg.Denom)
-	if err != nil {
-		return fmt.Errorf("error getting saved token from db: %s", err)
+	t := &tokentypes.Token{
+		Denom:       msg.Denom,
+		Ticker:      msg.Ticker,
+		Description: msg.Description,
+		IconPath:    msg.IconPath,
 	}
-
-	tkn.Ticker = msg.Ticker
-	tkn.Description = msg.Description
-	tkn.IconPath = msg.IconPath
-
-	return m.db.SaveOrUpdateTokenDenom(tkn)
+	return m.db.UpdateTokenDenom(t)
 }
 
 func (m Module) handleMsgTransferTokenOwnership(index int, tx *juno.Tx, msg *tokentypes.MsgTransferTokenOwnership) error {
-	tkn, err := m.db.TokenDenom(msg.Denom)
-	if err != nil {
-		return fmt.Errorf("error getting saved token from db: %s", err)
-	}
-
-	tkn.Admin = msg.NewAdminAccount
-
-	return m.db.SaveOrUpdateTokenDenom(tkn)
+	return m.db.UpdateTokenAdminAccount(msg.Denom, msg.NewAdminAccount)
 }
 
 func (m Module) handleOnramp(tx *juno.Tx, paymentRef string) error {

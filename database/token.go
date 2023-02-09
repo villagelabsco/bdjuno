@@ -22,41 +22,10 @@ import (
 	tokentypes "github.com/villagelabsco/villaged/x/token/types"
 )
 
-func (db *Db) TokenDenom(denom string) (*tokentypes.Token, error) {
-	stmt := `
-		SELECT (network, denom, ticker, description, nb_decimals, transferable, backing_asset, admin, name_id, incentive_type, icon_path, referenced_denom, offramp_enabled, clawback_enabled, clawback_period_sec)
-		FROM token_tokens
-		WHERE denom = $1
-		LIMIT 1;
-	`
-
-	var t types.DbToken
-	if err := db.Sqlx.Select(&t, stmt, denom); err != nil {
-		return nil, fmt.Errorf("error while getting token: %s", err)
-	}
-
-	return t.ToProto(), nil
-}
-
-func (db *Db) SaveOrUpdateTokenDenom(token *tokentypes.Token) error {
+func (db *Db) SaveTokenDenom(token *tokentypes.Token) error {
 	stmt := `
 		INSERT INTO token_tokens (network, denom, ticker, description, nb_decimals, transferable, backing_asset, admin, name_id, incentive_type, icon_path, referenced_denom, offramp_enabled, clawback_enabled, clawback_period_sec) 
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
-		ON CONFLICT (denom) 
-		    DO UPDATE SET
-		    	ticker = $3,
-		    	description = $4,
-		    	nb_decimals = $5,
-		    	transferable = $6,
-		    	backing_asset = $7,
-		    	admin = $8,
-		    	name_id = $9,
-		    	incentive_type = $10,
-		    	icon_path = $11,
-		    	referenced_denom = $12,
-		    	offramp_enabled = $13,
-		    	clawback_enabled = $14,
-		    	clawback_period_sec = $15;
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15);
 	`
 
 	t := types.DbToken{}.FromProto(token)
@@ -79,6 +48,38 @@ func (db *Db) SaveOrUpdateTokenDenom(token *tokentypes.Token) error {
 	)
 	if err != nil {
 		return fmt.Errorf("error while storing or updating token: %s", err)
+	}
+
+	return nil
+}
+
+func (db *Db) UpdateTokenDenom(token *tokentypes.Token) error {
+	stmt := `
+		UPDATE token_tokens
+		SET ticker = $2,
+			description = $3,
+			icon_path = $4
+		WHERE denom = $1;
+	`
+
+	_, err := db.SQL.Exec(stmt, token.Denom, token.Ticker, token.Description, token.IconPath)
+	if err != nil {
+		return fmt.Errorf("error while updating token: %s", err)
+	}
+
+	return nil
+}
+
+func (db *Db) UpdateTokenAdminAccount(denom, adminAccount string) error {
+	stmt := `
+		UPDATE token_tokens
+		SET admin = $2
+		WHERE denom = $1;
+	`
+
+	_, err := db.SQL.Exec(stmt, denom, adminAccount)
+	if err != nil {
+		return fmt.Errorf("error while updating token admin account: %s", err)
 	}
 
 	return nil

@@ -31,14 +31,12 @@ func (m Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 		return m.handleMsgRemoveHook(index, tx, cosmosMsg)
 	case *econtypes.MsgPostTransaction:
 		return m.handleMsgPostTransaction(index, tx, cosmosMsg)
+	case *econtypes.MsgPostTask:
+		return m.handleMsgPostTask(index, tx, cosmosMsg)
 	case *econtypes.MsgEnableDisableNetworkEconomics:
 		return m.handleMsgEnableDisableNetworkEconomics(index, tx, cosmosMsg)
 	case *econtypes.MsgTriggerScheduledHooks:
 		return m.handleMsgTriggerScheduledHooks(index, tx, cosmosMsg)
-	//case *econtypes.MsgPostTask:
-	//	return m.handleMsgPostTask(index, tx, cosmosMsg)
-	//case *econtypes.MsgExecutePendingTask:
-	//	return m.handleMsgExecutePendingTask(index, tx, cosmosMsg)
 	//case *econtypes.MsgExecuteOneShotMint:
 	//	return m.handleMsgExecuteOneShotMint(index, tx, cosmosMsg)
 	//case *econtypes.MsgExecuteOneShotTransfer:
@@ -87,6 +85,10 @@ func (m Module) handleMsgRemoveHook(index int, tx *juno.Tx, msg *econtypes.MsgRe
 
 // TODO: Need an event for this
 func (m Module) handleMsgPostTransaction(index int, tx *juno.Tx, msg *econtypes.MsgPostTransaction) error {
+	return nil
+}
+
+func (m Module) handleMsgPostTask(index int, tx *juno.Tx, msg *econtypes.MsgPostTask) error {
 	return nil
 }
 
