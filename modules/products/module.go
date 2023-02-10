@@ -22,7 +22,7 @@ import (
 	nftsource "github.com/villagelabsco/bdjuno/v3/modules/nft/source"
 	productssource "github.com/villagelabsco/bdjuno/v3/modules/products/source"
 	"github.com/villagelabsco/juno/v4/modules"
-	productstypes "github.com/villagelabsco/villaged/x/products/types"
+	productstypes "github.com/villagelabsco/village/x/products/types"
 )
 
 var (

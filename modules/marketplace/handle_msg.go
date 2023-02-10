@@ -21,7 +21,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/villagelabsco/bdjuno/v3/utils"
 	juno "github.com/villagelabsco/juno/v4/types"
-	marketplacetypes "github.com/villagelabsco/villaged/x/marketplace/types"
+	marketplacetypes "github.com/villagelabsco/village/x/marketplace/types"
 )
 
 func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {

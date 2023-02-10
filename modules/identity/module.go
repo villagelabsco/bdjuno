@@ -21,7 +21,7 @@ import (
 	"github.com/villagelabsco/bdjuno/v3/database"
 	rbacsource "github.com/villagelabsco/bdjuno/v3/modules/rbac/source"
 	"github.com/villagelabsco/juno/v4/modules"
-	identitytypes "github.com/villagelabsco/villaged/x/identity/types"
+	identitytypes "github.com/villagelabsco/village/x/identity/types"
 
 	feegrantsource "github.com/villagelabsco/bdjuno/v3/modules/feegrant/source"
 	identitysource "github.com/villagelabsco/bdjuno/v3/modules/identity/source"

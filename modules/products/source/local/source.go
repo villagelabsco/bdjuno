@@ -20,7 +20,7 @@ import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/villagelabsco/juno/v4/node/local"
-	productstypes "github.com/villagelabsco/villaged/x/products/types"
+	productstypes "github.com/villagelabsco/village/x/products/types"
 )
 
 type Source struct {

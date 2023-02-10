@@ -21,7 +21,7 @@ import (
 	"github.com/villagelabsco/bdjuno/v3/database"
 	econsource "github.com/villagelabsco/bdjuno/v3/modules/economics/source"
 	"github.com/villagelabsco/juno/v4/modules"
-	econtypes "github.com/villagelabsco/villaged/x/economics/types"
+	econtypes "github.com/villagelabsco/village/x/economics/types"
 )
 
 var _ modules.Module = &Module{}

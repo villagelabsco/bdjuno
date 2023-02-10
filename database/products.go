@@ -21,7 +21,7 @@ import (
 	"fmt"
 	nfttypes "github.com/cosmos/cosmos-sdk/x/nft"
 	"github.com/villagelabsco/bdjuno/v3/database/types"
-	productstypes "github.com/villagelabsco/villaged/x/products/types"
+	productstypes "github.com/villagelabsco/village/x/products/types"
 )
 
 func (db *Db) SaveOrUpdateProductClass(

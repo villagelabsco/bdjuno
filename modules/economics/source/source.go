@@ -17,7 +17,7 @@
 package source
 
 import (
-	econtypes "github.com/villagelabsco/villaged/x/economics/types"
+	econtypes "github.com/villagelabsco/village/x/economics/types"
 )
 
 type Source interface {

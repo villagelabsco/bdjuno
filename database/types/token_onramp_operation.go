@@ -17,7 +17,7 @@
 package types
 
 import (
-	tokentypes "github.com/villagelabsco/villaged/x/token/types"
+	tokentypes "github.com/villagelabsco/village/x/token/types"
 )
 
 type DbTokenOnrampOperation struct {

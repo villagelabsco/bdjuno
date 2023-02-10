@@ -19,7 +19,7 @@ package database
 import (
 	"fmt"
 	"github.com/villagelabsco/bdjuno/v3/database/types"
-	tokentypes "github.com/villagelabsco/villaged/x/token/types"
+	tokentypes "github.com/villagelabsco/village/x/token/types"
 )
 
 func (db *Db) SaveTokenDenom(token *tokentypes.Token) error {

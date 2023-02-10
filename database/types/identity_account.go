@@ -16,7 +16,7 @@
 
 package types
 
-import identitytypes "github.com/villagelabsco/villaged/x/identity/types"
+import identitytypes "github.com/villagelabsco/village/x/identity/types"
 
 type DbIdentityAccount struct {
 	Index      string `db:"index"`

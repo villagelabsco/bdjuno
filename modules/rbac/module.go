@@ -21,7 +21,7 @@ import (
 	"github.com/villagelabsco/bdjuno/v3/database"
 	rbacsource "github.com/villagelabsco/bdjuno/v3/modules/rbac/source"
 	"github.com/villagelabsco/juno/v4/modules"
-	rbactypes "github.com/villagelabsco/villaged/x/rbac/types"
+	rbactypes "github.com/villagelabsco/village/x/rbac/types"
 )
 
 var (

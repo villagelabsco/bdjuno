@@ -20,7 +20,7 @@ import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	juno "github.com/villagelabsco/juno/v4/types"
-	rbactypes "github.com/villagelabsco/villaged/x/rbac/types"
+	rbactypes "github.com/villagelabsco/village/x/rbac/types"
 )
 
 func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {

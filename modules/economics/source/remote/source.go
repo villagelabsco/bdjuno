@@ -19,7 +19,7 @@ package remote
 import (
 	"fmt"
 	"github.com/villagelabsco/juno/v4/node/remote"
-	econtypes "github.com/villagelabsco/villaged/x/economics/types"
+	econtypes "github.com/villagelabsco/village/x/economics/types"
 )
 
 type Source struct {

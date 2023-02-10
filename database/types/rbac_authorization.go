@@ -20,7 +20,7 @@ import (
 	"encoding/json"
 	"fmt"
 	sqlxtypes "github.com/jmoiron/sqlx/types"
-	rbactypes "github.com/villagelabsco/villaged/x/rbac/types"
+	rbactypes "github.com/villagelabsco/village/x/rbac/types"
 )
 
 type DbRbacAuthorization struct {

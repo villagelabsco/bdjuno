@@ -19,7 +19,7 @@ package database
 import (
 	"fmt"
 	"github.com/villagelabsco/bdjuno/v3/database/types"
-	reputationtypes "github.com/villagelabsco/villaged/x/reputation/types"
+	reputationtypes "github.com/villagelabsco/village/x/reputation/types"
 )
 
 func (db *Db) SaveOrUpdateReputationFeedback(fb *reputationtypes.Feedback) error {

@@ -16,7 +16,7 @@ import (
 	"github.com/villagelabsco/bdjuno/v3/database"
 	"github.com/villagelabsco/bdjuno/v3/modules"
 
-	villagedapp "github.com/villagelabsco/villaged/app"
+	villagedapp "github.com/villagelabsco/village/app"
 )
 
 func main() {

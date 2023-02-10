@@ -19,7 +19,7 @@ package database
 import (
 	"fmt"
 	"github.com/villagelabsco/bdjuno/v3/database/types"
-	rbactypes "github.com/villagelabsco/villaged/x/rbac/types"
+	rbactypes "github.com/villagelabsco/village/x/rbac/types"
 )
 
 func (db *Db) SaveOrUpdateRbacAuthorization(au *rbactypes.Authorizations) error {

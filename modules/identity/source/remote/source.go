@@ -19,7 +19,7 @@ package remote
 import (
 	"fmt"
 	"github.com/villagelabsco/juno/v4/node/remote"
-	identitytypes "github.com/villagelabsco/villaged/x/identity/types"
+	identitytypes "github.com/villagelabsco/village/x/identity/types"
 )
 
 type Source struct {

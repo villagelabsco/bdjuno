@@ -19,7 +19,7 @@ package remote
 import (
 	"fmt"
 	"github.com/villagelabsco/juno/v4/node/remote"
-	marketplacetypes "github.com/villagelabsco/villaged/x/marketplace/types"
+	marketplacetypes "github.com/villagelabsco/village/x/marketplace/types"
 )
 
 type Source struct {

@@ -21,7 +21,7 @@ import (
 	"github.com/villagelabsco/bdjuno/v3/database"
 	marketplacesource "github.com/villagelabsco/bdjuno/v3/modules/marketplace/source"
 	"github.com/villagelabsco/juno/v4/modules"
-	marketplacetypes "github.com/villagelabsco/villaged/x/marketplace/types"
+	marketplacetypes "github.com/villagelabsco/village/x/marketplace/types"
 )
 
 var (

@@ -5,7 +5,7 @@ import (
 	"github.com/villagelabsco/bdjuno/v3/database"
 	reputationsource "github.com/villagelabsco/bdjuno/v3/modules/reputation/source"
 	"github.com/villagelabsco/juno/v4/modules"
-	reputationtypes "github.com/villagelabsco/villaged/x/reputation/types"
+	reputationtypes "github.com/villagelabsco/village/x/reputation/types"
 )
 
 var (

@@ -23,7 +23,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sqlxtypes "github.com/jmoiron/sqlx/types"
 	"github.com/villagelabsco/bdjuno/v3/utils"
-	econtypes "github.com/villagelabsco/villaged/x/economics/types"
+	econtypes "github.com/villagelabsco/village/x/economics/types"
 	"time"
 )
 

@@ -16,7 +16,7 @@
 
 package types
 
-import tokentypes "github.com/villagelabsco/villaged/x/token/types"
+import tokentypes "github.com/villagelabsco/village/x/token/types"
 
 type DbTokenOfframpOperation struct {
 	Id                          uint64 `json:"id"`

@@ -19,7 +19,7 @@ package types
 import (
 	nfttypes "github.com/cosmos/cosmos-sdk/x/nft"
 	sqlxtypes "github.com/jmoiron/sqlx/types"
-	productstypes "github.com/villagelabsco/villaged/x/products/types"
+	productstypes "github.com/villagelabsco/village/x/products/types"
 )
 
 type DbProductClassInfo struct {

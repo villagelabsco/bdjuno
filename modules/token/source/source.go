@@ -16,7 +16,7 @@
 
 package source
 
-import tokentypes "github.com/villagelabsco/villaged/x/token/types"
+import tokentypes "github.com/villagelabsco/village/x/token/types"
 
 type Source interface {
 	GetParams(height int64) (tokentypes.Params, error)

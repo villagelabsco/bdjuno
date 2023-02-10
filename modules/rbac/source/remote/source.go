@@ -19,7 +19,7 @@ package remote
 import (
 	"fmt"
 	"github.com/villagelabsco/juno/v4/node/remote"
-	rbactypes "github.com/villagelabsco/villaged/x/rbac/types"
+	rbactypes "github.com/villagelabsco/village/x/rbac/types"
 )
 
 type Source struct {

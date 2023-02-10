@@ -19,7 +19,7 @@ package remote
 import (
 	"fmt"
 	"github.com/villagelabsco/juno/v4/node/remote"
-	reputationtypes "github.com/villagelabsco/villaged/x/reputation/types"
+	reputationtypes "github.com/villagelabsco/village/x/reputation/types"
 )
 
 type Source struct {

@@ -24,8 +24,8 @@ import (
 	"github.com/villagelabsco/bdjuno/v3/types"
 	"github.com/villagelabsco/bdjuno/v3/utils"
 	juno "github.com/villagelabsco/juno/v4/types"
-	identitytypes "github.com/villagelabsco/villaged/x/identity/types"
-	rbactypes "github.com/villagelabsco/villaged/x/rbac/types"
+	identitytypes "github.com/villagelabsco/village/x/identity/types"
+	rbactypes "github.com/villagelabsco/village/x/rbac/types"
 )
 
 func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {

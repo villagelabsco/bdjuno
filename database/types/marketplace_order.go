@@ -21,7 +21,7 @@ import (
 	"encoding/json"
 	"fmt"
 	sqlxtypes "github.com/jmoiron/sqlx/types"
-	marketplacetypes "github.com/villagelabsco/villaged/x/marketplace/types"
+	marketplacetypes "github.com/villagelabsco/village/x/marketplace/types"
 	"time"
 )
 

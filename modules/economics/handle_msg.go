@@ -21,7 +21,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/villagelabsco/bdjuno/v3/utils"
 	juno "github.com/villagelabsco/juno/v4/types"
-	econtypes "github.com/villagelabsco/villaged/x/economics/types"
+	econtypes "github.com/villagelabsco/village/x/economics/types"
 	"strconv"
 )
 
@@ -114,7 +114,7 @@ func (m Module) handleMsgTriggerScheduledHooks(index int, tx *juno.Tx, msg *econ
 }
 
 func (m Module) handleMsgEnableDisableNetworkEconomics(index int, tx *juno.Tx, msg *econtypes.MsgEnableDisableNetworkEconomics) error {
-	active, err := utils.FindEventAndAttr(index, tx, &econtypes.NetworkEnabledDisabled{}, "status")
+	active, err := utils.FindEventAndAttr(index, tx, &econtypes.EvtNetworkEnabledDisabled{}, "status")
 	if err != nil {
 		return fmt.Errorf("error while getting economics active from event: %s", err)
 	}

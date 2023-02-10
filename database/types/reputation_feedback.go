@@ -20,7 +20,7 @@ import (
 	"encoding/json"
 	"fmt"
 	sqlxtypes "github.com/jmoiron/sqlx/types"
-	reputationtypes "github.com/villagelabsco/villaged/x/reputation/types"
+	reputationtypes "github.com/villagelabsco/village/x/reputation/types"
 	"time"
 )
 

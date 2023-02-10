@@ -21,7 +21,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/villagelabsco/bdjuno/v3/utils"
 	juno "github.com/villagelabsco/juno/v4/types"
-	tokentypes "github.com/villagelabsco/villaged/x/token/types"
+	tokentypes "github.com/villagelabsco/village/x/token/types"
 	"strconv"
 )
 

@@ -19,7 +19,7 @@ package database
 import (
 	"fmt"
 	"github.com/villagelabsco/bdjuno/v3/database/types"
-	marketplacetypes "github.com/villagelabsco/villaged/x/marketplace/types"
+	marketplacetypes "github.com/villagelabsco/village/x/marketplace/types"
 )
 
 func (db *Db) SaveOrUpdateListing(listing *marketplacetypes.Listing) error {

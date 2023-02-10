@@ -21,7 +21,7 @@ import (
 	"github.com/villagelabsco/bdjuno/v3/database"
 	tokensource "github.com/villagelabsco/bdjuno/v3/modules/token/source"
 	"github.com/villagelabsco/juno/v4/modules"
-	tokentypes "github.com/villagelabsco/villaged/x/token/types"
+	tokentypes "github.com/villagelabsco/village/x/token/types"
 )
 
 var (
