@@ -65,9 +65,13 @@ func (m Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 func (m Module) handleMsgCreateToken(index int, tx *juno.Tx, msg *tokentypes.MsgCreateToken) error {
 	denom, err := utils.FindEventAndAttr(index, tx, &tokentypes.EvtCreatedToken{}, "denom")
 	if err != nil {
-		return fmt.Errorf("error while getting token denom from events: %s", err)
+		return fmt.Errorf("error while getting token denom from tx events: %s", err)
 	}
 
+	return m.handleCreateToken(tx, denom)
+}
+
+func (m Module) handleCreateToken(tx *juno.Tx, denom string) error {
 	t, err := m.src.GetToken(tx.Height, tokentypes.QueryGetTokenRequest{
 		Denom: denom,
 	})
@@ -211,9 +215,19 @@ func (m Module) handleMsgCancelOfframpRequest(index int, tx *juno.Tx, msg *token
 }
 
 func (m Module) handleMsgCreateAccountingToken(index int, tx *juno.Tx, msg *tokentypes.MsgCreateAccountingToken) error {
-	return m.handleMsgCreateToken(index, tx, nil)
+	denom, err := utils.FindEventAndAttr(index, tx, &tokentypes.EvtCreatedAccountingToken{}, "denom")
+	if err != nil {
+		return fmt.Errorf("error while getting token denom from events: %s", err)
+	}
+
+	return m.handleCreateToken(tx, denom)
 }
 
 func (m Module) handleMsgCreateRootCurrencyToken(index int, tx *juno.Tx, msg *tokentypes.MsgCreateRootCurrencyToken) error {
-	return m.handleMsgCreateToken(index, tx, nil)
+	denom, err := utils.FindEventAndAttr(index, tx, &tokentypes.EvtCreatedRootCurrencyToken{}, "denom")
+	if err != nil {
+		return fmt.Errorf("error while getting token denom from events: %s", err)
+	}
+
+	return m.handleCreateToken(tx, denom)
 }
