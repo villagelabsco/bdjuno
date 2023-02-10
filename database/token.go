@@ -91,8 +91,12 @@ func (db *Db) SaveTokenOnrampOperation(op tokentypes.OnrampOperations) error {
 		VALUES ($1, $2, $3);
 	`
 
-	dbOp := types.DbTokenOnrampOperation{}.FromProto(op)
-	_, err := db.SQL.Exec(stmt,
+	dbOp, err := types.DbTokenOnrampOperation{}.FromProto(op)
+	if err != nil {
+		return fmt.Errorf("error while converting token onramp operation: %s", err)
+	}
+
+	_, err = db.SQL.Exec(stmt,
 		dbOp.PaymentRef,
 		dbOp.Account,
 		dbOp.Amount,
@@ -119,8 +123,12 @@ func (db *Db) SaveOrUpdateTokenOfframpOperation(op tokentypes.OfframpOperations)
 			id_provider = $9;
 	`
 
-	dbOp := types.DbTokenOfframpOperation{}.FromProto(op)
-	_, err := db.SQL.Exec(stmt,
+	dbOp, err := types.DbTokenOfframpOperation{}.FromProto(op)
+	if err != nil {
+		return fmt.Errorf("error while converting token offramp operation: %s", err)
+	}
+
+	_, err = db.SQL.Exec(stmt,
 		dbOp.Id,
 		dbOp.Account,
 		dbOp.HumanId,

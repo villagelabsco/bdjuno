@@ -17,19 +17,27 @@
 package types
 
 import (
+	"encoding/json"
+	"fmt"
+	sqlxtypes "github.com/jmoiron/sqlx/types"
 	tokentypes "github.com/villagelabsco/village/x/token/types"
 )
 
 type DbTokenOnrampOperation struct {
-	PaymentRef string `json:"payment_ref"`
-	Account    string `json:"account"`
-	Amount     DbCoin `json:"amount"`
+	PaymentRef string             `json:"payment_ref"`
+	Account    string             `json:"account"`
+	Amount     sqlxtypes.JSONText `json:"amount"`
 }
 
-func (DbTokenOnrampOperation) FromProto(op tokentypes.OnrampOperations) DbTokenOnrampOperation {
+func (DbTokenOnrampOperation) FromProto(op tokentypes.OnrampOperations) (DbTokenOnrampOperation, error) {
+	amt, err := json.Marshal(op.Amount)
+	if err != nil {
+		return DbTokenOnrampOperation{}, fmt.Errorf("error while marshaling amount: %s", err)
+	}
+
 	return DbTokenOnrampOperation{
 		PaymentRef: op.PaymentRef,
 		Account:    op.Account,
-		Amount:     NewDbCoin(op.Amount),
-	}
+		Amount:     amt,
+	}, nil
 }

@@ -78,6 +78,6 @@ CREATE TABLE identity_account_link_proposals (
         REFERENCES identity_accounts (index),
     human_id TEXT NOT NULL REFERENCES identity_humans (index),
     set_as_primary_wallet_for_network TEXT NOT NULL REFERENCES identity_networks (index),
-    deposit COIN NOT NULL,
+    deposit jsonb NOT NULL,
     primary key (index)
 );

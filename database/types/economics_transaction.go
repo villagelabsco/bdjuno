@@ -33,7 +33,7 @@ type DbEconomicsTransaction struct {
 	Creator                string             `db:"creator"`
 	Seller                 string             `db:"seller"`
 	Buyer                  string             `db:"buyer"`
-	Amount                 DbCoin             `db:"amount"`
+	Amount                 sqlxtypes.JSONText `db:"amount"`
 	ProductClass           string             `db:"product_class"`
 	Metadata               sqlxtypes.JSONText `db:"metadata"`
 	Force                  bool               `db:"force"`
@@ -74,12 +74,17 @@ func (DbEconomicsTransaction) FromProto(msg *econtypes.MsgPostTransaction, retVa
 		return DbEconomicsTransaction{}, fmt.Errorf("error while marshaling individual results: %s", err)
 	}
 
+	amt, err := json.Marshal(sdk.NewCoin(msg.Denom, sdk.NewInt(int64(msg.Amount))))
+	if err != nil {
+		return DbEconomicsTransaction{}, fmt.Errorf("error while marshaling amount: %s", err)
+	}
+
 	return DbEconomicsTransaction{
 		Network:                msg.Network,
 		Creator:                msg.Creator,
 		Seller:                 msg.Seller,
 		Buyer:                  msg.Buyer,
-		Amount:                 NewDbCoin(sdk.NewCoin(msg.Denom, sdk.NewInt(int64(msg.Amount)))),
+		Amount:                 amt,
 		ProductClass:           msg.ProductClass,
 		Metadata:               metadataB,
 		Force:                  msg.Force,

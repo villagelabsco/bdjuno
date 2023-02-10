@@ -16,30 +16,40 @@
 
 package types
 
-import tokentypes "github.com/villagelabsco/village/x/token/types"
+import (
+	"encoding/json"
+	"fmt"
+	sqlxtypes "github.com/jmoiron/sqlx/types"
+	tokentypes "github.com/villagelabsco/village/x/token/types"
+)
 
 type DbTokenOfframpOperation struct {
-	Id                          uint64 `json:"id"`
-	Account                     string `json:"account"`
-	HumanId                     string `json:"human_id"`
-	Executed                    bool   `json:"executed"`
-	Amount                      DbCoin `json:"amount"`
-	CreationBlock               uint64 `json:"creation_block"`
-	ExecutionBlock              uint64 `json:"execution_block"`
-	FundsTransferMethodPseudoId string `json:"funds_transfer_method_pseudo_id"`
-	IdProvider                  string `json:"id_provider"`
+	Id                          uint64             `json:"id"`
+	Account                     string             `json:"account"`
+	HumanId                     string             `json:"human_id"`
+	Executed                    bool               `json:"executed"`
+	Amount                      sqlxtypes.JSONText `json:"amount"`
+	CreationBlock               uint64             `json:"creation_block"`
+	ExecutionBlock              uint64             `json:"execution_block"`
+	FundsTransferMethodPseudoId string             `json:"funds_transfer_method_pseudo_id"`
+	IdProvider                  string             `json:"id_provider"`
 }
 
-func (DbTokenOfframpOperation) FromProto(op tokentypes.OfframpOperations) DbTokenOfframpOperation {
+func (DbTokenOfframpOperation) FromProto(op tokentypes.OfframpOperations) (DbTokenOfframpOperation, error) {
+	amt, err := json.Marshal(op.Amount)
+	if err != nil {
+		return DbTokenOfframpOperation{}, fmt.Errorf("error while marshaling amount: %s", err)
+	}
+
 	return DbTokenOfframpOperation{
 		Id:                          op.Id,
 		Account:                     op.Account,
 		HumanId:                     op.HumanId,
 		Executed:                    op.Executed,
-		Amount:                      NewDbCoin(op.Amount),
+		Amount:                      amt,
 		CreationBlock:               op.CreationBlock,
 		ExecutionBlock:              op.ExecutionBlock,
 		FundsTransferMethodPseudoId: op.FundsTransferMethodPseudoId,
 		IdProvider:                  op.IdProvider,
-	}
+	}, nil
 }

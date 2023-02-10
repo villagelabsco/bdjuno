@@ -16,16 +16,26 @@
 
 package types
 
-import tokentypes "github.com/villagelabsco/village/x/token/types"
+import (
+	"encoding/json"
+	"fmt"
+	sqlxtypes "github.com/jmoiron/sqlx/types"
+	tokentypes "github.com/villagelabsco/village/x/token/types"
+)
 
 type DbTokenImmobilizedFunds struct {
-	Account string `db:"account"`
-	Amount  DbCoin `db:"amount"`
+	Account string             `db:"account"`
+	Amount  sqlxtypes.JSONText `db:"amount"`
 }
 
-func (DbTokenImmobilizedFunds) FromProto(funds tokentypes.ImmobilizedFunds) DbTokenImmobilizedFunds {
+func (DbTokenImmobilizedFunds) FromProto(funds tokentypes.ImmobilizedFunds) (DbTokenImmobilizedFunds, error) {
+	amt, err := json.Marshal(funds.Amount)
+	if err != nil {
+		return DbTokenImmobilizedFunds{}, fmt.Errorf("error while marshaling amount: %s", err)
+	}
+
 	return DbTokenImmobilizedFunds{
 		Account: funds.Account,
-		Amount:  NewDbCoin(funds.Amount),
-	}
+		Amount:  amt,
+	}, nil
 }

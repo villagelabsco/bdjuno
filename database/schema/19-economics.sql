@@ -46,7 +46,7 @@ CREATE TABLE economics_transactions (
         references identity_accounts (index),
     seller text not null,
     buyer text not null,
-    amount COIN not null,
+    amount jsonb not null,
     product_class text not null,
     metadata jsonb not null,
     force boolean not null,

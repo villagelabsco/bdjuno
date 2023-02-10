@@ -17,23 +17,31 @@
 package types
 
 import (
+	"encoding/json"
+	"fmt"
+	sqlxtypes "github.com/jmoiron/sqlx/types"
 	identitytypes "github.com/villagelabsco/village/x/identity/types"
 )
 
 type DbIdentityAccountLinkProposal struct {
-	Index                        string `db:"index"`
-	ProposerAccount              string `db:"proposer_account"`
-	HumanId                      string `db:"human_id"`
-	SetAsPrimaryWalletForNetwork string `db:"set_as_primary_wallet_for_network"`
-	Deposit                      DbCoin `db:"deposit"`
+	Index                        string             `db:"index"`
+	ProposerAccount              string             `db:"proposer_account"`
+	HumanId                      string             `db:"human_id"`
+	SetAsPrimaryWalletForNetwork string             `db:"set_as_primary_wallet_for_network"`
+	Deposit                      sqlxtypes.JSONText `db:"deposit"`
 }
 
-func (DbIdentityAccountLinkProposal) FromProto(alp *identitytypes.AccountLinkProposal) DbIdentityAccountLinkProposal {
+func (DbIdentityAccountLinkProposal) FromProto(alp *identitytypes.AccountLinkProposal) (DbIdentityAccountLinkProposal, error) {
+	deposit, err := json.Marshal(alp.Deposit)
+	if err != nil {
+		return DbIdentityAccountLinkProposal{}, fmt.Errorf("error while marshaling deposit: %s", err)
+	}
+	
 	return DbIdentityAccountLinkProposal{
 		Index:                        alp.Index,
 		ProposerAccount:              alp.ProposerAccount,
 		HumanId:                      alp.HumanId,
 		SetAsPrimaryWalletForNetwork: alp.SetAsPrimaryWalletForNetwork,
-		Deposit:                      NewDbCoin(alp.Deposit),
-	}
+		Deposit:                      deposit,
+	}, nil
 }
