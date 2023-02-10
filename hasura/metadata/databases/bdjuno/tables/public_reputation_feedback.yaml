@@ -1,5 +1,5 @@
 table:
-  name: reputation_feedback_aggregate
+  name: reputation_feedback
   schema: public
 select_permissions:
   - role: anonymous
