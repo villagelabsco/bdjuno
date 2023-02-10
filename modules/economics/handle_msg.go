@@ -83,12 +83,29 @@ func (m Module) handleMsgRemoveHook(index int, tx *juno.Tx, msg *econtypes.MsgRe
 	}
 }
 
-// TODO: Need an event for this
 func (m Module) handleMsgPostTransaction(index int, tx *juno.Tx, msg *econtypes.MsgPostTransaction) error {
+	retValB64, err := utils.FindEventAndAttr(index, tx, &econtypes.EvtPostedTransaction{}, "hookSequenceRetValB64")
+	if err != nil {
+		return fmt.Errorf("error while getting retValB64 from event: %s", err)
+	}
+
+	if err := m.db.SaveEconomicsTransaction(msg, retValB64); err != nil {
+		return fmt.Errorf("error while saving transaction: %s", err)
+	}
+
 	return nil
 }
 
 func (m Module) handleMsgPostTask(index int, tx *juno.Tx, msg *econtypes.MsgPostTask) error {
+	retValB64, err := utils.FindEventAndAttr(index, tx, &econtypes.EvtPostedTask{}, "hookSequenceRetValB64")
+	if err != nil {
+		return fmt.Errorf("error while getting retValB64 from event: %s", err)
+	}
+
+	if err := m.db.SaveEconomicsTask(msg, retValB64); err != nil {
+		return fmt.Errorf("error while saving task: %s", err)
+	}
+
 	return nil
 }
 

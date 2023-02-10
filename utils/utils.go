@@ -2,6 +2,7 @@ package utils
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/gogo/protobuf/proto"
 	juno "github.com/villagelabsco/juno/v4/types"
@@ -51,4 +52,19 @@ func FindEventAndAttr(index int, tx *juno.Tx, event proto.Message, attrKey strin
 
 	res = strings.Replace(res, "\"", "", -1)
 	return res, nil
+}
+
+func ParseJsonStrMap(jsonStr string) (map[string]string, error) {
+	if jsonStr == "" {
+		return make(map[string]string), nil
+	}
+
+	var parsedMap map[string]string
+
+	err := json.Unmarshal([]byte(jsonStr), &parsedMap)
+	if err != nil {
+		return nil, err
+	}
+
+	return parsedMap, nil
 }

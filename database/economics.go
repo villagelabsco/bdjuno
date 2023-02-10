@@ -137,3 +137,66 @@ func (db *Db) SaveEconomicsScheduledHookManualTrigger(msg *econtypes.MsgTriggerS
 
 	return nil
 }
+
+func (db *Db) SaveEconomicsTransaction(msg *econtypes.MsgPostTransaction, retValB64 string) error {
+	stmt := `
+		INSERT INTO economics_transactions (network, creator, seller, buyer, amount, product_class, metadata, force, ref, timestamp, memo, hooks_cumulative_result, hooks_individual_results)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13);
+	`
+
+	dbT, err := types.DbEconomicsTransaction{}.FromProto(msg, retValB64)
+	if err != nil {
+		return fmt.Errorf("error while converting economics transaction: %s", err)
+	}
+
+	if _, err := db.SQL.Exec(stmt,
+		dbT.Network,
+		dbT.Creator,
+		dbT.Seller,
+		dbT.Buyer,
+		dbT.Amount,
+		dbT.ProductClass,
+		dbT.Metadata,
+		dbT.Force,
+		dbT.Ref,
+		dbT.Timestamp,
+		dbT.Memo,
+		dbT.HooksCumulativeResult,
+		dbT.HooksIndividualResults,
+	); err != nil {
+		return fmt.Errorf("error while storing economics transaction: %s", err)
+	}
+
+	return nil
+}
+
+func (db *Db) SaveEconomicsTask(msg *econtypes.MsgPostTask, retValB64 string) error {
+	stmt := `
+		INSERT INTO economics_tasks (network, creator, tasker, buyer, task_count, task_class_id, force, ref, timestamp, memo, hooks_cumulative_result, hooks_individual_results) 
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);
+	`
+
+	dbT, err := types.DbEconomicsTask{}.FromProto(msg, retValB64)
+	if err != nil {
+		return fmt.Errorf("error while converting economics task: %s", err)
+	}
+
+	if _, err := db.SQL.Exec(stmt,
+		dbT.Network,
+		dbT.Creator,
+		dbT.Tasker,
+		dbT.Buyer,
+		dbT.TaskCount,
+		dbT.TaskClassId,
+		dbT.Force,
+		dbT.Ref,
+		dbT.Timestamp,
+		dbT.Memo,
+		dbT.HooksCumulativeResult,
+		dbT.HooksIndividualResults,
+	); err != nil {
+		return fmt.Errorf("error while storing economics task: %s", err)
+	}
+
+	return nil
+}

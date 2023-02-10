@@ -37,3 +37,50 @@ CREATE TABLE economics_scheduled_hooks_manual_triggers (
     hook_idxs jsonb not null,
     primary key (id)
 );
+
+CREATE TABLE economics_transactions (
+    id serial not null,
+    network text not null references identity_networks (index),
+    creator text not null
+        references account (address)
+        references identity_accounts (index),
+    seller text not null
+        references account (address)
+        references identity_accounts (index),
+    buyer text not null
+        references account (address)
+        references identity_accounts (index),
+    amount COIN not null,
+    product_class text not null,
+    metadata jsonb not null,
+    force boolean not null,
+    ref text not null,
+    "timestamp" timestamp not null,
+    memo text,
+    hooks_cumulative_result jsonb not null,
+    hooks_individual_results jsonb not null,
+    primary key (id)
+);
+
+CREATE TABLE economics_tasks (
+    id serial not null,
+    network text not null references identity_networks (index),
+    creator text not null
+        references account (address)
+        references identity_accounts (index),
+    tasker text not null
+        references account (address)
+        references identity_accounts (index),
+    buyer text not null
+        references account (address)
+        references identity_accounts (index),
+    task_count numeric not null,
+    task_class_id text not null,
+    force boolean not null,
+    ref text not null,
+    "timestamp" timestamp not null,
+    memo text,
+    hooks_cumulative_result jsonb not null,
+    hooks_individual_results jsonb not null,
+    primary key (id)
+);
