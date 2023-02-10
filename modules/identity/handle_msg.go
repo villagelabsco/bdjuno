@@ -392,7 +392,7 @@ func (m *Module) handleMsgCreateNetwork(index int, tx *juno.Tx, msg *identitytyp
 	}
 	authorizations := auth.Authorizations
 
-	if err := m.db.SaveOrUpdateRbacAuthorization(&authorizations); err != nil {
+	if err := m.db.SaveRbacAuthorization(&authorizations, []*rbactypes.MemberUpdates{{Address: msg.Creator, Weight: "1"}}); err != nil {
 		return fmt.Errorf("error saving authorizations: %s", err)
 	}
 

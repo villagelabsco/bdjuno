@@ -1394,8 +1394,8 @@ github.com/valyala/fasttemplate v1.0.1/go.mod h1:UQGH1tvbgY+Nz5t2n7tXsz52dQxojPU
 github.com/valyala/fasttemplate v1.2.1/go.mod h1:KHLXt3tVN2HBp8eijSv/kGJopbvo7S+qRAEEKiv+SiQ=
 github.com/villagelabsco/juno/v4 v4.0.0-20230203084128-d8b280d9a958 h1:LnvDI8LcIBbzgpTLE9gkm3eCC0iJv/z7YhEorpO6XSY=
 github.com/villagelabsco/juno/v4 v4.0.0-20230203084128-d8b280d9a958/go.mod h1:1O3wFEVx8IQprpHJUH3paBxGhC60NXU2yHHQqMoFSuE=
-github.com/villagelabsco/villaged v0.1.0-alpha.0.20230131082733-96cb37bdc4c1 h1:Rw/GsiZi4JblZKqMzdZiLWPprPOkdrzxhzQkqJmVjFk=
-github.com/villagelabsco/villaged v0.1.0-alpha.0.20230131082733-96cb37bdc4c1/go.mod h1:JqnAZxWhHgFmIIqfB0aG8iBy4Bei2z0rJRLW1xclgak=
+github.com/villagelabsco/village v0.0.0-20230210112813-47119ccf9bb8 h1:BDYTI3eRf7Nu5lPAcfpO5Yk++xiDuH5DFXYaV/KO/es=
+github.com/villagelabsco/village v0.0.0-20230210112813-47119ccf9bb8/go.mod h1:hO7lQbZMWr6oDAfDtjOX6gGJdpb2njRFu/hy5JEQHN8=
 github.com/vishvananda/netlink v0.0.0-20181108222139-023a6dafdcdf/go.mod h1:+SR5DhBJrl6ZM7CoCKvpw5BKroDKQ+PJqOg65H/2ktk=
 github.com/vishvananda/netlink v1.1.0/go.mod h1:cTgwzPIzzgDAYoQrMm0EdrjRUBkTqKYppBueQtXaqoE=
 github.com/vishvananda/netlink v1.1.1-0.20201029203352-d40f9887b852/go.mod h1:twkDnbuQxJYemMlGd4JFIcuhgX83tXhKS2B/PRMpOho=

@@ -26,21 +26,21 @@ import (
 func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 	switch cosmosMsg := msg.(type) {
 	case *rbactypes.MsgDeclareRole:
-		return m.HandleMsgDeclareRole(index, tx, cosmosMsg)
-	//case *rbactypes.MsgUpdateGroupMembers:
-	//	return m.HandleMsgUpdateGroupMembers(index, tx, cosmosMsg)
+		return m.handleMsgDeclareRole(index, tx, cosmosMsg)
+	case *rbactypes.MsgUpdateGroupMembers:
+		return m.handleMsgUpdateGroupMembers(index, tx, cosmosMsg)
 	case *rbactypes.MsgTransferRoleOwnership:
-		return m.HandleMsgTransferRoleOwnership(index, tx, cosmosMsg)
+		return m.handleMsgTransferRoleOwnership(index, tx, cosmosMsg)
 	case *rbactypes.MsgUpdateRole:
-		return m.HandleMsgUpdateRole(index, tx, cosmosMsg)
+		return m.handleMsgUpdateRole(index, tx, cosmosMsg)
 	case *rbactypes.MsgSetRoleDelegates:
-		return m.HandleMsgSetRoleDelegates(index, tx, cosmosMsg)
+		return m.handleMsgSetRoleDelegates(index, tx, cosmosMsg)
 	}
 
 	return nil
 }
 
-func (m *Module) HandleMsgDeclareRole(index int, tx *juno.Tx, msg *rbactypes.MsgDeclareRole) error {
+func (m *Module) handleMsgDeclareRole(index int, tx *juno.Tx, msg *rbactypes.MsgDeclareRole) error {
 	roleName := msg.Network + rbactypes.NamespaceSeparator + msg.Name
 	auth, err := m.src.GetAuthorizations(tx.Height, rbactypes.QueryGetAuthorizationsRequest{
 		Index: roleName,
@@ -49,18 +49,19 @@ func (m *Module) HandleMsgDeclareRole(index int, tx *juno.Tx, msg *rbactypes.Msg
 		return fmt.Errorf("error getting authorizations: %s", err)
 	}
 
-	if err := m.db.SaveOrUpdateRbacAuthorization(&auth.Authorizations); err != nil {
+	if err := m.db.SaveRbacAuthorization(&auth.Authorizations, nil); err != nil {
 		return fmt.Errorf("error saving authorizations: %s", err)
 	}
 
 	return nil
 }
 
-//func (m *Module) HandleMsgUpdateGroupMembers(index int, tx *juno.Tx, msg *rbactypes.MsgUpdateGroupMembers) error {
-//	return nil
-//}
+func (m *Module) handleMsgUpdateGroupMembers(index int, tx *juno.Tx, msg *rbactypes.MsgUpdateGroupMembers) error {
+	roleName := msg.Network + rbactypes.NamespaceSeparator + msg.Name
+	return m.db.UpdateRbacRoleMembers(roleName, msg.MemberUpdates)
+}
 
-func (m *Module) HandleMsgTransferRoleOwnership(index int, tx *juno.Tx, msg *rbactypes.MsgTransferRoleOwnership) error {
+func (m *Module) handleMsgTransferRoleOwnership(index int, tx *juno.Tx, msg *rbactypes.MsgTransferRoleOwnership) error {
 	roleName := msg.Network + rbactypes.NamespaceSeparator + msg.Name
 	auth, err := m.src.GetAuthorizations(tx.Height, rbactypes.QueryGetAuthorizationsRequest{
 		Index: roleName,
@@ -69,14 +70,14 @@ func (m *Module) HandleMsgTransferRoleOwnership(index int, tx *juno.Tx, msg *rba
 		return fmt.Errorf("error getting authorizations: %s", err)
 	}
 
-	if err := m.db.SaveOrUpdateRbacAuthorization(&auth.Authorizations); err != nil {
+	if err := m.db.UpdateRbacRoleAdmins(&auth.Authorizations); err != nil {
 		return fmt.Errorf("error saving authorizations: %s", err)
 	}
 
 	return nil
 }
 
-func (m *Module) HandleMsgUpdateRole(index int, tx *juno.Tx, msg *rbactypes.MsgUpdateRole) error {
+func (m *Module) handleMsgUpdateRole(index int, tx *juno.Tx, msg *rbactypes.MsgUpdateRole) error {
 	roleName := msg.Network + rbactypes.NamespaceSeparator + msg.Name
 	auth, err := m.src.GetAuthorizations(tx.Height, rbactypes.QueryGetAuthorizationsRequest{
 		Index: roleName,
@@ -85,14 +86,14 @@ func (m *Module) HandleMsgUpdateRole(index int, tx *juno.Tx, msg *rbactypes.MsgU
 		return fmt.Errorf("error getting authorizations: %s", err)
 	}
 
-	if err := m.db.SaveOrUpdateRbacAuthorization(&auth.Authorizations); err != nil {
+	if err := m.db.UpdateRbacRoleMessages(&auth.Authorizations); err != nil {
 		return fmt.Errorf("error saving authorizations: %s", err)
 	}
 
 	return nil
 }
 
-func (m *Module) HandleMsgSetRoleDelegates(index int, tx *juno.Tx, msg *rbactypes.MsgSetRoleDelegates) error {
+func (m *Module) handleMsgSetRoleDelegates(index int, tx *juno.Tx, msg *rbactypes.MsgSetRoleDelegates) error {
 	roleName := msg.Network + rbactypes.NamespaceSeparator + msg.Name
 	auth, err := m.src.GetAuthorizations(tx.Height, rbactypes.QueryGetAuthorizationsRequest{
 		Index: roleName,
@@ -101,7 +102,7 @@ func (m *Module) HandleMsgSetRoleDelegates(index int, tx *juno.Tx, msg *rbactype
 		return fmt.Errorf("error getting authorizations: %s", err)
 	}
 
-	if err := m.db.SaveOrUpdateRbacAuthorization(&auth.Authorizations); err != nil {
+	if err := m.db.UpdateRbacRoleDelegates(&auth.Authorizations); err != nil {
 		return fmt.Errorf("error saving authorizations: %s", err)
 	}
 

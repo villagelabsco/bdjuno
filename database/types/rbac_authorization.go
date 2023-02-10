@@ -30,9 +30,10 @@ type DbRbacAuthorization struct {
 	GroupId       uint64             `db:"group_id"`
 	RoleAdmins    sqlxtypes.JSONText `db:"role_admins"`
 	RoleDelegates sqlxtypes.JSONText `db:"role_delegates"`
+	Members       sqlxtypes.JSONText `db:"members"`
 }
 
-func (DbRbacAuthorization) FromProto(au *rbactypes.Authorizations) (DbRbacAuthorization, error) {
+func (DbRbacAuthorization) FromProto(au *rbactypes.Authorizations, members []*rbactypes.MemberUpdates) (DbRbacAuthorization, error) {
 	msg, err := json.Marshal(au.Messages)
 	if err != nil {
 		return DbRbacAuthorization{}, fmt.Errorf("error marshalling messages: %v", err)
@@ -45,6 +46,15 @@ func (DbRbacAuthorization) FromProto(au *rbactypes.Authorizations) (DbRbacAuthor
 	if err != nil {
 		return DbRbacAuthorization{}, fmt.Errorf("error marshalling role delegates: %v", err)
 	}
+
+	if members == nil {
+		members = make([]*rbactypes.MemberUpdates, 0)
+	}
+	membersJ, err := json.Marshal(members)
+	if err != nil {
+		return DbRbacAuthorization{}, fmt.Errorf("error marshalling members: %v", err)
+	}
+
 	return DbRbacAuthorization{
 		Index:         au.Index,
 		Messages:      msg,
@@ -52,5 +62,6 @@ func (DbRbacAuthorization) FromProto(au *rbactypes.Authorizations) (DbRbacAuthor
 		GroupId:       au.GroupId,
 		RoleAdmins:    roleAdmins,
 		RoleDelegates: roleDelegates,
+		Members:       membersJ,
 	}, nil
 }
