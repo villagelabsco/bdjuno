@@ -1,0 +1,24 @@
+table:
+  name: economics_transactions
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      allow_aggregations: true
+      columns:
+        - id
+        - network
+        - creator
+        - seller
+        - buyer
+        - amount
+        - product_class
+        - metadata
+        - force
+        - ref
+        - timestamp
+        - memo
+        - hooks_cumulative_result
+        - hooks_individual_results
+      filter: {}
+      limit: 100

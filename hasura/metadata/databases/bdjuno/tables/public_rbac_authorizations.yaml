@@ -12,5 +12,6 @@ select_permissions:
         - group_id
         - role_admins
         - role_delegates
+        - members
       filter: {}
       limit: 100
