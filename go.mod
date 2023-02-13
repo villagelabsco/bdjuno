@@ -17,7 +17,7 @@ require (
 	github.com/stretchr/testify v1.8.1
 	github.com/tendermint/tendermint v0.34.24
 	github.com/villagelabsco/juno/v4 v4.0.0-20230203084128-d8b280d9a958
-	github.com/villagelabsco/village v0.0.0-20230210112813-47119ccf9bb8
+	github.com/villagelabsco/village v0.0.0-20230210145334-d5ee908f06b1
 	google.golang.org/grpc v1.51.0
 	gopkg.in/yaml.v3 v3.0.1
 )

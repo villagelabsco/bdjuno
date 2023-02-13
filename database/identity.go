@@ -18,7 +18,8 @@ package database
 
 import (
 	"fmt"
-	"github.com/villagelabsco/bdjuno/v3/database/types"
+	dbtypes "github.com/villagelabsco/bdjuno/v3/database/types"
+	types "github.com/villagelabsco/bdjuno/v3/types"
 	identitytypes "github.com/villagelabsco/village/x/identity/types"
 	"strings"
 )
@@ -28,7 +29,7 @@ func (db *Db) SaveIdentityNetwork(network *identitytypes.Network) error {
 	INSERT INTO identity_networks ("index", "active", "full_name", "identity_provider", "invite_only")
 	VALUES ($1, $2, $3, $4, $5);`
 
-	n := types.DbIdentityNetwork{}.FromProto(network)
+	n := dbtypes.DbIdentityNetwork{}.FromProto(network)
 	_, err := db.SQL.Exec(stmt, n.Index, n.Active, n.FullName, n.IdentityProvider, n.InviteOnly)
 	if err != nil {
 		return fmt.Errorf("error while inserting network: %s", err)
@@ -46,7 +47,7 @@ func (db *Db) UpdateIdentityNetwork(network *identitytypes.Network) error {
 		invite_only = $5
 	WHERE vn.index = $1;`
 
-	n := types.DbIdentityNetwork{}.FromProto(network)
+	n := dbtypes.DbIdentityNetwork{}.FromProto(network)
 	_, err := db.SQL.Exec(stmt, n.Index, n.Active, n.FullName, n.IdentityProvider, n.InviteOnly)
 	if err != nil {
 		return fmt.Errorf("error while updating network: %s", err)
@@ -61,7 +62,7 @@ func (db *Db) IdentityAccountNetworks(index string) (*identitytypes.AccountNetwo
 	WHERE index = $1
 	LIMIT 1;`
 
-	var userNetworks types.DbIdentityAccountNetworks
+	var userNetworks dbtypes.DbIdentityAccountNetworks
 	err := db.SQL.Select(&userNetworks, q, index)
 	if err != nil {
 		return nil, fmt.Errorf("error while getting user networks: %s", err)
@@ -85,7 +86,7 @@ func (db *Db) SaveOrAppendIdentityAccountNetworks(index, network string) error {
 		    networks = ian.networks || $2::jsonb;
 	`
 
-	un, err := types.DbIdentityAccountNetworks{}.FromProto(
+	un, err := dbtypes.DbIdentityAccountNetworks{}.FromProto(
 		&identitytypes.AccountNetworks{
 			Index:    index,
 			Networks: []string{network},
@@ -106,7 +107,7 @@ func (db *Db) SaveIdentityInvite(network string, invite *identitytypes.Invite) e
 	INSERT INTO identity_invites ("network", "challenge", "registered", "confirmed_account", "invite_creator", "human_id", "given_roles") 
 	VALUES ($1, $2, $3, $4, $5, $6, $7);`
 
-	inv := types.DbIdentityInvite{}.FromProto(network, invite)
+	inv := dbtypes.DbIdentityInvite{}.FromProto(network, invite)
 	_, err := db.SQL.Exec(stmt, network,
 		inv.Challenge,
 		inv.Registered,
@@ -194,7 +195,7 @@ func (db *Db) SaveOrUpdateIdentityProvider(ip identitytypes.IdentityProvider) er
 		        asset_burner_accounts = $5;
 	`
 
-	dbip, err := types.DbIdentityProvider{}.FromProto(ip)
+	dbip, err := dbtypes.DbIdentityProvider{}.FromProto(ip)
 	if err != nil {
 		return fmt.Errorf("error while converting identity provider: %s", err)
 	}
@@ -226,7 +227,7 @@ func (db *Db) SaveOrUpdateIdentityNetworkKyb(kyb *identitytypes.NetworkKyb) erro
 		        metadata = $5;
 	`
 
-	dbkyb := types.DbIdentityNetworkKyb{}.FromProto(kyb)
+	dbkyb := dbtypes.DbIdentityNetworkKyb{}.FromProto(kyb)
 	_, err := db.SQL.Exec(stmt,
 		dbkyb.Index,
 		dbkyb.Status,
@@ -254,7 +255,7 @@ func (db *Db) SaveOrUpdateIdentityHuman(human *identitytypes.Human) error {
 		        network_primary_wallet = $5;
 	`
 
-	dbHuman, err := types.DbIdentityHuman{}.FromProto(human)
+	dbHuman, err := dbtypes.DbIdentityHuman{}.FromProto(human)
 	if err != nil {
 		return fmt.Errorf("error while converting human: %s", err)
 	}
@@ -283,7 +284,7 @@ func (db *Db) SaveOrUpdateIdentityAccount(account *identitytypes.Account) error 
 			    private_acc = $3
 	`
 
-	dbAcc := types.DbIdentityAccount{}.FromProto(account)
+	dbAcc := dbtypes.DbIdentityAccount{}.FromProto(account)
 	_, err := db.SQL.Exec(stmt, dbAcc.Index, dbAcc.HumanId, dbAcc.PrivateAcc)
 	if err != nil {
 		return fmt.Errorf("error while storing account: %s", err)
@@ -306,7 +307,7 @@ func (db *Db) SaveOrUpdateKycStatus(provider string, status *identitytypes.KycSt
 		        timestamp = $5;
 	`
 
-	dbSt := types.DbIdentityKycStatus{}.FromProto(provider, status)
+	dbSt := dbtypes.DbIdentityKycStatus{}.FromProto(provider, status)
 	_, err := db.SQL.Exec(stmt,
 		dbSt.HumanId,
 		dbSt.IdentityProvider,
@@ -334,8 +335,12 @@ func (db *Db) SaveOrUpdateIdentityAccountLinkProposal(prop *identitytypes.Accoun
 		        deposit = $5;
 	`
 
-	dbProp := types.DbIdentityAccountLinkProposal{}.FromProto(prop)
-	_, err := db.SQL.Exec(stmt,
+	dbProp, err := dbtypes.DbIdentityAccountLinkProposal{}.FromProto(prop)
+	if err != nil {
+		return fmt.Errorf("error while converting account link proposal: %s", err)
+	}
+
+	_, err = db.SQL.Exec(stmt,
 		dbProp.Index,
 		dbProp.ProposerAccount,
 		dbProp.HumanId,
@@ -357,6 +362,37 @@ func (db *Db) DeleteIdentityAccountLinkProposal(index string) error {
 	_, err := db.SQL.Exec(stmt, index)
 	if err != nil {
 		return fmt.Errorf("error while deleting account link proposal: %s", err)
+	}
+
+	return nil
+}
+
+func (db *Db) SaveIdentityParams(p *types.IdentityParams) error {
+	stmt := `
+		INSERT INTO identity_params (granter_account, granted_denom, granted_amount, spam_deposit_denom, spam_deposit_amount, height) 
+		VALUES ($1, $2, $3, $4, $5, $6)
+		ON CONFLICT (one_row_id) DO
+		UPDATE
+		    SET
+		        granter_account = excluded.granter_account,
+		        granted_denom = excluded.granted_denom,
+		        granted_amount = excluded.granted_amount,
+		        spam_deposit_denom = excluded.spam_deposit_denom,
+		        spam_deposit_amount = excluded.spam_deposit_amount,
+		        height = excluded.height
+		WHERE identity_params.height <= excluded.height;
+	`
+
+	_, err := db.SQL.Exec(stmt,
+		p.GranterAccount,
+		p.GrantedDenom,
+		p.GrantedAmount,
+		p.SpamDepositDenom,
+		p.SpamDepositAmount,
+		p.Height,
+	)
+	if err != nil {
+		return fmt.Errorf("error while storing identity params: %s", err)
 	}
 
 	return nil

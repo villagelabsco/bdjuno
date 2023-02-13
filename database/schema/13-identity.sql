@@ -81,3 +81,14 @@ CREATE TABLE identity_account_link_proposals (
     deposit jsonb NOT NULL,
     primary key (index)
 );
+
+CREATE TABLE identity_params (
+    one_row_id     BOOLEAN NOT NULL DEFAULT TRUE PRIMARY KEY,
+    granter_account text NOT NULL,
+    granted_denom text NOT NULL,
+    granted_amount bigint NOT NULL,
+    spam_deposit_denom text NOT NULL,
+    spam_deposit_amount bigint NOT NULL,
+    height         BIGINT  NOT NULL,
+    CHECK (one_row_id)
+)

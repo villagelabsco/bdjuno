@@ -153,8 +153,12 @@ func (db *Db) SaveOrUpdateTokenImmobilizedFunds(i tokentypes.ImmobilizedFunds) e
 		DO UPDATE SET amount = $2;
 	`
 
-	dbImm := types.DbTokenImmobilizedFunds{}.FromProto(i)
-	_, err := db.SQL.Exec(stmt,
+	dbImm, err := types.DbTokenImmobilizedFunds{}.FromProto(i)
+	if err != nil {
+		return fmt.Errorf("error while converting token immobilized funds: %s", err)
+	}
+
+	_, err = db.SQL.Exec(stmt,
 		dbImm.Account,
 		dbImm.Amount,
 	)

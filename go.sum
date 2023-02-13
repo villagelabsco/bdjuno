@@ -1396,6 +1396,8 @@ github.com/villagelabsco/juno/v4 v4.0.0-20230203084128-d8b280d9a958 h1:LnvDI8LcI
 github.com/villagelabsco/juno/v4 v4.0.0-20230203084128-d8b280d9a958/go.mod h1:1O3wFEVx8IQprpHJUH3paBxGhC60NXU2yHHQqMoFSuE=
 github.com/villagelabsco/village v0.0.0-20230210112813-47119ccf9bb8 h1:BDYTI3eRf7Nu5lPAcfpO5Yk++xiDuH5DFXYaV/KO/es=
 github.com/villagelabsco/village v0.0.0-20230210112813-47119ccf9bb8/go.mod h1:hO7lQbZMWr6oDAfDtjOX6gGJdpb2njRFu/hy5JEQHN8=
+github.com/villagelabsco/village v0.0.0-20230210145334-d5ee908f06b1 h1:lmqf6XFHWKG7yFIIr/lDddUSrNtyWeOtkiqnMH9Mg5c=
+github.com/villagelabsco/village v0.0.0-20230210145334-d5ee908f06b1/go.mod h1:hO7lQbZMWr6oDAfDtjOX6gGJdpb2njRFu/hy5JEQHN8=
 github.com/vishvananda/netlink v0.0.0-20181108222139-023a6dafdcdf/go.mod h1:+SR5DhBJrl6ZM7CoCKvpw5BKroDKQ+PJqOg65H/2ktk=
 github.com/vishvananda/netlink v1.1.0/go.mod h1:cTgwzPIzzgDAYoQrMm0EdrjRUBkTqKYppBueQtXaqoE=
 github.com/vishvananda/netlink v1.1.1-0.20201029203352-d40f9887b852/go.mod h1:twkDnbuQxJYemMlGd4JFIcuhgX83tXhKS2B/PRMpOho=

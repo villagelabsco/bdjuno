@@ -36,7 +36,7 @@ func (DbIdentityAccountLinkProposal) FromProto(alp *identitytypes.AccountLinkPro
 	if err != nil {
 		return DbIdentityAccountLinkProposal{}, fmt.Errorf("error while marshaling deposit: %s", err)
 	}
-	
+
 	return DbIdentityAccountLinkProposal{
 		Index:                        alp.Index,
 		ProposerAccount:              alp.ProposerAccount,

@@ -79,7 +79,11 @@ func (m Module) handleCreateToken(tx *juno.Tx, denom string) error {
 		return fmt.Errorf("error while getting token from source: %s", err)
 	}
 
-	return m.db.SaveTokenDenom(&t.Token)
+	if err := m.db.SaveTokenDenom(&t.Token); err != nil {
+		return fmt.Errorf("error while saving token: %s", err)
+	}
+
+	return nil
 }
 
 func (m Module) handleMsgUpdateToken(index int, tx *juno.Tx, msg *tokentypes.MsgUpdateToken) error {

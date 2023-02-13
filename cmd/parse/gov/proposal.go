@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	v1govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
+	"github.com/villagelabsco/bdjuno/v3/modules/identity"
 	"strconv"
 	"time"
 
@@ -55,9 +56,10 @@ func proposalCmd(parseConfig *parsecmdtypes.Config) *cobra.Command {
 			mintModule := mint.NewModule(sources.MintSource, parseCtx.EncodingConfig.Codec, db)
 			slashingModule := slashing.NewModule(sources.SlashingSource, parseCtx.EncodingConfig.Codec, db)
 			stakingModule := staking.NewModule(sources.StakingSource, parseCtx.EncodingConfig.Codec, db)
+			identityModule := identity.NewModule(parseCtx.EncodingConfig.Codec, db, sources.IdentitySource, sources.RbacSource, sources.FeeGrantSource)
 
 			// Build the gov module
-			govModule := gov.NewModule(sources.GovSource, nil, distrModule, mintModule, slashingModule, stakingModule, parseCtx.EncodingConfig.Codec, db)
+			govModule := gov.NewModule(sources.GovSource, nil, distrModule, mintModule, slashingModule, stakingModule, identityModule, parseCtx.EncodingConfig.Codec, db)
 
 			err = refreshProposalDetails(parseCtx, proposalID, govModule)
 			if err != nil {

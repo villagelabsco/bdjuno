@@ -1,5 +1,5 @@
 CREATE TABLE token_tokens (
-    network text not null references identity_networks (index),
+    network text not null,
     denom text not null,
     ticker text not null,
     description text not null,
@@ -36,7 +36,6 @@ CREATE TABLE token_onramp_operations (
     payment_ref text not null,
     amount jsonb not null,
     account text not null
-        references account (address)
         references identity_accounts (index),
     primary key (payment_ref)
 );

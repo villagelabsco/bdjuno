@@ -2,6 +2,7 @@ package gov
 
 import (
 	"fmt"
+	identitytypes "github.com/villagelabsco/village/x/identity/types"
 	"strings"
 	"time"
 
@@ -125,6 +126,11 @@ func (m *Module) handleParamChangeProposal(height int64, paramChangeProposal *pr
 			err = m.stakingModule.UpdateParams(height)
 			if err != nil {
 				return fmt.Errorf("error while updating ParamChangeProposal %s params : %s", stakingtypes.ModuleName, err)
+			}
+		case identitytypes.ModuleName:
+			err = m.identityModule.UpdateParams(height)
+			if err != nil {
+				return fmt.Errorf("error while updating ParamChangeProposal %s params : %s", identitytypes.ModuleName, err)
 			}
 		}
 	}
