@@ -59,6 +59,9 @@ func (h DbEconomicsScheduledHook) FromProto(hook *econtypes.ScheduledHook) (DbEc
 		return DbEconomicsScheduledHook{}, fmt.Errorf("error while marshalling hook params: %v", err)
 	}
 
+	if hook.HookDependencies == nil {
+		hook.HookDependencies = make([]uint64, 0)
+	}
 	dps, err := json.Marshal(hook.HookDependencies)
 	if err != nil {
 		return DbEconomicsScheduledHook{}, fmt.Errorf("error while marshalling hook dependencies: %v", err)
