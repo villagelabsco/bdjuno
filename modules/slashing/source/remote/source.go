@@ -5,9 +5,9 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/types/query"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
-	"github.com/forbole/juno/v3/node/remote"
+	"github.com/villagelabsco/juno/v4/node/remote"
 
-	slashingsource "github.com/forbole/bdjuno/v3/modules/slashing/source"
+	slashingsource "github.com/villagelabsco/bdjuno/v3/modules/slashing/source"
 )
 
 var (

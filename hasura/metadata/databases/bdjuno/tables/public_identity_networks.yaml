@@ -1,0 +1,15 @@
+table:
+  name: identity_networks
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      allow_aggregations: false
+      columns:
+        - index
+        - active
+        - full_name
+        - identity_provider
+        - invite_only
+      filter: {}
+      limit: 100

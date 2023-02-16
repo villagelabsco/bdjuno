@@ -1,0 +1,15 @@
+table:
+  name: identity_primary_wallet_transfer_proposals
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      allow_aggregations: false
+      columns:
+        - index
+        - proposer_account
+        - human_id
+        - set_as_primary_wallet_for_network
+        - deposit
+      filter: {}
+      limit: 100

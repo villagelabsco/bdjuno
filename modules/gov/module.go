@@ -3,11 +3,11 @@ package gov
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
 
-	"github.com/forbole/bdjuno/v3/database"
+	"github.com/villagelabsco/bdjuno/v3/database"
 
-	govsource "github.com/forbole/bdjuno/v3/modules/gov/source"
+	govsource "github.com/villagelabsco/bdjuno/v3/modules/gov/source"
 
-	"github.com/forbole/juno/v3/modules"
+	"github.com/villagelabsco/juno/v4/modules"
 )
 
 var (
@@ -27,6 +27,7 @@ type Module struct {
 	mintModule     MintModule
 	slashingModule SlashingModule
 	stakingModule  StakingModule
+	identityModule IdentityModule
 }
 
 // NewModule returns a new Module instance
@@ -37,18 +38,20 @@ func NewModule(
 	mintModule MintModule,
 	slashingModule SlashingModule,
 	stakingModule StakingModule,
+	identityModule IdentityModule,
 	cdc codec.Codec,
 	db *database.Db,
 ) *Module {
 	return &Module{
 		cdc:            cdc,
+		db:             db,
 		source:         source,
 		authModule:     authModule,
 		distrModule:    distrModule,
 		mintModule:     mintModule,
 		slashingModule: slashingModule,
 		stakingModule:  stakingModule,
-		db:             db,
+		identityModule: identityModule,
 	}
 }
 

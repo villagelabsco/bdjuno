@@ -1,0 +1,17 @@
+table:
+  name: economics_transaction_hooks
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      allow_aggregations: false
+      columns:
+        - network
+        - index
+        - trigger
+        - type
+        - name_id
+        - description
+        - params
+      filter: {}
+      limit: 100

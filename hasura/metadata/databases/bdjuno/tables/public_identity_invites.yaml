@@ -1,0 +1,17 @@
+table:
+  name: identity_invites
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      allow_aggregations: false
+      columns:
+        - network
+        - challenge
+        - registered
+        - confirmed_account
+        - invite_creator
+        - human_id
+        - given_roles
+      filter: {}
+      limit: 100

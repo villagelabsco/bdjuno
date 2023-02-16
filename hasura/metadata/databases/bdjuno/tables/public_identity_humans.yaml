@@ -1,0 +1,14 @@
+table:
+  name: identity_humans
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      allow_aggregations: false
+      columns:
+        - index
+        - vns_domain
+        - accounts
+        - network_primary_wallet
+      filter: {}
+      limit: 100

@@ -1,0 +1,12 @@
+table:
+  name: identity_human_proposals
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      allow_aggregations: false
+      columns:
+        - human_id
+        - proposals
+      filter: {}
+      limit: 100

@@ -1,0 +1,13 @@
+table:
+  name: identity_accounts
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      allow_aggregations: false
+      columns:
+        - index
+        - human_id
+        - private_acc
+      filter: {}
+      limit: 100

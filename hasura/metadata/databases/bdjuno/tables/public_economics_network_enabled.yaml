@@ -1,0 +1,12 @@
+table:
+  name: economics_network_enabled
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      allow_aggregations: false
+      columns:
+        - network
+        - active
+      filter: {}
+      limit: 100

@@ -1,0 +1,15 @@
+table:
+  name: identity_network_kyb
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      allow_aggregations: false
+      columns:
+        - index
+        - status
+        - data_hash
+        - timestamp
+        - metadata
+      filter: {}
+      limit: 100
