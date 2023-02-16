@@ -3,13 +3,13 @@ package distribution
 import (
 	"fmt"
 
-	parsecmdtypes "github.com/forbole/juno/v3/cmd/parse/types"
-	"github.com/forbole/juno/v3/types/config"
 	"github.com/spf13/cobra"
+	parsecmdtypes "github.com/villagelabsco/juno/v4/cmd/parse/types"
+	"github.com/villagelabsco/juno/v4/types/config"
 
-	"github.com/forbole/bdjuno/v3/database"
-	"github.com/forbole/bdjuno/v3/modules/distribution"
-	modulestypes "github.com/forbole/bdjuno/v3/modules/types"
+	"github.com/villagelabsco/bdjuno/v3/database"
+	"github.com/villagelabsco/bdjuno/v3/modules/distribution"
+	modulestypes "github.com/villagelabsco/bdjuno/v3/modules/types"
 )
 
 // communityPoolCmd returns the Cobra command allowing to refresh community pool
@@ -32,7 +32,7 @@ func communityPoolCmd(parseConfig *parsecmdtypes.Config) *cobra.Command {
 			db := database.Cast(parseCtx.Database)
 
 			// Build distribution module
-			distrModule := distribution.NewModule(sources.DistrSource, parseCtx.EncodingConfig.Marshaler, db)
+			distrModule := distribution.NewModule(sources.DistrSource, parseCtx.EncodingConfig.Codec, db)
 
 			err = distrModule.GetLatestCommunityPool()
 			if err != nil {

@@ -1,0 +1,19 @@
+table:
+  name: reputation_feedback
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      allow_aggregations: true
+      columns:
+        - index
+        - cpt_positive
+        - cpt_negative
+        - cpt_neutral
+        - positive
+        - negative
+        - neutral
+        - feedbackers
+        - last_change
+      filter: {}
+      limit: 100

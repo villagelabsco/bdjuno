@@ -1,0 +1,18 @@
+table:
+  name: products_product_class_infos
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      allow_aggregations: false
+      columns:
+        - network
+        - class_id
+        - full_class_id
+        - class_type
+        - name
+        - description
+        - metadata
+        - specific_metadata
+      filter: {}
+      limit: 100

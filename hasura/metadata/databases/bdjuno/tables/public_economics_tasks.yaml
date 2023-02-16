@@ -1,0 +1,23 @@
+table:
+  name: economics_tasks
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      allow_aggregations: true
+      columns:
+        - id
+        - network
+        - creator
+        - tasker
+        - buyer
+        - task_count
+        - task_class_id
+        - force
+        - ref
+        - timestamp
+        - memo
+        - hooks_cumulative_result
+        - hooks_individual_results
+      filter: {}
+      limit: 100

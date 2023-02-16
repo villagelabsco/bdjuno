@@ -1,0 +1,19 @@
+table:
+  name: token_offramp_operations
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      allow_aggregations: false
+      columns:
+        - id
+        - account
+        - human_id
+        - executed
+        - amount
+        - creation_block
+        - execution_block
+        - funds_transfer_method_pseudo_id
+        - id_provider
+      filter: {}
+      limit: 100

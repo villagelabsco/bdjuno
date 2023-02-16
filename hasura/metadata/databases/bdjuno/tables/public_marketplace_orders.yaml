@@ -1,0 +1,18 @@
+table:
+  name: marketplace_orders
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      allow_aggregations: false
+      columns:
+        - network
+        - index
+        - status
+        - timestamp
+        - creator
+        - attributes
+        - items
+        - total
+      filter: {}
+      limit: 100

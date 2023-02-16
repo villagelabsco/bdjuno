@@ -1,0 +1,14 @@
+table:
+  name: identity_statuses
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      allow_aggregations: false
+      columns:
+        - provider_id
+        - human_id
+        - data_hash
+        - timestamp
+      filter: {}
+      limit: 100

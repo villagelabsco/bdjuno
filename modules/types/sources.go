@@ -2,43 +2,70 @@ package types
 
 import (
 	"fmt"
+	feegranttypes "github.com/cosmos/cosmos-sdk/x/feegrant"
+	v1betagovtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
+	nfttypes "github.com/cosmos/cosmos-sdk/x/nft"
+	econsource "github.com/villagelabsco/bdjuno/v3/modules/economics/source"
+	feegrantsource "github.com/villagelabsco/bdjuno/v3/modules/feegrant/source"
+	identitysource "github.com/villagelabsco/bdjuno/v3/modules/identity/source"
+	remotenftsource "github.com/villagelabsco/bdjuno/v3/modules/nft/source/remote"
+	remotetokensource "github.com/villagelabsco/bdjuno/v3/modules/token/source/remote"
+	econtypes "github.com/villagelabsco/village/x/economics/types"
+	identitytypes "github.com/villagelabsco/village/x/identity/types"
+	marketplacetypes "github.com/villagelabsco/village/x/marketplace/types"
+	productstypes "github.com/villagelabsco/village/x/products/types"
+	rbactypes "github.com/villagelabsco/village/x/rbac/types"
+	reputationtypes "github.com/villagelabsco/village/x/reputation/types"
+	tokentypes "github.com/villagelabsco/village/x/token/types"
 	"os"
 
 	"github.com/cosmos/cosmos-sdk/simapp"
-	"github.com/tendermint/tendermint/libs/log"
-
 	"github.com/cosmos/cosmos-sdk/simapp/params"
-	"github.com/forbole/juno/v3/node/remote"
-
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	"github.com/forbole/juno/v3/node/local"
+	"github.com/tendermint/tendermint/libs/log"
+	"github.com/villagelabsco/juno/v4/node/local"
+	"github.com/villagelabsco/juno/v4/node/remote"
 
-	nodeconfig "github.com/forbole/juno/v3/node/config"
+	nodeconfig "github.com/villagelabsco/juno/v4/node/config"
 
-	banksource "github.com/forbole/bdjuno/v3/modules/bank/source"
-	localbanksource "github.com/forbole/bdjuno/v3/modules/bank/source/local"
-	remotebanksource "github.com/forbole/bdjuno/v3/modules/bank/source/remote"
-	distrsource "github.com/forbole/bdjuno/v3/modules/distribution/source"
-	localdistrsource "github.com/forbole/bdjuno/v3/modules/distribution/source/local"
-	remotedistrsource "github.com/forbole/bdjuno/v3/modules/distribution/source/remote"
-	govsource "github.com/forbole/bdjuno/v3/modules/gov/source"
-	localgovsource "github.com/forbole/bdjuno/v3/modules/gov/source/local"
-	remotegovsource "github.com/forbole/bdjuno/v3/modules/gov/source/remote"
-	mintsource "github.com/forbole/bdjuno/v3/modules/mint/source"
-	localmintsource "github.com/forbole/bdjuno/v3/modules/mint/source/local"
-	remotemintsource "github.com/forbole/bdjuno/v3/modules/mint/source/remote"
-	slashingsource "github.com/forbole/bdjuno/v3/modules/slashing/source"
-	localslashingsource "github.com/forbole/bdjuno/v3/modules/slashing/source/local"
-	remoteslashingsource "github.com/forbole/bdjuno/v3/modules/slashing/source/remote"
-	stakingsource "github.com/forbole/bdjuno/v3/modules/staking/source"
-	localstakingsource "github.com/forbole/bdjuno/v3/modules/staking/source/local"
-	remotestakingsource "github.com/forbole/bdjuno/v3/modules/staking/source/remote"
+	v1govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
+	banksource "github.com/villagelabsco/bdjuno/v3/modules/bank/source"
+	localbanksource "github.com/villagelabsco/bdjuno/v3/modules/bank/source/local"
+	remotebanksource "github.com/villagelabsco/bdjuno/v3/modules/bank/source/remote"
+	distrsource "github.com/villagelabsco/bdjuno/v3/modules/distribution/source"
+	localdistrsource "github.com/villagelabsco/bdjuno/v3/modules/distribution/source/local"
+	remotedistrsource "github.com/villagelabsco/bdjuno/v3/modules/distribution/source/remote"
+	remoteeconsource "github.com/villagelabsco/bdjuno/v3/modules/economics/source/remote"
+	localfeegrantsource "github.com/villagelabsco/bdjuno/v3/modules/feegrant/source/local"
+	remotefeegrantsource "github.com/villagelabsco/bdjuno/v3/modules/feegrant/source/remote"
+	govsource "github.com/villagelabsco/bdjuno/v3/modules/gov/source"
+	localgovsource "github.com/villagelabsco/bdjuno/v3/modules/gov/source/local"
+	remotegovsource "github.com/villagelabsco/bdjuno/v3/modules/gov/source/remote"
+	remoteidentitysource "github.com/villagelabsco/bdjuno/v3/modules/identity/source/remote"
+	marketplacesource "github.com/villagelabsco/bdjuno/v3/modules/marketplace/source"
+	remotemarketplacesource "github.com/villagelabsco/bdjuno/v3/modules/marketplace/source/remote"
+	mintsource "github.com/villagelabsco/bdjuno/v3/modules/mint/source"
+	localmintsource "github.com/villagelabsco/bdjuno/v3/modules/mint/source/local"
+	remotemintsource "github.com/villagelabsco/bdjuno/v3/modules/mint/source/remote"
+	nftsource "github.com/villagelabsco/bdjuno/v3/modules/nft/source"
+	productssource "github.com/villagelabsco/bdjuno/v3/modules/products/source"
+	remoteproductssource "github.com/villagelabsco/bdjuno/v3/modules/products/source/remote"
+	rbacsource "github.com/villagelabsco/bdjuno/v3/modules/rbac/source"
+	remoterbacsource "github.com/villagelabsco/bdjuno/v3/modules/rbac/source/remote"
+	reputationsource "github.com/villagelabsco/bdjuno/v3/modules/reputation/source"
+	remotereputationsource "github.com/villagelabsco/bdjuno/v3/modules/reputation/source/remote"
+	slashingsource "github.com/villagelabsco/bdjuno/v3/modules/slashing/source"
+	localslashingsource "github.com/villagelabsco/bdjuno/v3/modules/slashing/source/local"
+	remoteslashingsource "github.com/villagelabsco/bdjuno/v3/modules/slashing/source/remote"
+	stakingsource "github.com/villagelabsco/bdjuno/v3/modules/staking/source"
+	localstakingsource "github.com/villagelabsco/bdjuno/v3/modules/staking/source/local"
+	remotestakingsource "github.com/villagelabsco/bdjuno/v3/modules/staking/source/remote"
+	tokensource "github.com/villagelabsco/bdjuno/v3/modules/token/source"
 )
 
 type Sources struct {
@@ -48,6 +75,16 @@ type Sources struct {
 	MintSource     mintsource.Source
 	SlashingSource slashingsource.Source
 	StakingSource  stakingsource.Source
+	NftSource      nftsource.Source
+	FeeGrantSource feegrantsource.Source
+
+	IdentitySource    identitysource.Source
+	RbacSource        rbacsource.Source
+	ReputationSource  reputationsource.Source
+	ProductsSource    productssource.Source
+	MarketplaceSource marketplacesource.Source
+	EconomicsSource   econsource.Source
+	TokenSource       tokensource.Source
 }
 
 func BuildSources(nodeCfg nodeconfig.Config, encodingConfig *params.EncodingConfig) (*Sources, error) {
@@ -68,32 +105,41 @@ func buildLocalSources(cfg *local.Details, encodingConfig *params.EncodingConfig
 		return nil, err
 	}
 
-	app := simapp.NewSimApp(
+	// TODO: Get app with custom sources
+	sapp := simapp.NewSimApp(
 		log.NewTMLogger(log.NewSyncWriter(os.Stdout)), source.StoreDB, nil, true, map[int64]bool{},
 		cfg.Home, 0, simapp.MakeTestEncodingConfig(), simapp.EmptyAppOptions{},
 	)
 
 	sources := &Sources{
-		BankSource:     localbanksource.NewSource(source, banktypes.QueryServer(app.BankKeeper)),
-		DistrSource:    localdistrsource.NewSource(source, distrtypes.QueryServer(app.DistrKeeper)),
-		GovSource:      localgovsource.NewSource(source, govtypes.QueryServer(app.GovKeeper)),
-		MintSource:     localmintsource.NewSource(source, minttypes.QueryServer(app.MintKeeper)),
-		SlashingSource: localslashingsource.NewSource(source, slashingtypes.QueryServer(app.SlashingKeeper)),
-		StakingSource:  localstakingsource.NewSource(source, stakingkeeper.Querier{Keeper: app.StakingKeeper}),
+		BankSource:     localbanksource.NewSource(source, banktypes.QueryServer(sapp.BankKeeper)),
+		DistrSource:    localdistrsource.NewSource(source, distrtypes.QueryServer(sapp.DistrKeeper)),
+		GovSource:      localgovsource.NewSource(source, v1govtypes.QueryServer(sapp.GovKeeper), nil),
+		MintSource:     localmintsource.NewSource(source, minttypes.QueryServer(sapp.MintKeeper)),
+		SlashingSource: localslashingsource.NewSource(source, slashingtypes.QueryServer(sapp.SlashingKeeper)),
+		StakingSource:  localstakingsource.NewSource(source, stakingkeeper.Querier{Keeper: sapp.StakingKeeper}),
+		FeeGrantSource: localfeegrantsource.NewSource(source, feegranttypes.QueryServer(sapp.FeeGrantKeeper)),
+		//NftSource:         localnftsource.NewSource(source, nfttypes.QueryServer(sapp.NFTKeeper)),
+		//KycSource:         localkycsource.NewSource(source, kyctypes.QueryServer(sapp.KycKeeper)),
+		//MarketplaceSource: localmarketplacesource.NewSource(source, marketplacetypes.QueryServer(sapp.MarketplaceKeeper)),
+		//ProductsSource:    localproductssource.NewSource(source, productstypes.QueryServer(sapp.ProductsKeeper)),
+		//RbacSource:        localrbacsource.NewSource(source, rbactypes.QueryServer(sapp.RbacKeeper)),
+		//ReputationSource:  localreputationsource.NewSource(source, reputationtypes.QueryServer(sapp.ReputationKeeper)),
+		//VillageSource:     localvillagesource.NewSource(source, villagetypes.QueryServer(sapp.VillageKeeper)),
 	}
 
 	// Mount and initialize the stores
-	err = source.MountKVStores(app, "keys")
+	err = source.MountKVStores(sapp, "keys")
 	if err != nil {
 		return nil, err
 	}
 
-	err = source.MountTransientStores(app, "tkeys")
+	err = source.MountTransientStores(sapp, "tkeys")
 	if err != nil {
 		return nil, err
 	}
 
-	err = source.MountMemoryStores(app, "memKeys")
+	err = source.MountMemoryStores(sapp, "memKeys")
 	if err != nil {
 		return nil, err
 	}
@@ -113,11 +159,20 @@ func buildRemoteSources(cfg *remote.Details) (*Sources, error) {
 	}
 
 	return &Sources{
-		BankSource:     remotebanksource.NewSource(source, banktypes.NewQueryClient(source.GrpcConn)),
-		DistrSource:    remotedistrsource.NewSource(source, distrtypes.NewQueryClient(source.GrpcConn)),
-		GovSource:      remotegovsource.NewSource(source, govtypes.NewQueryClient(source.GrpcConn)),
-		MintSource:     remotemintsource.NewSource(source, minttypes.NewQueryClient(source.GrpcConn)),
-		SlashingSource: remoteslashingsource.NewSource(source, slashingtypes.NewQueryClient(source.GrpcConn)),
-		StakingSource:  remotestakingsource.NewSource(source, stakingtypes.NewQueryClient(source.GrpcConn)),
+		BankSource:        remotebanksource.NewSource(source, banktypes.NewQueryClient(source.GrpcConn)),
+		DistrSource:       remotedistrsource.NewSource(source, distrtypes.NewQueryClient(source.GrpcConn)),
+		GovSource:         remotegovsource.NewSource(source, v1govtypes.NewQueryClient(source.GrpcConn), v1betagovtypes.NewQueryClient(source.GrpcConn)),
+		MintSource:        remotemintsource.NewSource(source, minttypes.NewQueryClient(source.GrpcConn)),
+		SlashingSource:    remoteslashingsource.NewSource(source, slashingtypes.NewQueryClient(source.GrpcConn)),
+		StakingSource:     remotestakingsource.NewSource(source, stakingtypes.NewQueryClient(source.GrpcConn)),
+		NftSource:         remotenftsource.NewSource(source, nfttypes.NewQueryClient(source.GrpcConn)),
+		FeeGrantSource:    remotefeegrantsource.NewSource(source, feegranttypes.NewQueryClient(source.GrpcConn)),
+		IdentitySource:    remoteidentitysource.NewSource(source, identitytypes.NewQueryClient(source.GrpcConn)),
+		RbacSource:        remoterbacsource.NewSource(source, rbactypes.NewQueryClient(source.GrpcConn)),
+		ReputationSource:  remotereputationsource.NewSource(source, reputationtypes.NewQueryClient(source.GrpcConn)),
+		ProductsSource:    remoteproductssource.NewSource(source, productstypes.NewQueryClient(source.GrpcConn)),
+		MarketplaceSource: remotemarketplacesource.NewSource(source, marketplacetypes.NewQueryClient(source.GrpcConn)),
+		EconomicsSource:   remoteeconsource.NewSource(source, econtypes.NewQueryClient(source.GrpcConn)),
+		TokenSource:       remotetokensource.NewSource(source, tokentypes.NewQueryClient(source.GrpcConn)),
 	}, nil
 }
