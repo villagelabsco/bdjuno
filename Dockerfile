@@ -1,7 +1,15 @@
 FROM golang:1.18-alpine AS builder
 RUN apk update && apk add --no-cache make git
+RUN apk add openssh-client
 WORKDIR /go/src/github.com/forbole/bdjuno
 COPY . ./
+
+ARG SSH_PRIVATE_KEY
+RUN mkdir /root/.ssh/
+RUN echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_rsa
+RUN chmod 600 /root/.ssh/id_rsa
+RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
+RUN git config --global url.ssh://git@github.com/.insteadOf https://github.com/
 
 ######################################################
 ## Enabe the lines below if chain supports cosmwasm ##
@@ -17,6 +25,7 @@ COPY . ./
 
 RUN go mod download
 RUN make build
+RUN rm /root/.ssh/id_rsa
 
 ##################################################
 ## Enabe line below if chain supports cosmwasm  ##
@@ -33,4 +42,4 @@ FROM alpine:latest
 #RUN apk update && apk add --no-cache ca-certificates build-base
 WORKDIR /bdjuno
 COPY --from=builder /go/src/github.com/forbole/bdjuno/build/bdjuno /usr/bin/bdjuno
-CMD [ "bdjuno" ]
+CMD [ "bdjuno"]

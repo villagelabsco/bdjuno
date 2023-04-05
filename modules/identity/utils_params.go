@@ -18,6 +18,7 @@ package identity
 
 import (
 	"fmt"
+
 	"github.com/rs/zerolog/log"
 	"github.com/villagelabsco/bdjuno/v3/types"
 	identitytypes "github.com/villagelabsco/village/x/identity/types"
@@ -36,4 +37,28 @@ func (m *Module) UpdateParams(height int64) error {
 		Params: p,
 		Height: height,
 	})
+}
+
+func (m *Module) UpdateNetworks(networks []identitytypes.Network) error {
+
+	for _, network := range networks {
+		err := m.db.SaveIdentityNetwork(&network)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Module) UpdateProviders(providers []identitytypes.IdentityProvider) error {
+
+	for _, provider := range providers {
+		err := m.db.SaveOrUpdateIdentityProvider(provider)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

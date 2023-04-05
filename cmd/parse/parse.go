@@ -1,8 +1,8 @@
 package parse
 
 import (
-	parse "github.com/villagelabsco/juno/v4/cmd/parse/types"
 	"github.com/spf13/cobra"
+	parse "github.com/villagelabsco/juno/v4/cmd/parse/types"
 
 	parseblocks "github.com/villagelabsco/juno/v4/cmd/parse/blocks"
 
@@ -13,6 +13,7 @@ import (
 	parsedistribution "github.com/villagelabsco/bdjuno/v3/cmd/parse/distribution"
 	parsefeegrant "github.com/villagelabsco/bdjuno/v3/cmd/parse/feegrant"
 	parsegov "github.com/villagelabsco/bdjuno/v3/cmd/parse/gov"
+	parseidentity "github.com/villagelabsco/bdjuno/v3/cmd/parse/identity"
 	parsemint "github.com/villagelabsco/bdjuno/v3/cmd/parse/mint"
 	parsepricefeed "github.com/villagelabsco/bdjuno/v3/cmd/parse/pricefeed"
 	parsestaking "github.com/villagelabsco/bdjuno/v3/cmd/parse/staking"
@@ -39,6 +40,7 @@ func NewParseCmd(parseCfg *parse.Config) *cobra.Command {
 		parsepricefeed.NewPricefeedCmd(parseCfg),
 		parsestaking.NewStakingCmd(parseCfg),
 		parsetransaction.NewTransactionsCmd(parseCfg),
+		parseidentity.NewIdentityCmd(parseCfg),
 	)
 
 	return cmd
