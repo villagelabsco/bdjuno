@@ -16,7 +16,10 @@
 
 package source
 
-import tokentypes "github.com/villagelabsco/village/x/token/types"
+import (
+	economicstypes "github.com/villagelabsco/village/x/economics/types"
+	tokentypes "github.com/villagelabsco/village/x/token/types"
+)
 
 type Source interface {
 	GetParams(height int64) (tokentypes.Params, error)
@@ -29,15 +32,15 @@ type Source interface {
 	GetImmobilizedFunds(height int64, req tokentypes.QueryGetImmobilizedFundsRequest) (tokentypes.QueryGetImmobilizedFundsResponse, error)
 	GetAllImmobilizedFunds(height int64, req tokentypes.QueryAllImmobilizedFundsRequest) (tokentypes.QueryAllImmobilizedFundsResponse, error)
 	GetTokenDetails(height int64, req tokentypes.QueryGetTokenDetailsRequest) (tokentypes.QueryGetTokenDetailsResponse, error)
-	GetPendingBalance(height int64, req tokentypes.QueryGetPendingBalanceRequest) (tokentypes.QueryGetPendingBalanceResponse, error)
-	GetAllPendingBalance(height int64, req tokentypes.QueryAllPendingBalanceRequest) (tokentypes.QueryAllPendingBalanceResponse, error)
+	// GetPendingBalance(height int64, req tokentypes.QueryGetPendingBalanceRequest) (tokentypes.QueryGetPendingBalanceResponse, error)
+	// GetAllPendingBalance(height int64, req tokentypes.QueryAllPendingBalanceRequest) (tokentypes.QueryAllPendingBalanceResponse, error)
 	GetNbTokenCreationPerDay(height int64, req tokentypes.QueryGetNbTokenCreationPerDayRequest) (tokentypes.QueryGetNbTokenCreationPerDayResponse, error)
 	GetAllNbTokenCreationPerDay(height int64, req tokentypes.QueryAllNbTokenCreationPerDayRequest) (tokentypes.QueryAllNbTokenCreationPerDayResponse, error)
 	GetPendingClawbackableOperation(height int64, req tokentypes.QueryGetPendingClawbackableOperationRequest) (tokentypes.QueryGetPendingClawbackableOperationResponse, error)
 	GetAllPendingClawbackableOperation(height int64, req tokentypes.QueryAllPendingClawbackableOperationRequest) (tokentypes.QueryAllPendingClawbackableOperationResponse, error)
 	GetPendingClawbackableMultiOperation(height int64, req tokentypes.QueryGetPendingClawbackableMultiOperationRequest) (tokentypes.QueryGetPendingClawbackableMultiOperationResponse, error)
 	GetAllPendingClawbackableMultiOperation(height int64, req tokentypes.QueryAllPendingClawbackableMultiOperationRequest) (tokentypes.QueryAllPendingClawbackableMultiOperationResponse, error)
-	GetLastInputActivity(height int64, req tokentypes.QueryGetLastInputActivityRequest) (tokentypes.QueryGetLastInputActivityResponse, error)
-	GetAllLastInputActivity(height int64, req tokentypes.QueryAllLastInputActivityRequest) (tokentypes.QueryAllLastInputActivityResponse, error)
+	GetLastInputActivity(height int64, req economicstypes.QueryGetActivityRequest) (economicstypes.QueryGetActivityResponse, error)
+	GetAllLastInputActivity(height int64, req economicstypes.QueryAllActivityRequest) (economicstypes.QueryAllActivityResponse, error)
 	GetShowClawbackableAmount(height int64, req tokentypes.QueryShowClawbackableAmountRequest) (tokentypes.QueryShowClawbackableAmountResponse, error)
 }

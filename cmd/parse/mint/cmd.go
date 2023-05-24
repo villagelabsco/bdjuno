@@ -1,8 +1,8 @@
 package mint
 
 import (
+	parsecmdtypes "github.com/forbole/juno/v4/cmd/parse/types"
 	"github.com/spf13/cobra"
-	parsecmdtypes "github.com/villagelabsco/juno/v4/cmd/parse/types"
 )
 
 // NewMintCmd returns the Cobra command allowing to fix various things related to the x/mint module

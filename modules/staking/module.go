@@ -2,10 +2,10 @@ package staking
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/villagelabsco/juno/v4/modules"
+	"github.com/forbole/juno/v4/modules"
 
-	"github.com/villagelabsco/bdjuno/v3/database"
-	stakingsource "github.com/villagelabsco/bdjuno/v3/modules/staking/source"
+	"github.com/villagelabsco/bdjuno/v4/database"
+	stakingsource "github.com/villagelabsco/bdjuno/v4/modules/staking/source"
 )
 
 var (

@@ -3,7 +3,7 @@ package consensus
 import (
 	"fmt"
 
-	"github.com/villagelabsco/juno/v4/types"
+	"github.com/forbole/juno/v4/types"
 
 	"github.com/rs/zerolog/log"
 

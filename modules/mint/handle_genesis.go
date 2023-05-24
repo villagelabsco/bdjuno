@@ -6,7 +6,7 @@ import (
 
 	tmtypes "github.com/tendermint/tendermint/types"
 
-	"github.com/villagelabsco/bdjuno/v3/types"
+	"github.com/villagelabsco/bdjuno/v4/types"
 
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	"github.com/rs/zerolog/log"

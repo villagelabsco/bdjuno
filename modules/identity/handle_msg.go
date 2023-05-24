@@ -18,12 +18,13 @@ package identity
 
 import (
 	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	feegranttypes "github.com/cosmos/cosmos-sdk/x/feegrant"
-	"github.com/villagelabsco/bdjuno/v3/types"
-	"github.com/villagelabsco/bdjuno/v3/utils"
-	juno "github.com/villagelabsco/juno/v4/types"
+	juno "github.com/forbole/juno/v4/types"
+	"github.com/villagelabsco/bdjuno/v4/types"
+	"github.com/villagelabsco/bdjuno/v4/utils"
 	identitytypes "github.com/villagelabsco/village/x/identity/types"
 	rbactypes "github.com/villagelabsco/village/x/rbac/types"
 )

@@ -4,10 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/gogo/protobuf/proto"
-	juno "github.com/villagelabsco/juno/v4/types"
 	"strconv"
 	"strings"
+
+	juno "github.com/forbole/juno/v4/types"
+	"github.com/gogo/protobuf/proto"
 
 	grpctypes "github.com/cosmos/cosmos-sdk/types/grpc"
 	"google.golang.org/grpc/metadata"

@@ -6,7 +6,7 @@ import (
 
 	tmtypes "github.com/tendermint/tendermint/types"
 
-	"github.com/villagelabsco/bdjuno/v3/types"
+	"github.com/villagelabsco/bdjuno/v4/types"
 
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	v1betagovtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"

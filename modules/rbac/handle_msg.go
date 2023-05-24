@@ -18,8 +18,9 @@ package rbac
 
 import (
 	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	juno "github.com/villagelabsco/juno/v4/types"
+	juno "github.com/forbole/juno/v4/types"
 	rbactypes "github.com/villagelabsco/village/x/rbac/types"
 )
 

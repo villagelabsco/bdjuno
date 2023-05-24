@@ -3,7 +3,7 @@ package handlers
 import (
 	"fmt"
 
-	"github.com/villagelabsco/bdjuno/v3/modules/actions/types"
+	"github.com/villagelabsco/bdjuno/v4/modules/actions/types"
 
 	"github.com/rs/zerolog/log"
 )

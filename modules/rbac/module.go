@@ -18,9 +18,9 @@ package rbac
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/villagelabsco/bdjuno/v3/database"
-	rbacsource "github.com/villagelabsco/bdjuno/v3/modules/rbac/source"
-	"github.com/villagelabsco/juno/v4/modules"
+	"github.com/forbole/juno/v4/modules"
+	"github.com/villagelabsco/bdjuno/v4/database"
+	rbacsource "github.com/villagelabsco/bdjuno/v4/modules/rbac/source"
 	rbactypes "github.com/villagelabsco/village/x/rbac/types"
 )
 

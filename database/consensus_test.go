@@ -3,8 +3,8 @@ package database_test
 import (
 	time "time"
 
-	dbtypes "github.com/villagelabsco/bdjuno/v3/database/types"
-	"github.com/villagelabsco/bdjuno/v3/types"
+	dbtypes "github.com/villagelabsco/bdjuno/v4/database/types"
+	"github.com/villagelabsco/bdjuno/v4/types"
 )
 
 func (suite *DbTestSuite) TestSaveConsensus_GetBlockHeightTimeMinuteAgo() {

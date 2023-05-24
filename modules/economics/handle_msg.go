@@ -18,11 +18,12 @@ package economics
 
 import (
 	"fmt"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/villagelabsco/bdjuno/v3/utils"
-	juno "github.com/villagelabsco/juno/v4/types"
-	econtypes "github.com/villagelabsco/village/x/economics/types"
 	"strconv"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	juno "github.com/forbole/juno/v4/types"
+	"github.com/villagelabsco/bdjuno/v4/utils"
+	econtypes "github.com/villagelabsco/village/x/economics/types"
 )
 
 func (m Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {

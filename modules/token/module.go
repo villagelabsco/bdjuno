@@ -18,9 +18,9 @@ package token
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/villagelabsco/bdjuno/v3/database"
-	tokensource "github.com/villagelabsco/bdjuno/v3/modules/token/source"
-	"github.com/villagelabsco/juno/v4/modules"
+	"github.com/forbole/juno/v4/modules"
+	"github.com/villagelabsco/bdjuno/v4/database"
+	tokensource "github.com/villagelabsco/bdjuno/v4/modules/token/source"
 	tokentypes "github.com/villagelabsco/village/x/token/types"
 )
 

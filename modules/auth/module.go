@@ -3,10 +3,10 @@ package auth
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
 
-	"github.com/villagelabsco/bdjuno/v3/database"
+	"github.com/villagelabsco/bdjuno/v4/database"
 
-	"github.com/villagelabsco/juno/v4/modules"
-	"github.com/villagelabsco/juno/v4/modules/messages"
+	"github.com/forbole/juno/v4/modules"
+	"github.com/forbole/juno/v4/modules/messages"
 )
 
 var (

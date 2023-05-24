@@ -3,7 +3,7 @@ package database
 import (
 	"fmt"
 
-	"github.com/villagelabsco/bdjuno/v3/types"
+	"github.com/villagelabsco/bdjuno/v4/types"
 )
 
 // SaveStakingPool allows to save for the given height the given stakingtypes pool

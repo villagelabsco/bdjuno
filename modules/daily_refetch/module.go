@@ -1,11 +1,11 @@
 package daily_refetch
 
 import (
-	"github.com/villagelabsco/juno/v4/node"
+	"github.com/forbole/juno/v4/node"
 
-	bdjunodb "github.com/villagelabsco/bdjuno/v3/database"
+	bdjunodb "github.com/villagelabsco/bdjuno/v4/database"
 
-	"github.com/villagelabsco/juno/v4/modules"
+	"github.com/forbole/juno/v4/modules"
 )
 
 var (

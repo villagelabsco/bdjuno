@@ -6,8 +6,8 @@ import (
 
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	dbtypes "github.com/villagelabsco/bdjuno/v3/database/types"
-	"github.com/villagelabsco/bdjuno/v3/types"
+	dbtypes "github.com/villagelabsco/bdjuno/v4/database/types"
+	"github.com/villagelabsco/bdjuno/v4/types"
 )
 
 // SaveStakingParams allows to store the given params into the database

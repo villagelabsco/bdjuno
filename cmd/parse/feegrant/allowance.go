@@ -4,15 +4,15 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	parsecmdtypes "github.com/villagelabsco/juno/v4/cmd/parse/types"
-	"github.com/villagelabsco/juno/v4/types/config"
+	parsecmdtypes "github.com/forbole/juno/v4/cmd/parse/types"
+	"github.com/forbole/juno/v4/types/config"
 
-	"github.com/villagelabsco/bdjuno/v3/modules/feegrant"
-	"github.com/villagelabsco/bdjuno/v3/utils"
+	"github.com/villagelabsco/bdjuno/v4/modules/feegrant"
+	"github.com/villagelabsco/bdjuno/v4/utils"
 
 	"github.com/spf13/cobra"
 
-	"github.com/villagelabsco/bdjuno/v3/database"
+	"github.com/villagelabsco/bdjuno/v4/database"
 
 	"sort"
 

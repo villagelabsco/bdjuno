@@ -3,7 +3,7 @@ package database
 import (
 	"fmt"
 
-	dbtypes "github.com/villagelabsco/bdjuno/v3/database/types"
+	dbtypes "github.com/villagelabsco/bdjuno/v4/database/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/lib/pq"

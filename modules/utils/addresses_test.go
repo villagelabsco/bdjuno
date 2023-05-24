@@ -3,7 +3,7 @@ package utils_test
 import (
 	"testing"
 
-	"github.com/villagelabsco/bdjuno/v3/modules/utils"
+	"github.com/villagelabsco/bdjuno/v4/modules/utils"
 
 	"github.com/stretchr/testify/require"
 )

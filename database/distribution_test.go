@@ -5,12 +5,12 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	dbtypes "github.com/villagelabsco/bdjuno/v3/database/types"
+	dbtypes "github.com/villagelabsco/bdjuno/v4/database/types"
 
-	"github.com/villagelabsco/bdjuno/v3/types"
+	"github.com/villagelabsco/bdjuno/v4/types"
 
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
-	bddbtypes "github.com/villagelabsco/bdjuno/v3/database/types"
+	bddbtypes "github.com/villagelabsco/bdjuno/v4/database/types"
 )
 
 func (suite *DbTestSuite) TestBigDipperDb_SaveCommunityPool() {

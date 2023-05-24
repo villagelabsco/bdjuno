@@ -18,8 +18,8 @@ package database
 
 import (
 	"fmt"
-	dbtypes "github.com/villagelabsco/bdjuno/v3/database/types"
-	types "github.com/villagelabsco/bdjuno/v3/types"
+	dbtypes "github.com/villagelabsco/bdjuno/v4/database/types"
+	types "github.com/villagelabsco/bdjuno/v4/types"
 	identitytypes "github.com/villagelabsco/village/x/identity/types"
 	"strings"
 )

@@ -27,9 +27,8 @@ type DbToken struct {
 	Transferable      bool   `db:"transferable"`
 	BackingAsset      string `db:"backing_asset"`
 	Admin             string `db:"admin"`
-	NameId            string `db:"name_id"`
-	IncentiveType     string `db:"incentive_type"`
-	IconPath          string `db:"icon_path"`
+	Name              string `db:"name"`
+	IconUri           string `db:"icon_path"`
 	ReferencedDenom   string `db:"referenced_denom"`
 	OfframpEnabled    bool   `db:"offramp_enabled"`
 	ClawbackEnabled   bool   `db:"clawback_enabled"`
@@ -38,40 +37,42 @@ type DbToken struct {
 
 func (DbToken) FromProto(t *tokentypes.Token) DbToken {
 	return DbToken{
-		Network:           t.Network,
-		Denom:             t.Denom,
-		Ticker:            t.Ticker,
-		Description:       t.Description,
-		NbDecimals:        t.NbDecimals,
-		Transferable:      t.Transferable,
-		BackingAsset:      t.BackingAsset,
-		Admin:             t.Admin,
-		NameId:            t.NameId,
-		IncentiveType:     t.IncentiveType,
-		IconPath:          t.IconPath,
-		ReferencedDenom:   t.ReferencedDenom,
-		OfframpEnabled:    t.OfframpEnabled,
-		ClawbackEnabled:   t.ClawbackEnabled,
-		ClawbackPeriodSec: t.ClawbackPeriodSec,
+		Network:           t.Data.Network,
+		Denom:             t.Data.Denom,
+		Ticker:            t.Metadata.Ticker,
+		Description:       t.Metadata.Description,
+		NbDecimals:        t.Data.NbDecimals,
+		Transferable:      t.Data.Transferable,
+		BackingAsset:      t.Data.BackingAsset,
+		Admin:             t.Data.Admin,
+		Name:              t.Metadata.Name,
+		IconUri:           t.Metadata.IconUri,
+		ReferencedDenom:   t.Data.ReferencedDenom,
+		OfframpEnabled:    t.Data.OfframpEnabled,
+		ClawbackEnabled:   t.Data.ClawbackEnabled,
+		ClawbackPeriodSec: t.Data.ClawbackPeriodSec,
 	}
 }
 
 func (t DbToken) ToProto() *tokentypes.Token {
 	return &tokentypes.Token{
-		Network:           t.Network,
-		Denom:             t.Denom,
-		Ticker:            t.Ticker,
-		Description:       t.Description,
-		NbDecimals:        t.NbDecimals,
-		Transferable:      t.Transferable,
-		BackingAsset:      t.BackingAsset,
-		Admin:             t.Admin,
-		NameId:            t.NameId,
-		IncentiveType:     t.IncentiveType,
-		IconPath:          t.IconPath,
-		ReferencedDenom:   t.ReferencedDenom,
-		OfframpEnabled:    t.OfframpEnabled,
-		ClawbackEnabled:   t.ClawbackEnabled,
-		ClawbackPeriodSec: t.ClawbackPeriodSec,
+		Data: tokentypes.TokenData{
+			Network:           t.Network,
+			Denom:             t.Denom,
+			NbDecimals:        t.NbDecimals,
+			Transferable:      t.Transferable,
+			BackingAsset:      t.BackingAsset,
+			Admin:             t.Admin,
+			ReferencedDenom:   t.ReferencedDenom,
+			OfframpEnabled:    t.OfframpEnabled,
+			ClawbackEnabled:   t.ClawbackEnabled,
+			ClawbackPeriodSec: t.ClawbackPeriodSec,
+		},
+		Metadata: tokentypes.TokenMetadata{
+			Ticker:      t.Ticker,
+			Description: t.Description,
+			Name:        t.Name,
+			IconUri:     t.IconUri,
+		},
 	}
 }

@@ -3,17 +3,18 @@ package database
 import (
 	"encoding/json"
 	"fmt"
-	v1govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	"time"
+
+	v1govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	v1beta1govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 	"github.com/gogo/protobuf/proto"
 
-	"github.com/villagelabsco/bdjuno/v3/types"
+	"github.com/villagelabsco/bdjuno/v4/types"
 
-	dbtypes "github.com/villagelabsco/bdjuno/v3/database/types"
+	dbtypes "github.com/villagelabsco/bdjuno/v4/database/types"
 
 	"github.com/lib/pq"
 )

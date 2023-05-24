@@ -3,14 +3,14 @@ package bank
 import (
 	"fmt"
 
-	modulestypes "github.com/villagelabsco/bdjuno/v3/modules/types"
+	modulestypes "github.com/villagelabsco/bdjuno/v4/modules/types"
 
+	parsecmdtypes "github.com/forbole/juno/v4/cmd/parse/types"
+	"github.com/forbole/juno/v4/types/config"
 	"github.com/spf13/cobra"
-	parsecmdtypes "github.com/villagelabsco/juno/v4/cmd/parse/types"
-	"github.com/villagelabsco/juno/v4/types/config"
 
-	"github.com/villagelabsco/bdjuno/v3/database"
-	"github.com/villagelabsco/bdjuno/v3/modules/bank"
+	"github.com/villagelabsco/bdjuno/v4/database"
+	"github.com/villagelabsco/bdjuno/v4/modules/bank"
 )
 
 // supplyCmd returns the Cobra command allowing to refresh x/bank total supply

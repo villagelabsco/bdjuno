@@ -19,7 +19,7 @@ package identity
 import (
 	"fmt"
 	"github.com/rs/zerolog/log"
-	"github.com/villagelabsco/bdjuno/v3/types"
+	"github.com/villagelabsco/bdjuno/v4/types"
 	identitytypes "github.com/villagelabsco/village/x/identity/types"
 )
 

@@ -20,7 +20,7 @@ import (
 	"encoding/json"
 	"fmt"
 	nfttypes "github.com/cosmos/cosmos-sdk/x/nft"
-	"github.com/villagelabsco/bdjuno/v3/database/types"
+	"github.com/villagelabsco/bdjuno/v4/database/types"
 	productstypes "github.com/villagelabsco/village/x/products/types"
 )
 

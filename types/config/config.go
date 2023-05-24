@@ -1,12 +1,12 @@
 package config
 
 import (
-	initcmd "github.com/villagelabsco/juno/v4/cmd/init"
-	junoconfig "github.com/villagelabsco/juno/v4/types/config"
+	initcmd "github.com/forbole/juno/v4/cmd/init"
+	junoconfig "github.com/forbole/juno/v4/types/config"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v3"
 
-	"github.com/villagelabsco/bdjuno/v3/modules/actions"
+	"github.com/villagelabsco/bdjuno/v4/modules/actions"
 )
 
 // Config represents the BDJuno configuration

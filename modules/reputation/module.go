@@ -2,9 +2,9 @@ package reputation
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/villagelabsco/bdjuno/v3/database"
-	reputationsource "github.com/villagelabsco/bdjuno/v3/modules/reputation/source"
-	"github.com/villagelabsco/juno/v4/modules"
+	"github.com/forbole/juno/v4/modules"
+	"github.com/villagelabsco/bdjuno/v4/database"
+	reputationsource "github.com/villagelabsco/bdjuno/v4/modules/reputation/source"
 	reputationtypes "github.com/villagelabsco/village/x/reputation/types"
 )
 

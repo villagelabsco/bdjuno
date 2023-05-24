@@ -18,9 +18,10 @@ package marketplace
 
 import (
 	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/villagelabsco/bdjuno/v3/utils"
-	juno "github.com/villagelabsco/juno/v4/types"
+	juno "github.com/forbole/juno/v4/types"
+	"github.com/villagelabsco/bdjuno/v4/utils"
 	marketplacetypes "github.com/villagelabsco/village/x/marketplace/types"
 )
 

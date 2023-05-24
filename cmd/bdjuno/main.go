@@ -2,19 +2,19 @@ package main
 
 import (
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/villagelabsco/juno/v4/cmd"
-	initcmd "github.com/villagelabsco/juno/v4/cmd/init"
-	parsetypes "github.com/villagelabsco/juno/v4/cmd/parse/types"
-	startcmd "github.com/villagelabsco/juno/v4/cmd/start"
-	"github.com/villagelabsco/juno/v4/modules/messages"
+	"github.com/forbole/juno/v4/cmd"
+	initcmd "github.com/forbole/juno/v4/cmd/init"
+	parsetypes "github.com/forbole/juno/v4/cmd/parse/types"
+	startcmd "github.com/forbole/juno/v4/cmd/start"
+	"github.com/forbole/juno/v4/modules/messages"
 
-	migratecmd "github.com/villagelabsco/bdjuno/v3/cmd/migrate"
-	parsecmd "github.com/villagelabsco/bdjuno/v3/cmd/parse"
+	migratecmd "github.com/villagelabsco/bdjuno/v4/cmd/migrate"
+	parsecmd "github.com/villagelabsco/bdjuno/v4/cmd/parse"
 
-	"github.com/villagelabsco/bdjuno/v3/types/config"
+	"github.com/villagelabsco/bdjuno/v4/types/config"
 
-	"github.com/villagelabsco/bdjuno/v3/database"
-	"github.com/villagelabsco/bdjuno/v3/modules"
+	"github.com/villagelabsco/bdjuno/v4/database"
+	"github.com/villagelabsco/bdjuno/v4/modules"
 
 	villagedapp "github.com/villagelabsco/village/app"
 )

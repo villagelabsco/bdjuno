@@ -22,7 +22,7 @@ import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sqlxtypes "github.com/jmoiron/sqlx/types"
-	"github.com/villagelabsco/bdjuno/v3/utils"
+	"github.com/villagelabsco/bdjuno/v4/utils"
 	econtypes "github.com/villagelabsco/village/x/economics/types"
 	"time"
 )

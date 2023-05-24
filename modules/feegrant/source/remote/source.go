@@ -18,8 +18,9 @@ package remote
 
 import (
 	"fmt"
+
 	feegranttypes "github.com/cosmos/cosmos-sdk/x/feegrant"
-	"github.com/villagelabsco/juno/v4/node/remote"
+	"github.com/forbole/juno/v4/node/remote"
 )
 
 type Source struct {

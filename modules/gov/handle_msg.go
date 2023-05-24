@@ -2,17 +2,18 @@ package gov
 
 import (
 	"fmt"
-	v1govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	"time"
 
 	"strconv"
 
-	"github.com/villagelabsco/bdjuno/v3/types"
+	v1govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
+	v1beta1govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
+
+	"github.com/villagelabsco/bdjuno/v4/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
-	v1beta1govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
-	juno "github.com/villagelabsco/juno/v4/types"
+	juno "github.com/forbole/juno/v4/types"
 )
 
 // HandleMsg implements modules.MessageModule

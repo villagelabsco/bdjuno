@@ -3,28 +3,29 @@ package gov
 import (
 	"encoding/hex"
 	"fmt"
-	v1govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
-	"github.com/villagelabsco/bdjuno/v3/modules/identity"
 	"strconv"
 	"time"
 
-	"github.com/rs/zerolog/log"
-	modulestypes "github.com/villagelabsco/bdjuno/v3/modules/types"
-
+	v1govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	v1beta1govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
+	"github.com/villagelabsco/bdjuno/v4/modules/identity"
+
+	"github.com/rs/zerolog/log"
+	modulestypes "github.com/villagelabsco/bdjuno/v4/modules/types"
+
+	parsecmdtypes "github.com/forbole/juno/v4/cmd/parse/types"
+	"github.com/forbole/juno/v4/types/config"
 	"github.com/spf13/cobra"
-	parsecmdtypes "github.com/villagelabsco/juno/v4/cmd/parse/types"
-	"github.com/villagelabsco/juno/v4/types/config"
 
-	"github.com/villagelabsco/juno/v4/parser"
+	"github.com/forbole/juno/v4/parser"
 
-	"github.com/villagelabsco/bdjuno/v3/database"
-	"github.com/villagelabsco/bdjuno/v3/modules/distribution"
-	"github.com/villagelabsco/bdjuno/v3/modules/gov"
-	"github.com/villagelabsco/bdjuno/v3/modules/mint"
-	"github.com/villagelabsco/bdjuno/v3/modules/slashing"
-	"github.com/villagelabsco/bdjuno/v3/modules/staking"
-	"github.com/villagelabsco/bdjuno/v3/utils"
+	"github.com/villagelabsco/bdjuno/v4/database"
+	"github.com/villagelabsco/bdjuno/v4/modules/distribution"
+	"github.com/villagelabsco/bdjuno/v4/modules/gov"
+	"github.com/villagelabsco/bdjuno/v4/modules/mint"
+	"github.com/villagelabsco/bdjuno/v4/modules/slashing"
+	"github.com/villagelabsco/bdjuno/v4/modules/staking"
+	"github.com/villagelabsco/bdjuno/v4/utils"
 )
 
 // proposalCmd returns the Cobra command allowing to fix all things related to a proposal

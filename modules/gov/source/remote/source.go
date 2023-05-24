@@ -1,11 +1,11 @@
 package remote
 
 import (
-	v1govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
-	v1beta1govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
-	"github.com/villagelabsco/juno/v4/node/remote"
+	govtypesv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
+	"github.com/forbole/juno/v4/node/remote"
 
-	govsource "github.com/villagelabsco/bdjuno/v3/modules/gov/source"
+	govtypesv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
+	govsource "github.com/villagelabsco/bdjuno/v4/modules/gov/source"
 )
 
 var (
@@ -15,12 +15,12 @@ var (
 // Source implements govsource.Source using a remote node
 type Source struct {
 	*remote.Source
-	govClient        v1govtypes.QueryClient
-	govClientv1beta1 v1beta1govtypes.QueryClient
+	govClient        govtypesv1.QueryClient
+	govClientv1beta1 govtypesv1beta1.QueryClient
 }
 
 // NewSource returns a new Source implementation
-func NewSource(source *remote.Source, govClient v1govtypes.QueryClient, govClientv1beta1 v1beta1govtypes.QueryClient) *Source {
+func NewSource(source *remote.Source, govClient govtypesv1.QueryClient, govClientv1beta1 govtypesv1beta1.QueryClient) *Source {
 	return &Source{
 		Source:           source,
 		govClient:        govClient,
@@ -29,23 +29,23 @@ func NewSource(source *remote.Source, govClient v1govtypes.QueryClient, govClien
 }
 
 // Proposal implements govsource.Source
-func (s Source) Proposal(height int64, id uint64) (v1beta1govtypes.Proposal, error) {
+func (s Source) Proposal(height int64, id uint64) (govtypesv1beta1.Proposal, error) {
 	res, err := s.govClientv1beta1.Proposal(
 		remote.GetHeightRequestContext(s.Ctx, height),
-		&v1beta1govtypes.QueryProposalRequest{ProposalId: id},
+		&govtypesv1beta1.QueryProposalRequest{ProposalId: id},
 	)
 	if err != nil {
-		return v1beta1govtypes.Proposal{}, err
+		return govtypesv1beta1.Proposal{}, err
 	}
 
 	return res.Proposal, err
 }
 
 // ProposalDeposit implements govsource.Source
-func (s Source) ProposalDeposit(height int64, id uint64, depositor string) (*v1govtypes.Deposit, error) {
+func (s Source) ProposalDeposit(height int64, id uint64, depositor string) (*govtypesv1.Deposit, error) {
 	res, err := s.govClient.Deposit(
 		remote.GetHeightRequestContext(s.Ctx, height),
-		&v1govtypes.QueryDepositRequest{ProposalId: id, Depositor: depositor},
+		&govtypesv1.QueryDepositRequest{ProposalId: id, Depositor: depositor},
 	)
 	if err != nil {
 		return nil, err
@@ -55,10 +55,10 @@ func (s Source) ProposalDeposit(height int64, id uint64, depositor string) (*v1g
 }
 
 // TallyResult implements govsource.Source
-func (s Source) TallyResult(height int64, proposalID uint64) (*v1govtypes.TallyResult, error) {
+func (s Source) TallyResult(height int64, proposalID uint64) (*govtypesv1.TallyResult, error) {
 	res, err := s.govClient.TallyResult(
 		remote.GetHeightRequestContext(s.Ctx, height),
-		&v1govtypes.QueryTallyResultRequest{ProposalId: proposalID},
+		&govtypesv1.QueryTallyResultRequest{ProposalId: proposalID},
 	)
 	if err != nil {
 		return nil, err
@@ -68,10 +68,10 @@ func (s Source) TallyResult(height int64, proposalID uint64) (*v1govtypes.TallyR
 }
 
 // DepositParams implements govsource.Source
-func (s Source) DepositParams(height int64) (*v1govtypes.DepositParams, error) {
+func (s Source) DepositParams(height int64) (*govtypesv1.DepositParams, error) {
 	res, err := s.govClient.Params(
 		remote.GetHeightRequestContext(s.Ctx, height),
-		&v1govtypes.QueryParamsRequest{ParamsType: v1govtypes.ParamDeposit},
+		&govtypesv1.QueryParamsRequest{ParamsType: govtypesv1.ParamDeposit},
 	)
 	if err != nil {
 		return nil, err
@@ -81,10 +81,10 @@ func (s Source) DepositParams(height int64) (*v1govtypes.DepositParams, error) {
 }
 
 // VotingParams implements govsource.Source
-func (s Source) VotingParams(height int64) (*v1govtypes.VotingParams, error) {
+func (s Source) VotingParams(height int64) (*govtypesv1.VotingParams, error) {
 	res, err := s.govClient.Params(
 		remote.GetHeightRequestContext(s.Ctx, height),
-		&v1govtypes.QueryParamsRequest{ParamsType: v1beta1govtypes.ParamVoting},
+		&govtypesv1.QueryParamsRequest{ParamsType: govtypesv1.ParamVoting},
 	)
 	if err != nil {
 		return nil, err
@@ -94,10 +94,10 @@ func (s Source) VotingParams(height int64) (*v1govtypes.VotingParams, error) {
 }
 
 // TallyParams implements govsource.Source
-func (s Source) TallyParams(height int64) (*v1govtypes.TallyParams, error) {
+func (s Source) TallyParams(height int64) (*govtypesv1.TallyParams, error) {
 	res, err := s.govClient.Params(
 		remote.GetHeightRequestContext(s.Ctx, height),
-		&v1govtypes.QueryParamsRequest{ParamsType: v1beta1govtypes.ParamTallying},
+		&govtypesv1.QueryParamsRequest{ParamsType: govtypesv1.ParamTallying},
 	)
 	if err != nil {
 		return nil, err

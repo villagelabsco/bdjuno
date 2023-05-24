@@ -19,7 +19,7 @@ package database
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/villagelabsco/bdjuno/v3/database/types"
+	"github.com/villagelabsco/bdjuno/v4/database/types"
 	rbactypes "github.com/villagelabsco/village/x/rbac/types"
 )
 

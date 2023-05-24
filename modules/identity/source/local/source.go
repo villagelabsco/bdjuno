@@ -18,8 +18,9 @@ package local
 
 import (
 	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/villagelabsco/juno/v4/node/local"
+	"github.com/forbole/juno/v4/node/local"
 	identitytypes "github.com/villagelabsco/village/x/identity/types"
 )
 

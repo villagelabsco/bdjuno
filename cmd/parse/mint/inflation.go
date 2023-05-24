@@ -3,13 +3,13 @@ package mint
 import (
 	"fmt"
 
+	parsecmdtypes "github.com/forbole/juno/v4/cmd/parse/types"
+	"github.com/forbole/juno/v4/types/config"
 	"github.com/spf13/cobra"
-	parsecmdtypes "github.com/villagelabsco/juno/v4/cmd/parse/types"
-	"github.com/villagelabsco/juno/v4/types/config"
 
-	"github.com/villagelabsco/bdjuno/v3/database"
-	"github.com/villagelabsco/bdjuno/v3/modules/mint"
-	modulestypes "github.com/villagelabsco/bdjuno/v3/modules/types"
+	"github.com/villagelabsco/bdjuno/v4/database"
+	"github.com/villagelabsco/bdjuno/v4/modules/mint"
+	modulestypes "github.com/villagelabsco/bdjuno/v4/modules/types"
 )
 
 // inflationCmd returns the Cobra command allowing to refresh x/mint inflation

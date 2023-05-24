@@ -5,9 +5,9 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
-	"github.com/villagelabsco/juno/v4/node/local"
+	"github.com/forbole/juno/v4/node/local"
 
-	mintsource "github.com/villagelabsco/bdjuno/v3/modules/mint/source"
+	mintsource "github.com/villagelabsco/bdjuno/v4/modules/mint/source"
 )
 
 var (

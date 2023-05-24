@@ -7,10 +7,10 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/villagelabsco/juno/v4/node/local"
+	"github.com/forbole/juno/v4/node/local"
 
-	"github.com/villagelabsco/bdjuno/v3/modules/bank/source"
-	"github.com/villagelabsco/bdjuno/v3/types"
+	"github.com/villagelabsco/bdjuno/v4/modules/bank/source"
+	"github.com/villagelabsco/bdjuno/v4/types"
 )
 
 var (

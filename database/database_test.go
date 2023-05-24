@@ -9,15 +9,15 @@ import (
 	"testing"
 	"time"
 
-	dbconfig "github.com/villagelabsco/juno/v4/database/config"
-	"github.com/villagelabsco/juno/v4/logging"
+	dbconfig "github.com/forbole/juno/v4/database/config"
+	"github.com/forbole/juno/v4/logging"
 
-	junodb "github.com/villagelabsco/juno/v4/database"
+	junodb "github.com/forbole/juno/v4/database"
 
-	"github.com/villagelabsco/bdjuno/v3/database"
-	"github.com/villagelabsco/bdjuno/v3/types"
+	"github.com/villagelabsco/bdjuno/v4/database"
+	"github.com/villagelabsco/bdjuno/v4/types"
 
-	juno "github.com/villagelabsco/juno/v4/types"
+	juno "github.com/forbole/juno/v4/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	tmversion "github.com/tendermint/tendermint/proto/tendermint/version"
@@ -27,7 +27,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/simapp"
 	"github.com/stretchr/testify/suite"
 
-	_ "github.com/proullon/ramsql/driver"
+	_ "	"
 )
 
 func TestDatabaseTestSuite(t *testing.T) {

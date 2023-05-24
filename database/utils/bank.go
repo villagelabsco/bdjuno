@@ -1,6 +1,6 @@
 package utils
 
-import "github.com/villagelabsco/bdjuno/v3/types"
+import "github.com/villagelabsco/bdjuno/v4/types"
 
 const (
 	maxPostgreSQLParams = 65535

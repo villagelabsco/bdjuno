@@ -18,13 +18,16 @@ package remote
 
 import (
 	"fmt"
-	"github.com/villagelabsco/juno/v4/node/remote"
+
+	"github.com/forbole/juno/v4/node/remote"
+	economicstypes "github.com/villagelabsco/village/x/economics/types"
 	tokentypes "github.com/villagelabsco/village/x/token/types"
 )
 
 type Source struct {
 	*remote.Source
-	q tokentypes.QueryClient
+	q  tokentypes.QueryClient
+	qe economicstypes.QueryClient
 }
 
 func NewSource(source *remote.Source, q tokentypes.QueryClient) *Source {
@@ -54,7 +57,7 @@ func (s Source) GetToken(height int64, req tokentypes.QueryGetTokenRequest) (tok
 
 func (s Source) GetAllToken(height int64, req tokentypes.QueryAllTokenRequest) (tokentypes.QueryAllTokenResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.q.TokenAll(ctx, &req)
+	res, err := s.q.Tokens(ctx, &req)
 	if err != nil {
 		return tokentypes.QueryAllTokenResponse{}, fmt.Errorf("error while getting all tokens: %s", err)
 	}
@@ -124,23 +127,23 @@ func (s Source) GetTokenDetails(height int64, req tokentypes.QueryGetTokenDetail
 	return *res, nil
 }
 
-func (s Source) GetPendingBalance(height int64, req tokentypes.QueryGetPendingBalanceRequest) (tokentypes.QueryGetPendingBalanceResponse, error) {
-	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.q.PendingBalance(ctx, &req)
-	if err != nil {
-		return tokentypes.QueryGetPendingBalanceResponse{}, fmt.Errorf("error while getting pending balance: %s", err)
-	}
-	return *res, nil
-}
+// func (s Source) GetPendingBalance(height int64, req tokentypes.QueryGetPendingBalanceRequest) (tokentypes.QueryGetPendingBalanceResponse, error) {
+// 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
+// 	res, err := s.q.PendingBalance(ctx, &req)
+// 	if err != nil {
+// 		return tokentypes.QueryGetPendingBalanceResponse{}, fmt.Errorf("error while getting pending balance: %s", err)
+// 	}
+// 	return *res, nil
+// }
 
-func (s Source) GetAllPendingBalance(height int64, req tokentypes.QueryAllPendingBalanceRequest) (tokentypes.QueryAllPendingBalanceResponse, error) {
-	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.q.PendingBalanceAll(ctx, &req)
-	if err != nil {
-		return tokentypes.QueryAllPendingBalanceResponse{}, fmt.Errorf("error while getting all pending balance: %s", err)
-	}
-	return *res, nil
-}
+// func (s Source) GetAllPendingBalance(height int64, req tokentypes.QueryAllPendingBalanceRequest) (tokentypes.QueryAllPendingBalanceResponse, error) {
+// 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
+// 	res, err := s.q.PendingBalanceAll(ctx, &req)
+// 	if err != nil {
+// 		return tokentypes.QueryAllPendingBalanceResponse{}, fmt.Errorf("error while getting all pending balance: %s", err)
+// 	}
+// 	return *res, nil
+// }
 
 func (s Source) GetNbTokenCreationPerDay(height int64, req tokentypes.QueryGetNbTokenCreationPerDayRequest) (tokentypes.QueryGetNbTokenCreationPerDayResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
@@ -196,20 +199,22 @@ func (s Source) GetAllPendingClawbackableMultiOperation(height int64, req tokent
 	return *res, nil
 }
 
-func (s Source) GetLastInputActivity(height int64, req tokentypes.QueryGetLastInputActivityRequest) (tokentypes.QueryGetLastInputActivityResponse, error) {
+func (s Source) GetLastInputActivity(height int64, req economicstypes.QueryGetActivityRequest) (economicstypes.QueryGetActivityResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.q.LastInputActivity(ctx, &req)
+	// res, err := s.q.LastInputActivity(ctx, &req)
+	res, err := s.qe.Activity(ctx, &req)
 	if err != nil {
-		return tokentypes.QueryGetLastInputActivityResponse{}, fmt.Errorf("error while getting last input activity: %s", err)
+		return economicstypes.QueryGetActivityResponse{}, fmt.Errorf("error while getting last input activity: %s", err)
+		// return tokentypes.QueryGetLastInputActivityResponse{}, fmt.Errorf("error while getting last input activity: %s", err)
 	}
 	return *res, nil
 }
 
-func (s Source) GetAllLastInputActivity(height int64, req tokentypes.QueryAllLastInputActivityRequest) (tokentypes.QueryAllLastInputActivityResponse, error) {
+func (s Source) GetAllLastInputActivity(height int64, req economicstypes.QueryAllActivityRequest) (economicstypes.QueryAllActivityResponse, error) {
 	ctx := remote.GetHeightRequestContext(s.Ctx, height)
-	res, err := s.q.LastInputActivityAll(ctx, &req)
+	res, err := s.qe.ActivityAll(ctx, &req)
 	if err != nil {
-		return tokentypes.QueryAllLastInputActivityResponse{}, fmt.Errorf("error while getting all last input activity: %s", err)
+		return economicstypes.QueryAllActivityResponse{}, fmt.Errorf("error while getting all last input activity: %s", err)
 	}
 	return *res, nil
 }

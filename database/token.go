@@ -18,7 +18,8 @@ package database
 
 import (
 	"fmt"
-	"github.com/villagelabsco/bdjuno/v3/database/types"
+
+	"github.com/villagelabsco/bdjuno/v4/database/types"
 	tokentypes "github.com/villagelabsco/village/x/token/types"
 )
 
@@ -38,9 +39,8 @@ func (db *Db) SaveTokenDenom(token *tokentypes.Token) error {
 		t.Transferable,
 		t.BackingAsset,
 		t.Admin,
-		t.NameId,
-		t.IncentiveType,
-		t.IconPath,
+		t.Name,
+		t.IconUri,
 		t.ReferencedDenom,
 		t.OfframpEnabled,
 		t.ClawbackEnabled,
@@ -62,7 +62,7 @@ func (db *Db) UpdateTokenDenom(token *tokentypes.Token) error {
 		WHERE denom = $1;
 	`
 
-	_, err := db.SQL.Exec(stmt, token.Denom, token.Ticker, token.Description, token.IconPath)
+	_, err := db.SQL.Exec(stmt, token.Data.Denom, token.Metadata.Ticker, token.Metadata.Description, token.Metadata.IconUri)
 	if err != nil {
 		return fmt.Errorf("error while updating token: %s", err)
 	}

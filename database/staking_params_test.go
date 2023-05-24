@@ -7,8 +7,8 @@ import (
 
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	dbtypes "github.com/villagelabsco/bdjuno/v3/database/types"
-	"github.com/villagelabsco/bdjuno/v3/types"
+	dbtypes "github.com/villagelabsco/bdjuno/v4/database/types"
+	"github.com/villagelabsco/bdjuno/v4/types"
 )
 
 func (suite *DbTestSuite) TestSaveStakingParams() {

@@ -1,7 +1,7 @@
 package database_test
 
 import (
-	"github.com/villagelabsco/bdjuno/v3/database/types"
+	"github.com/villagelabsco/bdjuno/v4/database/types"
 )
 
 func (suite *DbTestSuite) TestBigDipperDb_InsertEnableModules() {

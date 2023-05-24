@@ -18,11 +18,12 @@ package products
 
 import (
 	"fmt"
+
 	"github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	nfttypes "github.com/cosmos/cosmos-sdk/x/nft"
+	juno "github.com/forbole/juno/v4/types"
 	"github.com/gogo/protobuf/proto"
-	juno "github.com/villagelabsco/juno/v4/types"
 	productstypes "github.com/villagelabsco/village/x/products/types"
 )
 

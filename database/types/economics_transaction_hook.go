@@ -19,15 +19,17 @@ package types
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/gogo/protobuf/proto"
 	sqlxtypes "github.com/jmoiron/sqlx/types"
 	econtypes "github.com/villagelabsco/village/x/economics/types"
 )
 
 type DbEconomicsTransactionHook struct {
-	Network     string                        `db:"network"`
-	Index       uint64                        `db:"index"`
-	Trigger     econtypes.TriggerType         `db:"trigger"`
+	Network string                      `db:"network"`
+	Index   uint64                      `db:"index"`
+	Trigger econtypes.LegacyTriggerType `db:"trigger"`
+	// Trigger     econtypes.TriggerType         `db:"trigger"`
 	Type        econtypes.TransactionHookType `db:"type"`
 	NameId      string                        `db:"name_id"`
 	Description string                        `db:"description"`

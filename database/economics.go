@@ -18,7 +18,7 @@ package database
 
 import (
 	"fmt"
-	"github.com/villagelabsco/bdjuno/v3/database/types"
+	"github.com/villagelabsco/bdjuno/v4/database/types"
 	econtypes "github.com/villagelabsco/village/x/economics/types"
 )
 
