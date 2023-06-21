@@ -7,8 +7,8 @@ import (
 	"github.com/forbole/juno/v4/types/config"
 	"github.com/spf13/cobra"
 
-	"github.com/forbole/bdjuno/v4/database"
-	"github.com/forbole/bdjuno/v4/modules/pricefeed"
+	"github.com/villagelabsco/bdjuno/v4/database"
+	"github.com/villagelabsco/bdjuno/v4/modules/pricefeed"
 )
 
 // priceHistoryCmd returns the Cobra command allowing to store token price history

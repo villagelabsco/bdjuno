@@ -14,7 +14,7 @@ import (
 
 	tmctypes "github.com/tendermint/tendermint/rpc/core/types"
 
-	"github.com/forbole/bdjuno/v4/types"
+	"github.com/villagelabsco/bdjuno/v4/types"
 
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 

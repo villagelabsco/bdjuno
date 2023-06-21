@@ -8,14 +8,15 @@ import (
 	startcmd "github.com/forbole/juno/v4/cmd/start"
 	"github.com/forbole/juno/v4/modules/messages"
 
-	migratecmd "github.com/forbole/bdjuno/v4/cmd/migrate"
-	parsecmd "github.com/forbole/bdjuno/v4/cmd/parse"
+	migratecmd "github.com/villagelabsco/bdjuno/v4/cmd/migrate"
+	parsecmd "github.com/villagelabsco/bdjuno/v4/cmd/parse"
 
-	"github.com/forbole/bdjuno/v4/types/config"
+	"github.com/villagelabsco/bdjuno/v4/types/config"
 
 	"github.com/cosmos/cosmos-sdk/simapp"
-	"github.com/forbole/bdjuno/v4/database"
-	"github.com/forbole/bdjuno/v4/modules"
+	"github.com/villagelabsco/bdjuno/v4/database"
+	"github.com/villagelabsco/bdjuno/v4/modules"
+	villagedapp "github.com/villagelabsco/village/app"
 )
 
 func main() {
@@ -55,6 +56,7 @@ func main() {
 func getBasicManagers() []module.BasicManager {
 	return []module.BasicManager{
 		simapp.ModuleBasics,
+		villagedapp.ModuleBasics,
 	}
 }
 

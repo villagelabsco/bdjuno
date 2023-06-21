@@ -8,8 +8,8 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/forbole/juno/v4/node/remote"
 
-	bankkeeper "github.com/forbole/bdjuno/v4/modules/bank/source"
-	"github.com/forbole/bdjuno/v4/types"
+	bankkeeper "github.com/villagelabsco/bdjuno/v4/modules/bank/source"
+	"github.com/villagelabsco/bdjuno/v4/types"
 )
 
 var (
