@@ -57,14 +57,10 @@ CREATE TABLE transaction
     raw_log      TEXT,
     logs         JSONB,
 
-    /* PSQL partition */
-    partition_id BIGINT  NOT NULL DEFAULT 0,
-
-    CONSTRAINT unique_tx UNIQUE (hash, partition_id)
-)PARTITION BY LIST(partition_id);
+    CONSTRAINT unique_tx UNIQUE (hash)
+);
 CREATE INDEX transaction_hash_index ON transaction (hash);
 CREATE INDEX transaction_height_index ON transaction (height);
-CREATE INDEX transaction_partition_id_index ON transaction (partition_id);
 
 CREATE TABLE message
 (
@@ -74,12 +70,10 @@ CREATE TABLE message
     value                       JSONB  NOT NULL,
     involved_accounts_addresses TEXT[] NOT NULL,
 
-    /* PSQL partition */
-    partition_id                BIGINT NOT NULL DEFAULT 0,
     height                      BIGINT NOT NULL,
-    FOREIGN KEY (transaction_hash, partition_id) REFERENCES transaction (hash, partition_id),
-    CONSTRAINT unique_message_per_tx UNIQUE (transaction_hash, index, partition_id)
-)PARTITION BY LIST(partition_id);
+    FOREIGN KEY (transaction_hash) REFERENCES transaction (hash),
+    CONSTRAINT unique_message_per_tx UNIQUE (transaction_hash, index)
+);
 CREATE INDEX message_transaction_hash_index ON message (transaction_hash);
 CREATE INDEX message_type_index ON message (type);
 CREATE INDEX message_involved_accounts_index ON message USING GIN(involved_accounts_addresses);
